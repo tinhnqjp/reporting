@@ -1,0 +1,15 @@
+<div class="row mg10b mg15t-">
+  <div class="col-sm-4 pdn">
+    <a class="search-title btn btn-link" ng-click="vm.open = !vm.open">
+      <i ng-show="vm.open" class="fa fa-angle-down"></i>
+      <i ng-show="!vm.open" class="fa fa-angle-up"></i>
+      <span>検索条件</span>
+    </a>
+    <button class="btn btn-warning" ng-click="vm.handleClearCondition()">
+      <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件削除
+    </button>
+  </div>
+  <div class="col-sm-8 text-right pd10t" ng-transclude>
+
+  </div>
+</div>

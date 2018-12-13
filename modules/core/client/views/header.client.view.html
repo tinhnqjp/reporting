@@ -1,0 +1,30 @@
+<div class="container" ng-controller="HeaderController as vm">
+  <!-- <a ui-sref="home" class="navbar-brand" ng-style="{'background-image': 'url(/modules/core/client/img/brand/logo.png)'}"></a> -->
+  <!--<div class="navbar-header">-->
+  <a class="navbar-toggle aside-menu-toggler d-md-none" id="aside-menu-toggler" href="#" ng-if="Authentication.user">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </a>
+  <ul class="nav navbar-nav d-sm-down-none" ng-if="Authentication.user">
+    <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-switch="item.type"
+      ng-class="{ active: $state.includes(item.state), dropdown: item.type === 'dropdown' }" dropdown="item.type === 'dropdown'">
+      <a ng-switch-when="dropdown" class="dropdown-toggle" dropdown-toggle role="button">{{::item.title}}&nbsp;
+        <span class="caret"></span>
+      </a>
+      <ul ng-switch-when="dropdown" class="dropdown-menu">
+        <li ng-repeat="subitem in item.items | orderBy: 'position'" ui-sref-active="active">
+          <a ui-sref="{{subitem.state}}" ng-bind="subitem.title"></a>
+        </li>
+      </ul>
+      <a ng-switch-default ui-sref="{{item.state}}" ng-bind="item.title"></a>
+    </li>
+  </ul>
+
+  <ul class="nav navbar-nav navbar-right d-sm-down-none" ng-if="Authentication.user">
+    <li>
+      <a href="/api/auth/signout" target="_self">ログアウト</a>
+    </li>
+  </ul>
+</div>

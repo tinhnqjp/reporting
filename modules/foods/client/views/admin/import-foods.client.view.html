@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-8 col-sm-offset-2 col-md-offset-3 col-lg-offset-3">
+      <div class="log-off-wrap">
+        <h3 class="mgn mg10b"><i class="fa fa-upload" aria-hidden="true"></i> 食べ物一括登録（削除）</h3>
+        <div class="form-group">
+          <span class="btn btn-default btn-block btn-upload-file">
+            <input class="btn btn-primary btn-block" type="file" nv-file-select uploader="vm.uploader" accept=".xlsx"
+              id="file-selection">
+          </span>
+        </div>
+        <div class="form-group text-center">
+          <button class="btn btn-default" ng-click="handleBackScreen('home')">戻る</button>
+          <button class="btn btn-success" ng-click="vm.handleUpload()" ng-disabled="!vm.isSelected">アップロード</button>
+        </div>
+        <div class="form-group mgnb" ng-show="vm.result">
+          <span>登録件数：{{ vm.result.add || 0 }} - </span>
+          <span>更新件数：{{ vm.result.update || 0 }} - </span>
+          <span>削除件数：{{ vm.result.remove || 0 }}</span>
+        </div>
+        <div class="form-group mgnb" ng-show="vm.errors">
+          <p class="text-danger" ng-repeat="error in vm.errors track by $index">エラー：{{ error }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
