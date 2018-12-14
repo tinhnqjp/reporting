@@ -1,5 +1,10 @@
-
 <div uib-collapse="!vm.open">
-  <div class="row mg10b" ng-transclude>
+  <div class="row" ng-transclude>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <button type="button" class="btn btn-primary" ng-click="vm.handleConditionChanged(true)">
+        <i class="fa fa-search"></i> 検索</button>
+    </div>
   </div>
 </div>

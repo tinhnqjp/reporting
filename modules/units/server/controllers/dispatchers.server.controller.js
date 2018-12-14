@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
 
 exports.create = function (req, res) {
   var dispatcher = new Dispatcher(req.body);
-  Dispatcher.findOne({ dispatchername: req.body.dispatchername }).exec((err, _dispatcher) => {
+  Dispatcher.findOne({ name: req.body.name }).exec((err, _dispatcher) => {
     if (_dispatcher)
       return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません！' });
     dispatcher.save(function (err) {
@@ -57,7 +57,10 @@ exports.list = function (req, res) {
   Dispatcher.paginate(query, {
     sort: sort,
     page: page,
-    limit: limit
+    limit: limit,
+    populate: [
+      { path: 'account', select: 'username' }
+    ]
   }).then(function (result) {
     return res.json(result);
   }, err => {
@@ -73,16 +76,19 @@ exports.dispatcherByID = function (req, res, next, id) {
     });
   }
 
-  Dispatcher.findById(id).exec(function (err, dispatcher) {
-    if (err) {
-      return next(err);
-    } else if (!dispatcher) {
-      return next(new Error('Failed to load dispatcher ' + id));
-    }
+  Dispatcher
+    .findById(id)
+    .populate('account', 'username')
+    .exec(function (err, dispatcher) {
+      if (err) {
+        return next(err);
+      } else if (!dispatcher) {
+        return next(new Error('Failed to load dispatcher ' + id));
+      }
 
-    req.model = dispatcher;
-    next();
-  });
+      req.model = dispatcher;
+      next();
+    });
 };
 
 /** ====== PRIVATE ========= */
@@ -93,9 +99,9 @@ function getQuery(condition) {
     var key_lower = condition.keyword.toLowerCase();
     var key_upper = condition.keyword.toUpperCase();
     var or_arr = [
-      { dispatchername: { $regex: '.*' + condition.keyword + '.*' } },
-      { dispatchername: { $regex: '.*' + key_lower + '.*' } },
-      { dispatchername: { $regex: '.*' + key_upper + '.*' } },
+      { name: { $regex: '.*' + condition.keyword + '.*' } },
+      { name: { $regex: '.*' + key_lower + '.*' } },
+      { name: { $regex: '.*' + key_upper + '.*' } },
       { description: { $regex: '.*' + condition.keyword + '.*' } },
       { description: { $regex: '.*' + key_lower + '.*' } },
       { description: { $regex: '.*' + key_upper + '.*' } }

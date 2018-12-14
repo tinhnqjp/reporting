@@ -29,7 +29,7 @@
         <div class="row">
           <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="form-group">
-            <label>ユーザー名・氏名</label>
+            <label>ログインID・氏名</label>
             <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="顧客コード・顧客名・IDを入力">
           </div>
           </div>
@@ -79,7 +79,7 @@
             <th class="col-index">#</th>
             <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="氏名" tbmodel="name"
               tbcondition="vm.condition"></th>
-            <th ng-click="vm.handleSortChanged('username')" table-order tbtitle="ユーザー名" tbmodel="username"
+            <th ng-click="vm.handleSortChanged('username')" table-order tbtitle="ログインID" tbmodel="username"
               tbcondition="vm.condition"></th>
             <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録時間" tbmodel="created"
               tbcondition="vm.condition" class="text-center"></th>

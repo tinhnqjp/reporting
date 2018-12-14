@@ -17,8 +17,8 @@
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('units', clear);
-      vm.condition.roles = 'units';
+      vm.condition = $scope.prepareCondition('dispatcher', clear);
+      vm.condition.roles = 'dispatcher';
     }
 
     function handleSearch() {
@@ -27,15 +27,14 @@
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
-          console.log('​handleSearch -> vm.docs', vm.docs);
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.total;
-          $scope.conditionFactoryUpdate('units', vm.condition);
+          $scope.conditionFactoryUpdate('dispatcher', vm.condition);
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '食べ物の取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '手配者の取得が失敗しました！';
           $scope.handleShowToast(message, true);
         });
     }
@@ -88,12 +87,12 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: 'この食べ物を削除します。よろしいですか？'
+        message: 'この手配者を削除します。よろしいですか？'
       }, function () {
         var unit = new DispatcherService({ _id: _id });
         unit.$remove(function () {
           handleSearch();
-          $scope.handleShowToast('食べ物の削除が完了しました。');
+          $scope.handleShowToast('手配者の削除が完了しました。');
         });
       });
     };

@@ -1,0 +1,43 @@
+<div class="container form-detail">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>手配者詳細</h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.dispatchers.list" state="admin.dispatchers.edit" params="{dispatcherId: vm.dispatcher._id}"></button-edit>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                名前
+              </th>
+              <td class="col-xs-10" ng-bind="vm.dispatcher.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                説明
+              </th>
+              <td class="col-xs-10" ng-bind="vm.dispatcher.description"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                ログインID / パスワード
+              </th>
+              <td class="col-xs-10">
+                <span>{{vm.dispatcher.account.username}} / {{vm.dispatcher.account.username}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="form-group mgnb text-center">
+        <button-edit back="admin.dispatchers.list" state="admin.dispatchers.edit" params="{dispatcherId: vm.dispatcher._id}"></button-edit>
+      </div>
+    </div>
+  </div>
+</div>

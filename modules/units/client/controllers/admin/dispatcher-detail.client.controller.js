@@ -5,11 +5,11 @@
     .module('units.admin')
     .controller('DispatcherDetailController', DispatcherDetailController);
 
-  DispatcherDetailController.$inject = ['$scope', '$state', 'unitResolve'];
+  DispatcherDetailController.$inject = ['$scope', '$state', 'dispatcherResolve'];
 
-  function DispatcherDetailController($scope, $state, unit) {
+  function DispatcherDetailController($scope, $state, dispatcher) {
     var vm = this;
-    vm.unit = unit;
+    vm.dispatcher = dispatcher;
 
   }
 }());
