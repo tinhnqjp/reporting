@@ -1,15 +1,14 @@
-<div class="row mg10b mg15t-">
-  <div class="col-sm-4 pdn">
-    <a class="search-title btn btn-link" ng-click="vm.open = !vm.open">
-      <i ng-show="vm.open" class="fa fa-angle-down"></i>
-      <i ng-show="!vm.open" class="fa fa-angle-up"></i>
-      <span>検索条件</span>
-    </a>
-    <button class="btn btn-warning" ng-click="vm.handleClearCondition()">
-      <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件削除
+<div class="title-group mg10b">
+  <h4 class="clickable mgn title-group__inline-title" ng-click="vm.open = !vm.open">
+    <span ng-show="!vm.open" class="fa fa-chevron-down"></span>
+    <span ng-show="vm.open" class="fa fa-chevron-up"></span>
+    検索条件
+  </h4>
+  <div class="title-group__inline-buttons">
+    <button class="btn btn-warning btn-sm" ng-click="vm.handleClearCondition()">
+      <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件解除
     </button>
+    <i class="fa fa-spinner fa-pulse fa-lg fa-fw mg20l" ng-show="vm.busy"></i>
   </div>
-  <div class="col-sm-8 text-right pd10t" ng-transclude>
-
-  </div>
+  <div ng-transclude></div>
 </div>

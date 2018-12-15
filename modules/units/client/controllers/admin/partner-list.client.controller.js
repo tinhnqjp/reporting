@@ -3,11 +3,11 @@
 
   angular
     .module('units.admin')
-    .controller('DispatcherListController', DispatcherListController);
+    .controller('PartnerListController', PartnerListController);
 
-  DispatcherListController.$inject = ['$scope', 'DispatcherService', 'DispatcherApi', '$window', '$location'];
+  PartnerListController.$inject = ['$scope', 'PartnerService', 'PartnerApi', '$window', '$location'];
 
-  function DispatcherListController($scope, DispatcherService, DispatcherApi, $window, $location) {
+  function PartnerListController($scope, PartnerService, PartnerApi, $window, $location) {
     var vm = this;
     onCreate();
 
@@ -17,24 +17,24 @@
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('dispatcher', clear);
-      vm.condition.roles = 'dispatcher';
+      vm.condition = $scope.prepareCondition('partner', clear);
+      vm.condition.roles = 'partner';
     }
 
     function handleSearch() {
       $scope.handleShowWaiting();
-      DispatcherApi.list(vm.condition)
+      PartnerApi.list(vm.condition)
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.total;
-          $scope.conditionFactoryUpdate('dispatcher', vm.condition);
+          $scope.conditionFactoryUpdate('partner', vm.condition);
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '手配者の取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '協力者の取得が失敗しました！';
           $scope.handleShowToast(message, true);
         });
     }
@@ -68,7 +68,7 @@
         message: '現在のデータ（' + vm.total + '件）をエクスポートしてます。よろしいでしょうか？'
       }, function () {
         $scope.handleShowWaiting();
-        DispatcherApi.export(vm.condition)
+        PartnerApi.export(vm.condition)
           .success(function (res) {
             $scope.handleCloseWaiting();
             var protocol = $location.protocol();
@@ -87,12 +87,12 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: 'この手配者を削除します。よろしいですか？'
+        message: 'この協力者を削除します。よろしいですか？'
       }, function () {
-        var unit = new DispatcherService({ _id: _id });
+        var unit = new PartnerService({ _id: _id });
         unit.$remove(function () {
           handleSearch();
-          $scope.handleShowToast('手配者の削除が完了しました。');
+          $scope.handleShowToast('協力者の削除が完了しました。');
         });
       });
     };

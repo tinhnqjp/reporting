@@ -14,7 +14,7 @@
 
     function update(isValid) {
       $scope.handleShowConfirm({
-        message: 'この食べ物を保存します。よろしいですか？'
+        message: 'この手配者を保存します。よろしいですか？'
       }, function () {
         if (!isValid) {
           vm.isSaveClick = true;
@@ -26,12 +26,12 @@
           .catch(errorCallback);
 
         function successCallback(res) {
-          $state.go('admin.dispatchers.list');
-          $scope.handleShowToast('この食べ物の保存が完了しました。');
+          $state.go('admin.dispatchers.detail', { dispatcherId: vm.dispatcher._id });
+          $scope.handleShowToast('この手配者の保存が完了しました。');
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '食べ物の保存が失敗しました！';
+          var message = (res) ? res.message || res.data.message : '手配者の保存が失敗しました！';
           $scope.handleShowToast(message, true);
         }
       });

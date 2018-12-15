@@ -9,7 +9,8 @@
   </a>
   <ul class="nav navbar-nav d-sm-down-none" ng-if="Authentication.user">
     <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-switch="item.type"
-      ng-class="{ active: $state.includes(item.state), dropdown: item.type === 'dropdown' }" dropdown="item.type === 'dropdown'">
+      ng-class="{ 'active': $state.includes(item.parrent_state) }"
+      dropdown="item.type === 'dropdown'">
       <a ng-switch-when="dropdown" class="dropdown-toggle" dropdown-toggle role="button">{{::item.title}}&nbsp;
         <span class="caret"></span>
       </a>

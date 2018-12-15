@@ -1,13 +1,13 @@
 <div class="container form-edit">
-  <form name="vm.dispatcherForm" ng-submit="vm.update(vm.dispatcherForm.$valid)" novalidate>
+  <form name="vm.partnerForm" ng-submit="vm.update(vm.partnerForm.$valid)" novalidate>
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
         <div class="row mg10b">
           <div class="col-xs-6">
-            <h4>手配者編集</h4>
+            <h4>協力者編集</h4>
           </div>
           <div class="col-xs-6 text-right">
-            <button-save back="admin.dispatchers.list"></button-save>
+            <button-save back="admin.partners.list"></button-save>
           </div>
         </div>
         <div class="table-responsive">
@@ -19,7 +19,7 @@
                   <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <input type="text" name="name" class="form-control" ng-model="vm.dispatcher.name" placeholder="名前を入力"
+                  <input type="text" name="name" class="form-control" ng-model="vm.partner.name" placeholder="名前を入力"
                     required autocomplete="off">
                 </td>
               </tr>
@@ -29,7 +29,7 @@
                   <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <input type="text" name="description" class="form-control" ng-model="vm.dispatcher.description"
+                  <input type="text" name="description" class="form-control" ng-model="vm.partner.description"
                     placeholder="説明を入力" required autocomplete="off">
                 </td>
               </tr>
@@ -38,24 +38,24 @@
                   ログインID / パスワード
                 </th>
                 <td class="col-xs-10">
-                  <p>{{vm.dispatcher.account.username}} / {{vm.dispatcher.account.username}}</p>
+                  <p>{{vm.partner.account.username}} / {{vm.partner.account.username}}</p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="messages" ng-if="vm.isSaveClick">
-          <div ng-messages="vm.dispatcherForm.name.$error" role="alert">
+          <div ng-messages="vm.partnerForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">名前を入力してください。</li>
             <li class="text-red" ng-show="halfsizeAlphameric">名前は半角英数字を入力してください。</li>
           </div>
-          <div ng-messages="vm.dispatcherForm.description.$error" role="alert">
+          <div ng-messages="vm.partnerForm.description.$error" role="alert">
             <li class="text-red" ng-message="required">説明を入力してください。</li>
             <li class="text-red" ng-message="maxLength">説明は50桁以内を入力してください。</li>
           </div>
         </div>
         <div class="form-group mgnb text-center">
-          <button-save back="admin.dispatchers.list"></button-save>
+          <button-save back="admin.partners.list"></button-save>
         </div>
       </div>
     </div>

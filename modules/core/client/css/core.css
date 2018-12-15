@@ -422,21 +422,26 @@ a.text-muted:focus {
 }
 
 /* +++++++++++ FORM EDIt ++++++++++++ */
-.form-edit h3 {
-  margin-top: 5px
+.form-edit h4, .form-detail h4 {
+	margin-top: 5px;
+	font-weight: 500;
 }
 
-.form-edit h3 {
-  margin-top: 5px
-}
-
-.form-edit .table-detail tbody tr th {
+.table-detail tbody tr th {
   background-color: #eee !important;
 }
 
-.form-edit .table-detail tbody tr td {
+.table-detail tbody tr td {
   padding: 2px;
   background-color: #fff !important;
+}
+
+.table-detail tbody tr td p {
+	padding: 8px;
+}
+
+.form-detail .table-detail tbody tr td, .form-edit .table-detail tbody tr td p {
+	padding: 8px;
 }
 
 /* +++++++++++ LIST SEARCH ++++++++++++ */
@@ -459,4 +464,7 @@ a.text-muted:focus {
 }
 .table-list .sort:hover {
   color: #999;
+}
+.table-list .cursor-p {
+	cursor:pointer!important;
 }

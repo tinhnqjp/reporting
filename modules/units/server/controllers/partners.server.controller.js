@@ -4,25 +4,23 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  Dispatcher = mongoose.model('Dispatcher'),
+  Partner = mongoose.model('Partner'),
   path = require('path'),
   moment = require('moment'),
   _ = require('lodash'),
-  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 
 exports.create = function (req, res) {
-  var dispatcher = new Dispatcher(req.body);
-  dispatcher.save(function (err) {
-    if (err) {
-      logger.error(err);
-      return res.status(422).send({
-        message: 'サーバーエラーが発生しました。'
-      });
-    } else {
-      res.json(dispatcher);
-    }
+  var partner = new Partner(req.body);
+  Partner.findOne({ name: req.body.name }).exec((err, _partner) => {
+    if (_partner)
+      return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません！' });
+    partner.save(function (err) {
+      if (err)
+        return res.status(422).send({ message: 'アカウントを登録できません！' });
+      return res.json(partner);
+    });
   });
 };
 
@@ -31,21 +29,21 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-  var dispatcher = req.model;
-  dispatcher = _.extend(dispatcher, req.body);
-  dispatcher.save(function (err) {
+  var partner = req.model;
+  partner = _.extend(partner, req.body);
+  partner.save(function (err) {
     if (err)
       return res.status(422).send({ message: 'アカウントを変更できません！' });
-    res.json(dispatcher);
+    res.json(partner);
   });
 };
 
 exports.delete = function (req, res) {
-  var dispatcher = req.model;
-  dispatcher.remove(function (err) {
+  var partner = req.model;
+  partner.remove(function (err) {
     if (err)
       return res.status(400).send({ message: 'アカウントを削除できません！' });
-    res.json(dispatcher);
+    res.json(partner);
   });
 };
 
@@ -56,7 +54,7 @@ exports.list = function (req, res) {
   var sort = help.getSort(condition);
   var limit = help.getLimit(condition);
 
-  Dispatcher.paginate(query, {
+  Partner.paginate(query, {
     sort: sort,
     page: page,
     limit: limit,
@@ -71,24 +69,24 @@ exports.list = function (req, res) {
   });
 };
 
-exports.dispatcherByID = function (req, res, next, id) {
+exports.partnerByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'アカウントが見つかりません。'
     });
   }
 
-  Dispatcher
+  Partner
     .findById(id)
     .populate('account', 'username')
-    .exec(function (err, dispatcher) {
+    .exec(function (err, partner) {
       if (err) {
         return next(err);
-      } else if (!dispatcher) {
-        return next(new Error('Failed to load dispatcher ' + id));
+      } else if (!partner) {
+        return next(new Error('Failed to load partner ' + id));
       }
 
-      req.model = dispatcher;
+      req.model = partner;
       next();
     });
 };
