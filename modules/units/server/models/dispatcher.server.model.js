@@ -22,9 +22,9 @@ DispatcherSchema.plugin(paginate);
 
 DispatcherSchema.pre('save', function (next) {
   var self = this;
-  if (self.isNew()) {
+  if (self.isNew) {
     var User = mongoose.model('User');
-    User.generateAccount('roles')
+    User.generateAccount('dispatcher')
       .then((user) => {
         self.account = user._id;
         next();
