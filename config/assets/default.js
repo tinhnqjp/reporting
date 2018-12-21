@@ -34,6 +34,7 @@ module.exports = {
         'public/lib/moment/moment.js',
         'public/lib/moment/locale/ja.js',
         'public/lib/angular-moment/angular-moment.js',
+        'public/lib/validator-js/validator.min.js',
         // end
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

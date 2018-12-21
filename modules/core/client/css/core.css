@@ -468,3 +468,12 @@ a.text-muted:focus {
 .table-list .cursor-p {
 	cursor:pointer!important;
 }
+
+/* DIALOG*/
+.ngdialog .ngdialog-content .container {
+  width: 100%;
+}
+
+.ngdialog.ngdialog-theme-default {
+  padding-top: 100px;
+}

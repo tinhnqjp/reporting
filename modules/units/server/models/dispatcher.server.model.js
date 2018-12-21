@@ -20,6 +20,28 @@ var DispatcherSchema = new Schema({
 });
 DispatcherSchema.plugin(paginate);
 
+DispatcherSchema.pre('save', function (next) {
+  var self = this;
+  if (self.isNew) {
+    var User = mongoose.model('User');
+    User.generateAccount('dispatcher')
+      .then((user) => {
+        self.account = user._id;
+        next();
+      }).catch((err) => {
+        next(err);
+      });
+  } else {
+    return next();
+  }
+});
+
+// Remove
+DispatcherSchema.pre('remove', function (next) {
+  var User = mongoose.model('User');
+  User.remove({ _id: this.account }, next);
+});
+
 DispatcherSchema.statics.common = function () {
   return new Promise(function (resolve, reject) {
     return resolve(true);

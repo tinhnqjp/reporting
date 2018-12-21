@@ -2,7 +2,7 @@
 
 module.exports = {
   app: {
-    title: 'Working report',
+    title: 'DEMO',
     description: 'Working report',
     keywords: '',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'

@@ -33,12 +33,30 @@
                     placeholder="説明を入力" required autocomplete="off">
                 </td>
               </tr>
-              <tr>
+              <tr ng-if="vm.dispatcher._id">
                 <th class="col-xs-2">
                   ログインID / パスワード
                 </th>
                 <td class="col-xs-10">
                   <p>{{vm.dispatcher.account.username}} / {{vm.dispatcher.account.username}}</p>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  start
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="start" class="form-control" ng-model="vm.dispatcher.start"
+                    placeholder="start" input-validator="int">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  end
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="end" class="form-control" ng-model="vm.dispatcher.end"
+                    placeholder="demo" input-validator="int" val-min="vm.dispatcher.start">
                 </td>
               </tr>
             </tbody>
@@ -52,6 +70,12 @@
           <div ng-messages="vm.dispatcherForm.description.$error" role="alert">
             <li class="text-red" ng-message="required">説明を入力してください。</li>
             <li class="text-red" ng-message="maxLength">説明は50桁以内を入力してください。</li>
+          </div>
+          <div ng-messages="vm.dispatcherForm.start.$error" role="alert">
+            <li class="text-red" ng-message="int">start 1-10 sai</li>
+          </div>
+          <div ng-messages="vm.dispatcherForm.end.$error" role="alert">
+            <li class="text-red" ng-message="int">end 1-10 sai</li>
           </div>
         </div>
         <div class="form-group mgnb text-center">

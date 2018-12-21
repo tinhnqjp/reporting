@@ -10,7 +10,7 @@
         </h4>
         <div class="title-group__inline-buttons">
           <button class="btn btn-warning btn-sm" ng-click="vm.handleClearCondition()">
-            <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件を解除
+            <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件解除
           </button>
           <i class="fa fa-spinner fa-pulse fa-lg fa-fw mg20l" ng-show="vm.busy"></i>
 
@@ -36,14 +36,14 @@
           <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="form-group">
             <label>登録時間(From)</label>
-            <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_min"  is-open="picker.created_min.open" 
+            <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_min"  is-open="picker.created_min.open"
               ng-click="openCalendar($event, 'created_min')" placeholder="0000/00/00" ng-change="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="form-group">
             <label>登録時間(To)</label>
-            <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_max"  is-open="picker.created_max.open" 
+            <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_max"  is-open="picker.created_max.open"
               ng-click="openCalendar($event, 'created_max')" placeholder="0000/00/00" ng-change="vm.handleConditionChanged(true)">
           </div>
         </div>

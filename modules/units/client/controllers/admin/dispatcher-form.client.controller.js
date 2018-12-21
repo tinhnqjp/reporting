@@ -13,14 +13,14 @@
     vm.update = update;
 
     function update(isValid) {
+      if (!isValid) {
+        vm.isSaveClick = true;
+        $scope.$broadcast('show-errors-check-validity', 'vm.dispatcherForm');
+        return false;
+      }
       $scope.handleShowConfirm({
         message: 'この手配者を保存します。よろしいですか？'
       }, function () {
-        if (!isValid) {
-          vm.isSaveClick = true;
-          $scope.$broadcast('show-errors-check-validity', 'vm.dispatcherForm');
-          return false;
-        }
         vm.dispatcher.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);
