@@ -6,7 +6,9 @@
 var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  passport = require('passport');
+  passport = require('passport'),
+  path = require('path'),
+  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller'));
 
 /**
  * 管理者機能
@@ -19,15 +21,20 @@ exports.signin = function (req, res, next) {
     user.password = undefined;
     user.salt = undefined;
     req.login(user, function (err) {
-      if (err) return res.status(400).send({ message: 'ユーザーIDまたはパスワードが間違います。' });
+      if (err) {
+        logger.error(err);
+        return res.status(400).send({ message: 'ユーザーIDまたはパスワードが間違います。' });
+      }
       return res.json(user);
     });
   })(req, res, next);
 };
+
 exports.signout = function (req, res) {
   req.logout();
   res.redirect('/');
 };
+
 exports.password = function (req, res) {
   if (!req.user) return res.status(400).send({ message: 'ユーザーがログインしていません。' });
   var passwordDetails = req.body;
@@ -44,17 +51,21 @@ exports.password = function (req, res) {
 
       user.password = passwordDetails.newPassword;
       user.save(function (err) {
-        if (err)
+        if (err) {
+          logger.error(err);
           return res.status(422).send({ message: 'パスワードを保存できません。' });
+        }
         req.login(user, function (err) {
-          if (err) return res.status(400).send(err);
+          if (err) {
+            logger.error(err);
+            return res.status(400).send(err);
+          }
           return res.end();
         });
       });
     } else {
       return res.status(422).send({ message: '現在のパスワードが間違います。' });
     }
-
   });
 
 };

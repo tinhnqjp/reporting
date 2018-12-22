@@ -6,7 +6,7 @@ var m_users = require('../controllers/mobiles/users-mobile.server.controller');
 module.exports = function (app) {
   /**
   * @function ログイン
-  * @param username(ログインID)
+  * @param username(ユーザーID)
   * @param password(パスワード)
   * @returns { user: object }
   */
@@ -14,7 +14,7 @@ module.exports = function (app) {
 
   /**
   * @function パスワード変更
-  * @param username(ログインID)
+  * @param username(ユーザーID)
   * @param password(パスワード)
   * @param new_password(新しいパスワード)
   * @param confirm_password(確認パスワード)
@@ -24,7 +24,7 @@ module.exports = function (app) {
 
   /**
   * @function アカウントチェック
-  * @param username(ログインID)
+  * @param username(ユーザーID)
   * @param password(パスワード)
   * @returns { user }
   */

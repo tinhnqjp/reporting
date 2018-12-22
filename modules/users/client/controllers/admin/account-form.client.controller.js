@@ -11,17 +11,27 @@
     var vm = this;
     vm.user = user;
     vm.update = update;
-    vm.isContextUserSelf = isContextUserSelf;
+    onCreate();
+
+    function onCreate() {
+      if (vm.user._id && vm.user.roles) {
+        vm.role = vm.user.roles[0];
+      } else {
+        vm.user.roles = [];
+      }
+    }
+
     function update(isValid) {
+      if (!isValid) {
+        vm.isSaveClick = true;
+        $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
+        return false;
+      }
       $scope.handleShowConfirm({
         message: 'このアカウントを保存します。よろしいですか？'
       }, function () {
-        if (!isValid) {
-          vm.isSaveClick = true;
-          $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
-          return false;
-        }
-        vm.user.roles = 'admin';
+
+        vm.user.roles[0] = vm.role;
         vm.user.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);
@@ -38,8 +48,5 @@
       });
     }
 
-    function isContextUserSelf() {
-      return vm.user.username === vm.authentication.user.username;
-    }
   }
 }());

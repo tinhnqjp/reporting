@@ -14,6 +14,7 @@ var mongoose = require('mongoose'),
   Excel = require('exceljs'),
   __ = require('underscore'),
   _ = require('lodash'),
+  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   files = require(path.resolve('./modules/core/server/controllers/files.server.controller'));
 
@@ -21,12 +22,19 @@ var SHEET_NAME = 'AccountList';
 
 exports.create = function (req, res) {
   var user = new User(req.body);
+
   User.findOne({ username: req.body.username }).exec((err, _user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'アカウントを登録できません。' });
+    }
     if (_user)
       return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません。' });
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを登録できません。' });
+      }
       return res.json(user);
     });
   });
@@ -44,16 +52,21 @@ exports.update = function (req, res) {
         return res.status(422).send({ message: 'IDが既存しますのでアカウントを変更できません。' });
       user = _.extend(user, req.body);
       user.save(function (err) {
-        if (err)
+        if (err) {
+          logger.error(err);
           return res.status(422).send({ message: 'アカウントを変更できません。' });
+        }
         res.json(user);
       });
     });
   } else {
     user = _.extend(user, req.body);
+    console.log('​exports.update -> user', user);
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを変更できません。' });
+      }
       res.json(user);
     });
   }
@@ -63,8 +76,10 @@ exports.delete = function (req, res) {
   var user = req.model;
 
   user.remove(function (err) {
-    if (err)
+    if (err) {
+      logger.error(err);
       return res.status(400).send({ message: 'アカウントを削除できません。' });
+    }
     res.json(user);
   });
 };
@@ -83,6 +98,7 @@ exports.list = function (req, res) {
   }).then(function (result) {
     return res.json(result);
   }, err => {
+    logger.error(err);
     return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
   });
 };
@@ -96,6 +112,7 @@ exports.userByID = function (req, res, next, id) {
 
   User.findById(id, '-salt -password -providerData').exec(function (err, user) {
     if (err) {
+      logger.error(err);
       return next(err);
     } else if (!user) {
       return next(new Error('Failed to load user ' + id));
@@ -128,13 +145,13 @@ exports.import = function (req, res) {
       res.jsonp({ status: true, result: result });
       fs.unlink(filePath, (err) => {
         if (err) {
-          console.log(err);
+          logger.error(err);
         }
         console.log('Removed: ' + filePath);
       });
     })
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       if (err && err.status) {
         return res.status(422).send({ message: err.message });
       }
@@ -251,6 +268,7 @@ exports.import = function (req, res) {
         var remove = getSum(results, 3);
         return resolve({ add: add, update: update, remove: remove });
       }).catch(err => {
+        logger.error(err);
         return reject({ status: 500, message: 'サーバーエラーが発生しました。' });
       });
     });
@@ -390,7 +408,10 @@ exports.export = function (req, res) {
       var query = getQuery(condition);
       var sort = help.getSort(condition);
       User.find(query).sort(sort).exec((err, users) => {
-        if (err) return reject({ message: 'サーバーでエラーが発生しました。' });
+        if (err) {
+          logger.error(err);
+          return reject({ message: 'サーバーでエラーが発生しました。' });
+        }
         return resolve(users);
       });
     });
@@ -418,7 +439,7 @@ exports.report = function (req, res) {
       }
     })
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.jsonp({});
     });
 };
@@ -428,7 +449,7 @@ exports.report = function (req, res) {
 function getQuery(condition) {
   var and_arr = [];
   if (condition.roles) {
-    and_arr.push({ roles: condition.roles });
+    and_arr.push({ roles: { $in: condition.roles } });
   }
 
   if (condition.keyword && condition.keyword !== '') {

@@ -21,7 +21,7 @@ module.exports = function () {
     }, function (err, user) {
       if (err) return done(err);
       if (!user || !user.authenticate(password))
-        return done(null, false, { message: 'ログインIDかパスワードが違います。' });
+        return done(null, false, { message: 'ユーザーIDかパスワードが違います。' });
       return done(null, user);
     });
   }));

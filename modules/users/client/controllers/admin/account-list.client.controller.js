@@ -18,7 +18,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('admin', clear);
-      vm.condition.roles = 'admin';
+      vm.condition.roles = _.map($scope.roles, 'id');
     }
 
     function handleSearch() {

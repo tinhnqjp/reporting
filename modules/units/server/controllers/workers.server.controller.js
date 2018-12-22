@@ -81,6 +81,7 @@ exports.workerByID = function (req, res, next, id) {
   Worker
     .findById(id)
     .populate('account', 'username')
+    .populate('partner', 'name')
     .exec(function (err, worker) {
       if (err) {
         return next(err);

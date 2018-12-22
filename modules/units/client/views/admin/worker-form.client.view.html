@@ -10,54 +10,52 @@
             <button-save back="admin.workers.list"></button-save>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-bordered table-detail">
-            <tbody>
-              <tr>
-                <th class="col-xs-2">
-                  名前
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="name" class="form-control" ng-model="vm.worker.name" placeholder="名前を入力"
-                    required autocomplete="off">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  説明
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="description" class="form-control" ng-model="vm.worker.description"
-                    placeholder="説明を入力" required autocomplete="off">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  協力者
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
-                    <ui-select-match placeholder="協力者を選択">{{$select.selected.name}}</ui-select-match>
-                    <ui-select-choices repeat="item in vm.partners | filter: $select.search">
-                      <span ng-bind-html="item.name | highlight: $select.search"></span>
-                    </ui-select-choices>
-                  </ui-select>
-                </td>
-              </tr>
-              <tr ng-if="vm.worker._id">
-                <th class="col-xs-2">
-                  ログインID / パスワード
-                </th>
-                <td class="col-xs-10">
-                  <p>{{vm.worker.account.username}} / {{vm.worker.account.username}}</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                名前
+                <span class="text-red">*</span>
+              </th>
+              <td class="col-xs-10">
+                <input type="text" name="name" class="form-control" ng-model="vm.worker.name" placeholder="名前を入力"
+                  required autocomplete="off">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                説明
+                <span class="text-red">*</span>
+              </th>
+              <td class="col-xs-10">
+                <input type="text" name="description" class="form-control" ng-model="vm.worker.description"
+                  placeholder="説明を入力" required autocomplete="off">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                協力者
+                <span class="text-red">*</span>
+              </th>
+              <td class="col-xs-10">
+                <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
+                  <ui-select-match placeholder="協力者を選択">{{$select.selected.name}}</ui-select-match>
+                  <ui-select-choices repeat="item in vm.partners | filter: $select.search">
+                    <span ng-bind-html="item.name | highlight: $select.search"></span>
+                  </ui-select-choices>
+                </ui-select>
+              </td>
+            </tr>
+            <tr ng-if="vm.worker._id">
+              <th class="col-xs-2">
+                ユーザーID / パスワード
+              </th>
+              <td class="col-xs-10">
+                <p>{{vm.worker.account.username}} / {{vm.worker.account.username}}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.workerForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">名前を入力してください。</li>

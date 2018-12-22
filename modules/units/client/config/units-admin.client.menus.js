@@ -10,14 +10,6 @@
   // Configuring the Units module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 3,
-      class: 'fa fa-food-circle-o',
-      title: '手配者管理',
-      state: 'admin.dispatchers.list',
-      parrent_state: 'admin.dispatchers'
-    });
-
-    menuService.addMenuItem('topbar', {
       position: 4,
       class: 'fa fa-food-circle-o',
       title: '協力者管理',

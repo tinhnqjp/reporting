@@ -13,6 +13,17 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   $scope.regexKana = /^[\u3040-\u309f]*$/;
   $scope.regexPass = /^[A-Za-z0-9]*$/;
 
+  /** roles */
+  $scope.roles = [
+    { id: 'admin', name: 'システム管理', class: 'label-danger' },
+    { id: 'operator', name: 'オペレーター', class: 'label-warning' },
+    { id: 'bsoperator', name: '営業者', class: 'label-info' },
+    { id: 'dispatcher', name: '手配者', class: 'label-success' },
+    { id: 'employee', name: '一般社員', class: 'label-primary' }
+    // { id: 'partner', name: '協力業者' },
+    // { id: 'user', name: '下請け' }
+  ];
+
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
   };
@@ -187,4 +198,6 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   $scope.openCalendar = function (e, picker) {
     $scope.picker[picker].open = true;
   };
+
+
 }

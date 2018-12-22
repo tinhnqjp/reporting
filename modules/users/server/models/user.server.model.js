@@ -18,17 +18,25 @@ var UserSchema = new Schema({
   // 氏名
   name: { type: String, default: '', require: true, maxlength: 50 },
   // 社名
-  company: { type: String, default: '', require: true },
+  company: { type: String, default: '', require: true, maxlength: 50 },
   // ユーザーID
   username: { type: String, trim: true, unique: true, require: true, maxlength: 12 },
   // パスワード
   password: { type: String, default: '' },
   // 役割
-  // user = worker, partner, dispatcher, admin = account
+  // 社員の役割
+  // システム管理 S = admin
+  // オペレーター A = operator
+  // 営業者 A- = bsoperator (Business operator)
+  // 手配者 B = dispatcher
+  // 一般社員 B- = employee
+  // 社外のアカウント
+  // 協力業者 C = partner
+  // 下請け D = user
   roles: {
     type: [{
       type: String,
-      enum: ['user', 'partner', 'dispatcher', 'admin']
+      enum: ['user', 'partner', 'operator', 'bsoperator', 'dispatcher', 'employee', 'admin']
     }],
     default: ['user'],
     required: true

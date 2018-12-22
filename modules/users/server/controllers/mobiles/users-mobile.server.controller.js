@@ -11,7 +11,7 @@ var _ = require('lodash'),
 
 /**
 * @function ログイン
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @returns { user: object }
 */
@@ -25,13 +25,14 @@ exports.m_signin = function (req, res) {
       return res.jsonp(user);
     })
     .catch(err => {
+      logger.error(err);
       return res.status(err.status).send(err);
     });
 };
 
 /**
 * @function パスワード変更
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @param new_password(新しいパスワード)
 * @param confirm_password(確認パスワード)
@@ -43,7 +44,7 @@ exports.m_password = function (req, res) {
   var newPassword = req.body.new_password;
   var verifyPassword = req.body.confirm_password;
   if (!username)
-    return res.status(400).send({ message: 'ログインIDを入力してください。' });
+    return res.status(400).send({ message: 'ユーザーIDを入力してください。' });
   if (!currentPassword)
     return res.status(400).send({ message: 'パスワードを入力してください。' });
   if (!newPassword)
@@ -74,7 +75,7 @@ exports.m_password = function (req, res) {
 
 /**
 * @function アカウントチェック
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @returns { user }
 */
@@ -83,7 +84,7 @@ exports.m_registry = function (req, res) {
   var password = req.body.password;
 
   if (!username)
-    return res.status(400).send({ message: 'ログインIDを入力してください。' });
+    return res.status(400).send({ message: 'ユーザーIDを入力してください。' });
   if (!password)
     return res.status(400).send({ message: 'パスワードを入力してください。' });
 
@@ -100,8 +101,10 @@ exports.m_registry = function (req, res) {
     user.username = username;
     user.password = password;
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを登録できません。' });
+      }
       return res.json(user);
     });
   });
