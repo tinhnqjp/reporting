@@ -10,40 +10,38 @@
             <button-save back="admin.partners.list"></button-save>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-bordered table-detail">
-            <tbody>
-              <tr>
-                <th class="col-xs-2">
-                  名前
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="name" class="form-control" ng-model="vm.partner.name" placeholder="名前を入力"
-                    required autocomplete="off">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  説明
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="description" class="form-control" ng-model="vm.partner.description"
-                    placeholder="説明を入力" required autocomplete="off">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  ログインID / パスワード
-                </th>
-                <td class="col-xs-10">
-                  <p>{{vm.partner.account.username}} / {{vm.partner.account.username}}</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                名前
+                <span class="text-red">*</span>
+              </th>
+              <td class="col-xs-10">
+                <input type="text" name="name" class="form-control" ng-model="vm.partner.name" placeholder="名前を入力"
+                  required autocomplete="off">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                説明
+                <span class="text-red">*</span>
+              </th>
+              <td class="col-xs-10">
+                <input type="text" name="description" class="form-control" ng-model="vm.partner.description"
+                  placeholder="説明を入力" required autocomplete="off">
+              </td>
+            </tr>
+            <tr ng-if="vm.partner._id">
+              <th class="col-xs-2">
+                ログインID / パスワード
+              </th>
+              <td class="col-xs-10">
+                <p>{{vm.partner.account.username}} / {{vm.partner.account.username}}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.partnerForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">名前を入力してください。</li>
@@ -52,6 +50,9 @@
           <div ng-messages="vm.partnerForm.description.$error" role="alert">
             <li class="text-red" ng-message="required">説明を入力してください。</li>
             <li class="text-red" ng-message="maxLength">説明は50桁以内を入力してください。</li>
+          </div>
+          <div ng-messages="vm.partnerForm.dispatchers.$error" role="alert">
+            <li class="text-red" ng-message="required">手配者を選択してください。</li>
           </div>
         </div>
         <div class="form-group mgnb text-center">

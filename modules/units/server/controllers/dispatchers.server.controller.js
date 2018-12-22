@@ -117,6 +117,9 @@ function getQuery(condition) {
     var max = moment(condition.created_max).endOf('day');
     and_arr.push({ created: { '$lte': max } });
   }
+  if (condition.notIds) {
+    and_arr.push({ _id: { $nin: condition.notIds } });
+  }
 
   if (and_arr.length > 0) {
     query = { $and: and_arr };

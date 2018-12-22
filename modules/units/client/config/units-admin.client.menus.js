@@ -21,8 +21,16 @@
       position: 4,
       class: 'fa fa-food-circle-o',
       title: '協力者管理',
-      state: 'admin.dispatchers.list',
-      parrent_state: 'admin.dispatchers'
+      state: 'admin.partners.list',
+      parrent_state: 'admin.partners'
+    });
+
+    menuService.addMenuItem('topbar', {
+      position: 5,
+      class: 'fa fa-food-circle-o',
+      title: '下請け管理',
+      state: 'admin.workers.list',
+      parrent_state: 'admin.workers'
     });
   }
 }());

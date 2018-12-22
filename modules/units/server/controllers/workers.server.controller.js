@@ -4,23 +4,25 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  Partner = mongoose.model('Partner'),
+  Worker = mongoose.model('Worker'),
   path = require('path'),
   moment = require('moment'),
   _ = require('lodash'),
+  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 
 exports.create = function (req, res) {
-  var partner = new Partner(req.body);
-  Partner.findOne({ name: req.body.name }).exec((err, _partner) => {
-    if (_partner)
-      return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません！' });
-    partner.save(function (err) {
-      if (err)
-        return res.status(422).send({ message: 'アカウントを登録できません！' });
-      return res.json(partner);
-    });
+  var worker = new Worker(req.body);
+  worker.save(function (err) {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({
+        message: 'サーバーエラーが発生しました。'
+      });
+    } else {
+      res.json(worker);
+    }
   });
 };
 
@@ -29,47 +31,32 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-  var partner = req.model;
-  partner = _.extend(partner, req.body);
-  partner.save(function (err) {
+  var worker = req.model;
+  worker = _.extend(worker, req.body);
+  worker.save(function (err) {
     if (err)
       return res.status(422).send({ message: 'アカウントを変更できません！' });
-    res.json(partner);
+    res.json(worker);
   });
 };
 
 exports.delete = function (req, res) {
-  var partner = req.model;
-  partner.remove(function (err) {
+  var worker = req.model;
+  worker.remove(function (err) {
     if (err)
       return res.status(400).send({ message: 'アカウントを削除できません！' });
-    res.json(partner);
+    res.json(worker);
   });
 };
 
-/**
- * List of Presents
- */
 exports.list = function (req, res) {
-  Partner.find().sort('-created').exec(function (err, partners) {
-    if (err) {
-      return res.status(422).send({
-        message: 'サーバーエラーが発生しました。'
-      });
-    } else {
-      res.json(partners);
-    }
-  });
-};
-
-exports.paging = function (req, res) {
   var condition = req.body.condition || {};
   var page = condition.page || 1;
   var query = getQuery(condition);
   var sort = help.getSort(condition);
   var limit = help.getLimit(condition);
 
-  Partner.paginate(query, {
+  Worker.paginate(query, {
     sort: sort,
     page: page,
     limit: limit,
@@ -84,25 +71,24 @@ exports.paging = function (req, res) {
   });
 };
 
-exports.partnerByID = function (req, res, next, id) {
+exports.workerByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'アカウントが見つかりません。'
     });
   }
 
-  Partner
+  Worker
     .findById(id)
-    .populate('dispatcher', 'name')
     .populate('account', 'username')
-    .exec(function (err, partner) {
+    .exec(function (err, worker) {
       if (err) {
         return next(err);
-      } else if (!partner) {
-        return next(new Error('Failed to load partner ' + id));
+      } else if (!worker) {
+        return next(new Error('Failed to load worker ' + id));
       }
 
-      req.model = partner;
+      req.model = worker;
       next();
     });
 };
@@ -130,6 +116,9 @@ function getQuery(condition) {
   if (condition.created_max) {
     var max = moment(condition.created_max).endOf('day');
     and_arr.push({ created: { '$lte': max } });
+  }
+  if (condition.notIds) {
+    and_arr.push({ _id: { $nin: condition.notIds } });
   }
 
   if (and_arr.length > 0) {

@@ -36,6 +36,12 @@ DispatcherSchema.pre('save', function (next) {
   }
 });
 
+// Remove
+DispatcherSchema.pre('remove', function (next) {
+  var User = mongoose.model('User');
+  User.remove({ _id: this.account }, next);
+});
+
 DispatcherSchema.statics.common = function () {
   return new Promise(function (resolve, reject) {
     return resolve(true);

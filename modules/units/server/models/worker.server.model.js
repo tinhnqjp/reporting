@@ -21,6 +21,21 @@ var WorkerSchema = new Schema({
 WorkerSchema.plugin(paginate);
 WorkerSchema.plugin(relationship, { relationshipPathName: 'partner' });
 
+WorkerSchema.pre('save', function (next) {
+  var self = this;
+  if (self.isNew) {
+    var User = mongoose.model('User');
+    User.generateAccount('user')
+      .then((user) => {
+        self.account = user._id;
+        next();
+      }).catch((err) => {
+        next(err);
+      });
+  } else {
+    return next();
+  }
+});
 WorkerSchema.statics.common = function () {
   return new Promise(function (resolve, reject) {
     return resolve(true);

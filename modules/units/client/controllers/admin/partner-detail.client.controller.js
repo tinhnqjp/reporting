@@ -10,6 +10,5 @@
   function PartnerDetailController($scope, $state, partner) {
     var vm = this;
     vm.partner = partner;
-
   }
 }());

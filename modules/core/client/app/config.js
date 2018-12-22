@@ -10,7 +10,7 @@
     'ui.router',
     'ui.bootstrap',
     // 'ui.bootstrap.datetimepicker',
-    // 'ui.select',
+    'ui.select',
     'ngSanitize',
     // 'ngFileUpload',
     'ui-notification',

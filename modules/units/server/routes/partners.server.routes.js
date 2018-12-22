@@ -8,8 +8,10 @@ var partnersPolicy = require('../policies/partners.server.policy'),
 
 module.exports = function (app) {
   // Units collection routes
-  app.route('/api/partners').post(partnersPolicy.isAllowed, partners.create);
-  app.route('/api/partners/list').post(partnersPolicy.isAllowed, partners.list);
+  app.route('/api/partners')
+    .post(partnersPolicy.isAllowed, partners.create)
+    .get(partnersPolicy.isAllowed, partners.list);
+  app.route('/api/partners/list').post(partnersPolicy.isAllowed, partners.paging);
 
   // Single partner routes
   app.route('/api/partners/:partnerId')

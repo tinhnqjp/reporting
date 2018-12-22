@@ -421,7 +421,7 @@ a.text-muted:focus {
   height: auto !important;
 }
 
-/* +++++++++++ FORM EDIt ++++++++++++ */
+/* +++++++++++++++ FORM EDIt +++++++++++++++ */
 .form-edit h4, .form-detail h4 {
 	margin-top: 5px;
 	font-weight: 500;
@@ -444,7 +444,7 @@ a.text-muted:focus {
 	padding: 8px;
 }
 
-/* +++++++++++ LIST SEARCH ++++++++++++ */
+/* +++++++++++++++ LIST SEARCH +++++++++++++++ */
 .table-list {
   background-color: #fff;
 }
@@ -467,4 +467,39 @@ a.text-muted:focus {
 }
 .table-list .cursor-p {
 	cursor:pointer!important;
+}
+
+/* +++++++++++++++ DIALOG +++++++++++++++ */
+.ngdialog .ngdialog-content .container {
+  width: 100%;
+}
+
+.ngdialog.ngdialog-theme-default {
+  padding-top: 100px;
+}
+
+/* +++++++++++++++ TAG +++++++++++++++ */
+.tag {
+  font-size: 12px;
+  padding: 4px;
+  margin: 4px;
+}
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.tag a:hover {
+  opacity: 1.0
+}
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 .3em;
+}
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
 }
