@@ -58,7 +58,7 @@
           unitResolve: getUnit
         },
         data: {
-          pageTitle: '食べ物編集'
+          pageTitle: '食べ物詳細'
         }
       });
 

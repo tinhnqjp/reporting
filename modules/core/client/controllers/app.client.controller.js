@@ -107,6 +107,15 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     if ($scope.dialog) $scope.dialog.close();
   };
 
+  $scope.generateRandomPassphrase = function () {
+    var password = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < 8; i++) {
+      password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return password;
+  };
+
   // page
   $scope.getPageTitle = function () {
     return $state.current.data.pageTitle;
@@ -183,10 +192,15 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   };
 
   $scope.tableReport = function (condition) {
-    var out = '全 ' + condition.total + ' 件';
-    var min = ((condition.page - 1) * condition.limit) + 1;
-    var max = min + condition.count - 1;
-    out += '中 ' + min + ' 件目 〜 ' + max + ' 件目を表示';
+    var total = condition.total ? condition.total : 0;
+    var page = condition.page ? condition.page : 0;
+    var count = condition.count ? condition.count : 0;
+    var out = '全 ' + total + ' 件';
+    if (total > 0) {
+      var min = ((page - 1) * condition.limit) + 1;
+      var max = min + count - 1;
+      out += '中 ' + min + ' 件目 〜 ' + max + ' 件目を表示';
+    }
 
     return out;
   };

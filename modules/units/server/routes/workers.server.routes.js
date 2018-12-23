@@ -9,7 +9,7 @@ var workersPolicy = require('../policies/workers.server.policy'),
 module.exports = function (app) {
   // Units collection routes
   app.route('/api/workers').post(workersPolicy.isAllowed, workers.create);
-  app.route('/api/workers/list').post(workersPolicy.isAllowed, workers.list);
+  app.route('/api/workers/list').post(workersPolicy.isAllowed, workers.paging);
 
   // Single worker routes
   app.route('/api/workers/:workerId')

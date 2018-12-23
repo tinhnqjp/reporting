@@ -22,7 +22,7 @@ var ReportSchema = new Schema({
   author_name: { type: String, default: '' },
   unit: { type: Schema.ObjectId, ref: 'Unit' },
   unit_name: { type: String, default: '' },
-  
+
 
   // 氏名
   name: { type: String, default: '', require: true, maxlength: 50 },
@@ -33,7 +33,6 @@ var ReportSchema = new Schema({
   // パスワード
   password: { type: String, default: '' },
   // 役割
-  // user = worker, partner, dispatcher, admin = account
   // System info
   updated: { type: Date },
   created: { type: Date, default: Date.now },

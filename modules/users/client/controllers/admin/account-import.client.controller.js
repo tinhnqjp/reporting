@@ -3,11 +3,11 @@
 
   angular
     .module('users.admin')
-    .controller('UserImportController', UserImportController);
+    .controller('AccountImportController', AccountImportController);
 
-  UserImportController.$inject = ['$scope', '$state', 'FileUploader', 'ngDialog'];
+  AccountImportController.$inject = ['$scope', '$state', 'FileUploader', 'ngDialog'];
 
-  function UserImportController($scope, $state, FileUploader, ngDialog) {
+  function AccountImportController($scope, $state, FileUploader, ngDialog) {
     var vm = this;
     vm.isSelected = false;
     prepareUploader();

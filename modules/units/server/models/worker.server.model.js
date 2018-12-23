@@ -12,8 +12,15 @@ var mongoose = require('mongoose'),
  * Worker Schema
  */
 var WorkerSchema = new Schema({
+  // 社名（氏名）
   name: { type: String, trim: true, require: true },
+  // 備考
   description: { type: String, default: '', require: true },
+  // 電話番号
+  phone: { type: String, trim: true },
+  // 担当者
+  manager: { type: String, trim: true },
+  // アカウント
   account: { type: Schema.ObjectId, ref: 'User' },
   partner: { type: Schema.ObjectId, ref: 'Partner', childPath: 'workers' },
   created: { type: Date, default: Date.now }
@@ -21,21 +28,12 @@ var WorkerSchema = new Schema({
 WorkerSchema.plugin(paginate);
 WorkerSchema.plugin(relationship, { relationshipPathName: 'partner' });
 
-WorkerSchema.pre('save', function (next) {
-  var self = this;
-  if (self.isNew) {
-    var User = mongoose.model('User');
-    User.generateAccount('user')
-      .then((user) => {
-        self.account = user._id;
-        next();
-      }).catch((err) => {
-        next(err);
-      });
-  } else {
-    return next();
-  }
+// Remove
+WorkerSchema.pre('remove', function (next) {
+  var User = mongoose.model('User');
+  User.remove({ _id: this.account }, next);
 });
+
 WorkerSchema.statics.common = function () {
   return new Promise(function (resolve, reject) {
     return resolve(true);

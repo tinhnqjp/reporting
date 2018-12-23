@@ -52,8 +52,10 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="名前" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="説明" tbmodel="description"
+              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="備考" tbmodel="description"
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone"
                 tbcondition="vm.condition"></th>
               <th>ユーザーID</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録時間" tbmodel="created" tbcondition="vm.condition"
@@ -69,6 +71,7 @@
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
+              <td>{{ item.phone }}</td>
               <td>{{ item.account.username }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w150" ui-sref-ignore>

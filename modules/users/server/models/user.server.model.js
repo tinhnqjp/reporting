@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
   crypto = require('crypto'),
   chalk = require('chalk');
 
+var PASSWORD_DEFAULT = '12345678';
 /**
  * User Schema
  */
@@ -77,10 +78,15 @@ UserSchema.statics.generateRandomPassphrase = function () {
     return resolve(password);
   });
 };
-UserSchema.statics.uniqueUserName = function (username) {
+UserSchema.statics.uniqueUserName = function (username, id) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
-    User.findOne({ username: username }).exec(function (err, user) {
+    var query = { username: username };
+    if (id) {
+      query._id = { '$ne': id };
+    }
+
+    User.findOne(query).exec(function (err, user) {
       if (err) return reject(err);
       if (!user) return resolve(false);
       if (user) return resolve(true);
@@ -97,9 +103,9 @@ UserSchema.statics.generateAccount = function (roles) {
         username = passphrase;
         return User.uniqueUserName(username);
       })
-      .then((result) => {
-        if (result) {
-          resolve(User.generateAccount(roles));
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを登録できません。' });
         } else {
           var user = new User();
           user.username = username;
@@ -114,6 +120,71 @@ UserSchema.statics.generateAccount = function (roles) {
       .catch((err) => {
         reject(err);
       });
+  });
+};
+
+UserSchema.statics.createAccount = function (roles, username, password) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.uniqueUserName(username)
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを登録できません。' });
+        } else {
+          var user = new User();
+          user.username = username;
+          user.password = password;
+          user.roles = roles;
+          user.save(function (err) {
+            if (err) reject(err);
+            resolve(user);
+          });
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+UserSchema.statics.updateAccount = function (userId, roles, username, password) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.uniqueUserName(username, userId)
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを変更できません。' });
+        } else {
+          User.findById(userId).exec(function (err, user) {
+            user.username = username;
+            if (password) {
+              user.password = password;
+            }
+            if (roles) {
+              user.roles = roles;
+            }
+            user.save(function (err) {
+              if (err) reject(err);
+              resolve(user);
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+UserSchema.statics.removeAccount = function (userId) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.findById(userId).exec(function (err, user) {
+      user.remove(function (err) {
+        if (err) reject(err);
+        resolve(user);
+      });
+    });
   });
 };
 

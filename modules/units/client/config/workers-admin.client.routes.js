@@ -58,7 +58,7 @@
           workerResolve: getWorker
         },
         data: {
-          pageTitle: '下請け編集'
+          pageTitle: '下請け詳細'
         }
       });
 

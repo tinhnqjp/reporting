@@ -34,7 +34,7 @@
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '協力者の取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '協力者の取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }

@@ -27,14 +27,15 @@
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
-          vm.condition.count = res.docs.length;
+					console.log("​handleSearch -> vm.docs", vm.docs)
+          vm.condition.count = res.docs ? res.docs.length : 0;
           vm.condition.page = res.page;
           vm.condition.total = res.total;
           $scope.conditionFactoryUpdate('worker', vm.condition);
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '下請けの取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '下請けの取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }

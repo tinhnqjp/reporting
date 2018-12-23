@@ -61,7 +61,6 @@ exports.update = function (req, res) {
     });
   } else {
     user = _.extend(user, req.body);
-    console.log('​exports.update -> user', user);
     user.save(function (err) {
       if (err) {
         logger.error(err);
@@ -450,6 +449,9 @@ function getQuery(condition) {
   var and_arr = [];
   if (condition.roles) {
     and_arr.push({ roles: { $in: condition.roles } });
+  }
+  if (condition.role) {
+    and_arr.push({ roles: condition.role });
   }
 
   if (condition.keyword && condition.keyword !== '') {

@@ -5,22 +5,42 @@
  */
 var mongoose = require('mongoose'),
   Partner = mongoose.model('Partner'),
+  User = mongoose.model('User'),
   path = require('path'),
   moment = require('moment'),
   _ = require('lodash'),
+  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 
 exports.create = function (req, res) {
+  var username = getUserName(req, res);
+  var password = getPass(req, res);
   var partner = new Partner(req.body);
-  Partner.findOne({ name: req.body.name }).exec((err, _partner) => {
-    if (_partner)
-      return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません！' });
-    partner.save(function (err) {
-      if (err)
-        return res.status(422).send({ message: 'アカウントを登録できません！' });
-      return res.json(partner);
-    });
+
+  User.findOne({ username: username }).exec((err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: '協力者を登録できません。' });
+    }
+    if (user)
+      return res.status(422).send({ message: 'IDが既存しますので協力者を登録できません。' });
+
+    User.createAccount('partner', username, password)
+      .then((user) => {
+        partner.account = user;
+        partner.save(function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(422).send({ message: '協力者を登録できません。' });
+          }
+          return res.json(partner);
+        });
+      })
+      .catch((err) => {
+        logger.error(err);
+        return res.status(422).send({ message: '協力者を登録できません。' });
+      });
   });
 };
 
@@ -29,21 +49,47 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
+  var username = getUserName(req, res);
   var partner = req.model;
-  partner = _.extend(partner, req.body);
-  partner.save(function (err) {
-    if (err)
-      return res.status(422).send({ message: 'アカウントを変更できません！' });
-    res.json(partner);
+
+  User.findOne({ username: username, _id: { '$ne': partner.account._id } }).exec((err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: '協力者を変更できません。' });
+    }
+    if (user)
+      return res.status(422).send({ message: 'IDが既存しますので協力者を変更できません。' });
+
+    partner = _.extend(partner, req.body);
+    var password = null;
+    if (req.body.account.password) {
+      password = req.body.account.password;
+    }
+    User.updateAccount(partner.account._id, null, username, password)
+      .then(() => {
+        partner.save(function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(422).send({ message: '協力者を変更できません。' });
+          }
+          return res.json(partner);
+        });
+      })
+      .catch((err) => {
+        logger.error(err);
+        return res.status(422).send({ message: '協力者を変更できません。' });
+      });
   });
 };
 
 exports.delete = function (req, res) {
   var partner = req.model;
   partner.remove(function (err) {
-    if (err)
-      return res.status(400).send({ message: 'アカウントを削除できません！' });
-    res.json(partner);
+    if (err) {
+      logger.error(err);
+      return res.status(400).send({ message: '協力者を削除できません。' });
+    }
+    return res.json(partner);
   });
 };
 
@@ -53,6 +99,7 @@ exports.delete = function (req, res) {
 exports.list = function (req, res) {
   Partner.find().sort('-created').exec(function (err, partners) {
     if (err) {
+      logger.error(err);
       return res.status(422).send({
         message: 'サーバーエラーが発生しました。'
       });
@@ -79,27 +126,27 @@ exports.paging = function (req, res) {
   }).then(function (result) {
     return res.json(result);
   }, err => {
-    console.log('​exports.list -> err', err);
-    return res.status(400).send({ message: 'サーバーでエラーが発生しました！' });
+    logger.error(err);
+    return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
   });
 };
 
 exports.partnerByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'アカウントが見つかりません。'
+      message: '協力者が見つかりません。'
     });
   }
 
   Partner
     .findById(id)
-    .populate('dispatcher', 'name')
     .populate('account', 'username')
     .exec(function (err, partner) {
       if (err) {
+        logger.error(err);
         return next(err);
       } else if (!partner) {
-        return next(new Error('Failed to load partner ' + id));
+        return next(new Error('協力者が見つかりません。'));
       }
 
       req.model = partner;
@@ -120,7 +167,10 @@ function getQuery(condition) {
       { name: { $regex: '.*' + key_upper + '.*' } },
       { description: { $regex: '.*' + condition.keyword + '.*' } },
       { description: { $regex: '.*' + key_lower + '.*' } },
-      { description: { $regex: '.*' + key_upper + '.*' } }
+      { description: { $regex: '.*' + key_upper + '.*' } },
+      { phone: { $regex: '.*' + condition.keyword + '.*' } },
+      { phone: { $regex: '.*' + key_lower + '.*' } },
+      { phone: { $regex: '.*' + key_upper + '.*' } }
     ];
     and_arr.push({ $or: or_arr });
   }
@@ -137,4 +187,20 @@ function getQuery(condition) {
   }
 
   return query;
+}
+
+function getUserName(req, res) {
+  if (req.body.account && req.body.account.username) {
+    return req.body.account.username;
+  } else {
+    return res.status(422).send({ message: 'ユーザーIDを入力してください。' });
+  }
+}
+
+function getPass(req, res) {
+  if (req.body.account && req.body.account.password) {
+    return req.body.account.password;
+  } else {
+    return res.status(422).send({ message: 'パスワードを入力してください。' });
+  }
 }

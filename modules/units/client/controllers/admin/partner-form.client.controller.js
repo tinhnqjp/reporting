@@ -11,6 +11,14 @@
     var vm = this;
     vm.partner = partner;
     vm.update = update;
+    vm.password = null;
+    onCreate();
+
+    function onCreate() {
+      if (!vm.partner._id) {
+        vm.password = $scope.generateRandomPassphrase();
+      }
+    }
 
     function update(isValid) {
       if (!isValid) {
@@ -21,6 +29,9 @@
       $scope.handleShowConfirm({
         message: 'この協力者を保存します。よろしいですか？'
       }, function () {
+        if (vm.password) {
+          vm.partner.account.password = vm.password;
+        }
         vm.partner.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);
@@ -31,10 +42,14 @@
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '協力者の保存が失敗しました！';
+          var message = (res) ? res.message || res.data.message : '協力者の保存が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });
     }
+
+    vm.randomPass = function () {
+      vm.password = $scope.generateRandomPassphrase();
+    };
   }
 }());

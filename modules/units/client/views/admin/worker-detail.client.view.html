@@ -3,7 +3,7 @@
     <div class="col-lg-8 col-lg-offset-2">
       <div class="row mg10b">
         <div class="col-xs-6">
-          <h4>手配者詳細</h4>
+          <form-title></form-title>
         </div>
         <div class="col-xs-6 text-right">
           <button-edit back="admin.workers.list" state="admin.workers.edit" params="{workerId: vm.worker._id}"></button-edit>
@@ -14,15 +14,33 @@
           <tbody>
             <tr>
               <th class="col-xs-2">
-                名前
+                社名
               </th>
               <td class="col-xs-10" ng-bind="vm.worker.name"></td>
             </tr>
             <tr>
               <th class="col-xs-2">
-                説明
+                備考
               </th>
               <td class="col-xs-10" ng-bind="vm.worker.description"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                電話番号
+              </th>
+              <td class="col-xs-10" ng-bind="vm.worker.phone"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                担当者
+              </th>
+              <td class="col-xs-10" ng-bind="vm.worker.manager"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                ユーザーID
+              </th>
+              <td class="col-xs-10" ng-bind="vm.worker.account.username"></td>
             </tr>
             <tr>
               <th class="col-xs-2">
@@ -30,14 +48,6 @@
               </th>
               <td class="col-xs-10">
                 {{vm.worker.partner.name}}
-              </td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                ユーザーID / パスワード
-              </th>
-              <td class="col-xs-10">
-                <span>{{vm.worker.account.username}} / {{vm.worker.account.username}}</span>
               </td>
             </tr>
           </tbody>

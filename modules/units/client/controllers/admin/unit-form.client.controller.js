@@ -31,7 +31,7 @@
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '食べ物の保存が失敗しました！';
+          var message = (res) ? res.message || res.data.message : '食べ物の保存が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });

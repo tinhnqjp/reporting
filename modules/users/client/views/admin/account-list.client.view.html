@@ -14,6 +14,15 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="form-group">
+            <label>役割</label>
+            <select name="role" class="form-control" ng-model="vm.condition.role">
+              <option value>全て</option>
+              <option ng-repeat="role in roles" value="{{role.id}}">{{role.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3">
+          <div class="form-group">
             <label>登録時間(From)</label>
             <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_min"
               is-open="picker.created_min.open" ng-click="openCalendar($event, 'created_min')" placeholder="0000/00/00"

@@ -3,11 +3,11 @@
 
   angular
     .module('users.admin')
-    .controller('UserController', UserController);
+    .controller('AccountController', AccountController);
 
-  UserController.$inject = ['$scope', '$state', 'userResolve'];
+  AccountController.$inject = ['$scope', '$state', 'userResolve'];
 
-  function UserController($scope, $state, user) {
+  function AccountController($scope, $state, user) {
     var vm = this;
     vm.user = user;
     vm.update = update;
@@ -37,7 +37,7 @@
           .catch(errorCallback);
 
         function successCallback(res) {
-          $state.go('admin.users.list');
+          $state.go('admin.users.detail', { userId: vm.user._id });
           $scope.handleShowToast('このアカウントの保存が完了しました。');
         }
 

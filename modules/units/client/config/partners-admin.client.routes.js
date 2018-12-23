@@ -58,7 +58,7 @@
           partnerResolve: getPartner
         },
         data: {
-          pageTitle: '協力者編集'
+          pageTitle: '協力者詳細'
         }
       });
 

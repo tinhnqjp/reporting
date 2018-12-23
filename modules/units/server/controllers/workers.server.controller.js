@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
   Worker = mongoose.model('Worker'),
+  User = mongoose.model('User'),
   path = require('path'),
   moment = require('moment'),
   _ = require('lodash'),
@@ -13,16 +14,33 @@ var mongoose = require('mongoose'),
 
 
 exports.create = function (req, res) {
+  var username = getUserName(req, res);
+  var password = getPass(req, res);
   var worker = new Worker(req.body);
-  worker.save(function (err) {
+
+  User.findOne({ username: username }).exec((err, user) => {
     if (err) {
       logger.error(err);
-      return res.status(422).send({
-        message: 'サーバーエラーが発生しました。'
-      });
-    } else {
-      res.json(worker);
+      return res.status(422).send({ message: '下請けを登録できません。' });
     }
+    if (user)
+      return res.status(422).send({ message: 'IDが既存しますので下請けを登録できません。' });
+
+    User.createAccount('user', username, password)
+      .then((user) => {
+        worker.account = user;
+        worker.save(function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(422).send({ message: '下請けを登録できません。' });
+          }
+          return res.json(worker);
+        });
+      })
+      .catch((err) => {
+        logger.error(err);
+        return res.status(422).send({ message: '下請けを登録できません。' });
+      });
   });
 };
 
@@ -31,25 +49,64 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
+  var username = getUserName(req, res);
   var worker = req.model;
-  worker = _.extend(worker, req.body);
-  worker.save(function (err) {
-    if (err)
-      return res.status(422).send({ message: 'アカウントを変更できません！' });
-    res.json(worker);
+
+  User.findOne({ username: username, _id: { '$ne': worker.account._id } }).exec((err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: '下請けを変更できません。' });
+    }
+    if (user)
+      return res.status(422).send({ message: 'IDが既存しますので下請けを変更できません。' });
+
+    worker = _.extend(worker, req.body);
+    var password = null;
+    if (req.body.account.password) {
+      password = req.body.account.password;
+    }
+    User.updateAccount(worker.account._id, null, username, password)
+      .then(() => {
+        worker.save(function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(422).send({ message: '下請けを変更できません。' });
+          }
+          return res.json(worker);
+        });
+      })
+      .catch((err) => {
+        logger.error(err);
+        return res.status(422).send({ message: '下請けを変更できません。' });
+      });
   });
 };
 
 exports.delete = function (req, res) {
   var worker = req.model;
   worker.remove(function (err) {
-    if (err)
-      return res.status(400).send({ message: 'アカウントを削除できません！' });
-    res.json(worker);
+    if (err) {
+      logger.error(err);
+      return res.status(400).send({ message: '下請けを削除できません。' });
+    }
+    return res.json(worker);
   });
 };
 
 exports.list = function (req, res) {
+  Worker.find().sort('-created').exec(function (err, result) {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({
+        message: 'サーバーエラーが発生しました。'
+      });
+    } else {
+      res.json(result);
+    }
+  });
+};
+
+exports.paging = function (req, res) {
   var condition = req.body.condition || {};
   var page = condition.page || 1;
   var query = getQuery(condition);
@@ -66,15 +123,15 @@ exports.list = function (req, res) {
   }).then(function (result) {
     return res.json(result);
   }, err => {
-    console.log('​exports.list -> err', err);
-    return res.status(400).send({ message: 'サーバーでエラーが発生しました！' });
+    logger.error(err);
+    return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
   });
 };
 
 exports.workerByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'アカウントが見つかりません。'
+      message: '下請けが見つかりません。'
     });
   }
 
@@ -86,7 +143,7 @@ exports.workerByID = function (req, res, next, id) {
       if (err) {
         return next(err);
       } else if (!worker) {
-        return next(new Error('Failed to load worker ' + id));
+        return next(new Error('下請けが見つかりません。'));
       }
 
       req.model = worker;
@@ -107,7 +164,13 @@ function getQuery(condition) {
       { name: { $regex: '.*' + key_upper + '.*' } },
       { description: { $regex: '.*' + condition.keyword + '.*' } },
       { description: { $regex: '.*' + key_lower + '.*' } },
-      { description: { $regex: '.*' + key_upper + '.*' } }
+      { description: { $regex: '.*' + key_upper + '.*' } },
+      { phone: { $regex: '.*' + condition.keyword + '.*' } },
+      { phone: { $regex: '.*' + key_lower + '.*' } },
+      { phone: { $regex: '.*' + key_upper + '.*' } },
+      { manager: { $regex: '.*' + condition.keyword + '.*' } },
+      { manager: { $regex: '.*' + key_lower + '.*' } },
+      { manager: { $regex: '.*' + key_upper + '.*' } }
     ];
     and_arr.push({ $or: or_arr });
   }
@@ -118,13 +181,26 @@ function getQuery(condition) {
     var max = moment(condition.created_max).endOf('day');
     and_arr.push({ created: { '$lte': max } });
   }
-  if (condition.notIds) {
-    and_arr.push({ _id: { $nin: condition.notIds } });
-  }
 
   if (and_arr.length > 0) {
     query = { $and: and_arr };
   }
 
   return query;
+}
+
+function getUserName(req, res) {
+  if (req.body.account && req.body.account.username) {
+    return req.body.account.username;
+  } else {
+    return res.status(422).send({ message: 'ユーザーIDを入力してください。' });
+  }
+}
+
+function getPass(req, res) {
+  if (req.body.account && req.body.account.password) {
+    return req.body.account.password;
+  } else {
+    return res.status(422).send({ message: 'パスワードを入力してください。' });
+  }
 }

@@ -3,11 +3,11 @@
 
   angular
     .module('users.admin')
-    .controller('UserListController', UserListController);
+    .controller('AccountListController', AccountListController);
 
-  UserListController.$inject = ['$scope', 'AdminService', 'UsersApi', '$window', '$location'];
+  AccountListController.$inject = ['$scope', 'AdminService', 'UsersApi', '$window', '$location'];
 
-  function UserListController($scope, AdminService, UsersApi, $window, $location) {
+  function AccountListController($scope, AdminService, UsersApi, $window, $location) {
     var vm = this;
     onCreate();
 

@@ -35,7 +35,7 @@
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '食べ物の取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '食べ物の取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }
@@ -80,7 +80,7 @@
           })
           .error(function (err) {
             $scope.handleCloseWaiting();
-            var message = (err) ? err.message || err.data.message : '現在のデータのエクスポートが失敗しました！';
+            var message = (err) ? err.message || err.data.message : '現在のデータのエクスポートが失敗しました。';
             $scope.handleShowToast(message, true);
           });
       });

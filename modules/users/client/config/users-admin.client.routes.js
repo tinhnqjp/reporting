@@ -18,7 +18,7 @@
       .state('admin.users.list', {
         url: '',
         templateUrl: '/modules/users/client/views/admin/account-list.client.view.html',
-        controller: 'UserListController',
+        controller: 'AccountListController',
         controllerAs: 'vm',
         data: {
           roles: ['admin'],
@@ -28,7 +28,7 @@
       .state('admin.users.create', {
         url: '/create',
         templateUrl: '/modules/users/client/views/admin/account-form.client.view.html',
-        controller: 'UserController',
+        controller: 'AccountController',
         controllerAs: 'vm',
         resolve: {
           userResolve: newUser
@@ -40,7 +40,7 @@
       .state('admin.users.edit', {
         url: '/:userId/edit',
         templateUrl: '/modules/users/client/views/admin/account-form.client.view.html',
-        controller: 'UserController',
+        controller: 'AccountController',
         controllerAs: 'vm',
         resolve: {
           userResolve: getUser
@@ -52,7 +52,7 @@
       .state('admin.users.detail', {
         url: '/:userId/detail',
         templateUrl: '/modules/users/client/views/admin/account-detail.client.view.html',
-        controller: 'UserDetailController',
+        controller: 'AccountDetailController',
         controllerAs: 'vm',
         resolve: {
           userResolve: getUser
@@ -64,7 +64,7 @@
       .state('admin.users.import', {
         url: '/import',
         templateUrl: '/modules/users/client/views/admin/account-import.client.view.html',
-        controller: 'UserImportController',
+        controller: 'AccountImportController',
         controllerAs: 'vm',
         data: { pageTitle: 'CSVインポート' }
       });

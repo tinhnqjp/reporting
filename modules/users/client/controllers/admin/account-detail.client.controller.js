@@ -3,11 +3,11 @@
 
   angular
     .module('users.admin')
-    .controller('UserController', UserController);
+    .controller('AccountDetailController', AccountDetailController);
 
-  UserController.$inject = ['$scope', '$state', 'userResolve'];
+  AccountDetailController.$inject = ['$scope', '$state', 'userResolve'];
 
-  function UserController($scope, $state, user) {
+  function AccountDetailController($scope, $state, user) {
     var vm = this;
     vm.user = user;
   }

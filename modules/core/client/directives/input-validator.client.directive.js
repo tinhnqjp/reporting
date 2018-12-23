@@ -85,7 +85,7 @@
             break;
           case TEL:
             pattern = /^(([0-9]{9,13}$)|([0-9]{3}-[0-9]{3}-[0-9]{4}$)|([0-9]{2}-[0-9]{4}-[0-9]{4}$)|([0-9]{3}-[0-9]{4}-[0-9]{4}$))/;
-            ngModel.$setValidity(ZIP, validator.matches(value, pattern));
+            ngModel.$setValidity(TEL, validator.matches(value, pattern));
             break;
           default:
             break;

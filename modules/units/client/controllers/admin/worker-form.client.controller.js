@@ -11,15 +11,15 @@
     var vm = this;
     vm.worker = worker;
     vm.update = update;
-
+    vm.password = null;
     onCreate();
     function onCreate() {
       PartnerService.query(function (data) {
         vm.partners = data;
-        if (vm.worker.partner) {
-          vm.worker.partner = _.find(vm.partners, { '_id': vm.worker.partner });
-        }
       });
+      if (!vm.worker._id) {
+        vm.password = $scope.generateRandomPassphrase();
+      }
     }
 
     function update(isValid) {
@@ -31,6 +31,9 @@
       $scope.handleShowConfirm({
         message: 'この下請けを保存します。よろしいですか？'
       }, function () {
+        if (vm.password) {
+          vm.worker.account.password = vm.password;
+        }
         vm.worker.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);
@@ -41,11 +44,15 @@
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '下請けの保存が失敗しました！';
+          var message = (res) ? res.message || res.data.message : '下請けの保存が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });
     }
+
+    vm.randomPass = function () {
+      vm.password = $scope.generateRandomPassphrase();
+    };
   }
 
 }());
