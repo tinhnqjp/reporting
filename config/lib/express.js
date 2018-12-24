@@ -13,6 +13,7 @@ var config = require('../config'),
   favicon = require('serve-favicon'),
   compress = require('compression'),
   methodOverride = require('method-override'),
+  expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   helmet = require('helmet'),
   flash = require('connect-flash'),
@@ -85,6 +86,8 @@ module.exports.initMiddleware = function (app) {
   app.use(bodyParser.json({ limit: '50mb', extended: true }));
   // app.use(express.json());
   app.use(methodOverride());
+
+  app.use(expressValidator());
 
   // Add the cookie parser and flash middleware
   app.use(cookieParser());

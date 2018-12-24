@@ -12,7 +12,6 @@ var mongoose = require('mongoose'),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
-
 exports.create = function (req, res) {
   var username = getUserName(req, res);
   var password = getPass(req, res);

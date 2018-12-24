@@ -11,7 +11,6 @@ var mongoose = require('mongoose'),
   crypto = require('crypto'),
   chalk = require('chalk');
 
-var PASSWORD_DEFAULT = '12345678';
 /**
  * User Schema
  */
