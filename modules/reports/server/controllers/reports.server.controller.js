@@ -16,7 +16,7 @@ exports.create = function (req, res) {
   report.save(function (err) {
     if (err) {
       logger.error(err);
-      return res.status(422).send({ message: '部署を登録できません。' });
+      return res.status(422).send({ message: '報告書を登録できません。' });
     }
     return res.json(report);
   });
@@ -32,7 +32,7 @@ exports.update = function (req, res) {
   report.save(function (err) {
     if (err) {
       logger.error(err);
-      return res.status(422).send({ message: '部署を変更できません。' });
+      return res.status(422).send({ message: '報告書を変更できません。' });
     }
     res.json(report);
   });
@@ -43,7 +43,7 @@ exports.delete = function (req, res) {
   report.remove(function (err) {
     if (err) {
       logger.error(err);
-      return res.status(400).send({ message: '部署を削除できません。' });
+      return res.status(400).send({ message: '報告書を削除できません。' });
     }
     res.json(report);
   });
@@ -70,6 +70,7 @@ exports.paging = function (req, res) {
   var limit = help.getLimit(condition);
 
   Report.paginate(query, {
+    select: 'created number supplier pdf author_name status kind unit_name',
     sort: sort,
     page: page,
     limit: limit
@@ -84,7 +85,7 @@ exports.paging = function (req, res) {
 exports.reportByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: '部署が見つかりません。'
+      message: '報告書が見つかりません。'
     });
   }
 
@@ -93,7 +94,7 @@ exports.reportByID = function (req, res, next, id) {
       logger.error(err);
       return next(err);
     } else if (!report) {
-      return next(new Error('部署が見つかりません。'));
+      return next(new Error('報告書が見つかりません。'));
     }
 
     req.model = report;

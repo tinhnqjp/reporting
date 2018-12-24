@@ -10,7 +10,7 @@
   // Configuring the Units module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 2,
+      position: 3,
       class: 'fa fa-food-circle-o',
       title: '協力者管理',
       state: 'admin.partners.list',
@@ -18,7 +18,7 @@
     });
 
     menuService.addMenuItem('topbar', {
-      position: 3,
+      position: 4,
       class: 'fa fa-food-circle-o',
       title: '下請け管理',
       state: 'admin.workers.list',
@@ -26,7 +26,7 @@
     });
 
     menuService.addMenuItem('topbar', {
-      position: 4,
+      position: 5,
       class: 'fa fa-food-circle-o',
       title: '部署管理',
       state: 'admin.units.list',

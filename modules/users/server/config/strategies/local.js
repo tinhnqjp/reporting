@@ -20,9 +20,16 @@ module.exports = function () {
       ]
     }, function (err, user) {
       if (err) return done(err);
-      if (!user || !user.authenticate(password))
+      if (!user || !user.authenticate(password) || !checkRole(user.roles))
         return done(null, false, { message: 'ユーザーIDかパスワードが違います。' });
       return done(null, user);
     });
   }));
+
+  function checkRole(roles) {
+    if (roles && roles[0] && ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'].indexOf(roles[0]) >= 0) {
+      return true;
+    }
+    return false;
+  }
 };

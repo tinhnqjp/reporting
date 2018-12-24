@@ -10,30 +10,32 @@
             <button-save back="admin.reports.list"></button-save>
           </div>
         </div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                部署名
-                <span class="text-red">*</span>
-              </th>
-              <td class="col-xs-10">
-                <input type="text" name="name" class="form-control" ng-model="vm.report.name" placeholder="社名を入力"
-                  required autocomplete="off" maxlength="30">
-              </td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                備考
-                <span class="text-red">*</span>
-              </th>
-              <td class="col-xs-10">
-                <input type="text" name="description" class="form-control" ng-model="vm.report.description"
-                  placeholder="備考を入力" required autocomplete="off" maxlength="50">
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-custom">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  報告書名
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="name" class="form-control" ng-model="vm.report.name" placeholder="社名を入力"
+                    required autocomplete="off" maxlength="30">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  備考
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="description" class="form-control" ng-model="vm.report.description"
+                    placeholder="備考を入力" required autocomplete="off" maxlength="50">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.reportForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">社名を入力してください。</li>

@@ -10,85 +10,87 @@
             <button-save back="admin.workers.list"></button-save>
           </div>
         </div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-              <th class="col-xs-2">
-                  社名
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="name" class="form-control" ng-model="vm.worker.name" placeholder="社名を入力"
-                    required autocomplete="off" maxlength="30">
-                </td>
+        <div class="table-custom">
+          <table class="table table-detail">
+            <tbody>
+                <th class="col-xs-2">
+                    社名
+                    <span class="text-red">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="name" class="form-control" ng-model="vm.worker.name" placeholder="社名を入力"
+                      required autocomplete="off" maxlength="30">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    備考
+                    <span class="text-red">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="description" class="form-control" ng-model="vm.worker.description"
+                      placeholder="備考を入力" required autocomplete="off" maxlength="50">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    電話番号
+                    <span class="text-red">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="phone" class="form-control" ng-model="vm.worker.phone"
+                      placeholder="電話番号を入力" required autocomplete="off" input-validator="tel">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    担当者
+                    <span class="text-red">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="manager" class="form-control" ng-model="vm.worker.manager"
+                      placeholder="担当者を入力" required autocomplete="off" maxlength="50">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    ユーザーID
+                    <span class="text-red">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" id="username" name="username" class="form-control" autocomplete="new-username"
+                    ng-model="vm.worker.account.username" placeholder="ユーザーIDを入力" required 
+                    maxlength="12"
+                    unique-validator params="{ type: 'username', username: vm.worker.account.username, id: vm.worker.account._id}" />
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    パスワード
+                    <span class="text-red" ng-if="!vm.worker._id">*</span>
+                  </th>
+                  <td class="col-xs-10">
+                    <button type="button" class="btn btn-warning btn-sm" ng-click="vm.randomPass()"><i class="glyphicon glyphicon-refresh"></i> 編集</button>
+                    <label class="alert alert-warning" ng-if="vm.password">{{vm.password}}</label>
+                  </td>
               </tr>
               <tr>
                 <th class="col-xs-2">
-                  備考
+                  協力者
                   <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <input type="text" name="description" class="form-control" ng-model="vm.worker.description"
-                    placeholder="備考を入力" required autocomplete="off" maxlength="50">
+                  <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
+                    <ui-select-match placeholder="協力者を選択">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="item in vm.partners | filter: $select.search">
+                      <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                  </ui-select>
                 </td>
               </tr>
-              <tr>
-                <th class="col-xs-2">
-                  電話番号
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="phone" class="form-control" ng-model="vm.worker.phone"
-                    placeholder="電話番号を入力" required autocomplete="off" input-validator="tel">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  担当者
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="manager" class="form-control" ng-model="vm.worker.manager"
-                    placeholder="担当者を入力" required autocomplete="off" maxlength="50">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  ユーザーID
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" id="username" name="username" class="form-control" autocomplete="new-username"
-                  ng-model="vm.worker.account.username" placeholder="ユーザーIDを入力" required 
-                  maxlength="12"
-                  unique-validator params="{ type: 'username', username: vm.worker.account.username, id: vm.worker.account._id}" />
-                </td>
-              </tr>
-			  <tr>
-              <th class="col-xs-2">
-                パスワード
-                <span class="text-red" ng-if="!vm.worker._id">*</span>
-              </th>
-              <td class="col-xs-10">
-                <button type="button" class="btn btn-warning btn-sm" ng-click="vm.randomPass()"><i class="glyphicon glyphicon-refresh"></i> 編集</button>
-                <label class="alert alert-warning" ng-if="vm.password">{{vm.password}}</label>
-              </td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                協力者
-                <span class="text-red">*</span>
-              </th>
-              <td class="col-xs-10">
-                <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
-                  <ui-select-match placeholder="協力者を選択">{{$select.selected.name}}</ui-select-match>
-                  <ui-select-choices repeat="item in vm.partners | filter: $select.search">
-                    <span ng-bind-html="item.name | highlight: $select.search"></span>
-                  </ui-select-choices>
-                </ui-select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.workerForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">社名を入力してください。</li>

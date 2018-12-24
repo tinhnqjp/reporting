@@ -24,6 +24,23 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     // { id: 'user', name: '下請け' }
   ];
 
+  // 状態 1: 提出 - 2: 確認済 - 3: 承認済 - 4: 確定済
+  /** report status */
+  $scope.reportStatus = [
+    { id: 1, name: '状態', class: 'label-danger' },
+    { id: 2, name: '確認済', class: 'label-warning' },
+    { id: 3, name: '承認済', class: 'label-info' },
+    { id: 4, name: '確定済', class: 'label-success' }
+  ];
+  // 1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ
+  $scope.reportKind = [
+    { id: 1, name: '洗浄', class: 'label-danger' },
+    { id: 2, name: '修理', class: 'label-warning' },
+    { id: 3, name: '設置', class: 'label-info' },
+    { id: 4, name: '写真', class: 'label-success' },
+    { id: 5, name: 'フリ', class: 'label-primary' }
+  ];
+
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
   };

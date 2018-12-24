@@ -33,7 +33,7 @@
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '部署の取得が失敗しました。';
+          var message = (err) ? err.message || err.data.message : '報告書の取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }
@@ -64,12 +64,12 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: 'この部署を削除します。よろしいですか？'
+        message: 'この報告書を削除します。よろしいですか？'
       }, function () {
         var report = new ReportsService({ _id: _id });
         report.$remove(function () {
           handleSearch();
-          $scope.handleShowToast('部署の削除が完了しました。');
+          $scope.handleShowToast('報告書の削除が完了しました。');
         });
       });
     };

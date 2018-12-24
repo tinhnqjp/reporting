@@ -80,7 +80,8 @@ var ReportSchema = new Schema({
   manager: { type: String, default: '' },
   // 営業担当者
   saler: { type: String, default: '' },
-
+  // PATH PDF
+  pdf: { type: String, default: '' },
   // ------------------------- 洗浄報告書 Clean Report------------------------------
   clean: {
     // 内機

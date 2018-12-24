@@ -14,7 +14,7 @@
 
     function update(isValid) {
       $scope.handleShowConfirm({
-        message: 'この部署を保存します。よろしいですか？'
+        message: 'この報告書を保存します。よろしいですか？'
       }, function () {
         if (!isValid) {
           vm.isSaveClick = true;
@@ -27,11 +27,11 @@
 
         function successCallback(res) {
           $state.go('admin.reports.list');
-          $scope.handleShowToast('この部署の保存が完了しました。');
+          $scope.handleShowToast('この報告書の保存が完了しました。');
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '部署の保存が失敗しました。';
+          var message = (res) ? res.message || res.data.message : '報告書の保存が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });

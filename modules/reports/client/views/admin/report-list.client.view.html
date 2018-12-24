@@ -1,9 +1,9 @@
 <div class="container" ng-init="vm.open = false">
   <table-search>
     <table-search-button>
-      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.reports.create">
+      <!-- <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.reports.create">
         <span class="glyphicon glyphicon-plus"></span> 登録
-      </a>
+      </a> -->
     </table-search-button>
     <table-search-content>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -52,8 +52,16 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="部署名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="備考" tbmodel="description"
+              <th class="text-center" ng-click="vm.handleSortChanged('kind')" table-order tbtitle="報告書種類" tbmodel="kind" tbcondition="vm.condition"></th>
+              <th class="text-center" ng-click="vm.handleSortChanged('number')" table-order tbtitle="報告書番号" tbmodel="number"
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier"
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('author_name')" table-order tbtitle="作業者名" tbmodel="author_name"
+                tbcondition="vm.condition"></th>
+              <th class="text-center" ng-click="vm.handleSortChanged('status')" table-order tbtitle="状態" tbmodel="status"
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('unit_name')" table-order tbtitle="提出先" tbmodel="unit_name"
                 tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録時間" tbmodel="created" tbcondition="vm.condition"
                 class="text-center"></th>
@@ -62,12 +70,16 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">顧客が一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.reports.detail({ reportId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.description }}</td>
+              <td class="text-center"><label-status item="item.kind" list="reportKind"></label-status></td>
+              <td class="text-center">{{ item.number }}</td>
+              <td>{{ item.supplier }}</td>
+              <td>{{ item.author_name }}</td>
+              <td class="text-center"><label-status item="item.status" list="reportStatus"></label-status></td>
+              <td>{{ item.unit_name }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w150" ui-sref-ignore>
                 <a class="btn btn-xs btn-primary" ui-sref="admin.reports.edit({reportId: item._id})"><i class="fa fa-pencil"

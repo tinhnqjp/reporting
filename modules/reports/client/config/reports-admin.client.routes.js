@@ -22,7 +22,7 @@
         controllerAs: 'vm',
         data: {
           roles: ['admin'],
-          pageTitle: '部署一覧'
+          pageTitle: '報告書一覧'
         }
       })
       .state('admin.reports.create', {
@@ -34,7 +34,7 @@
           reportResolve: newReport
         },
         data: {
-          pageTitle: '部署登録'
+          pageTitle: '報告書登録'
         }
       })
       .state('admin.reports.edit', {
@@ -46,7 +46,7 @@
           reportResolve: getReport
         },
         data: {
-          pageTitle: '部署編集'
+          pageTitle: '報告書編集'
         }
       })
       .state('admin.reports.detail', {
@@ -58,7 +58,7 @@
           reportResolve: getReport
         },
         data: {
-          pageTitle: '部署詳細'
+          pageTitle: '報告書詳細'
         }
       });
 

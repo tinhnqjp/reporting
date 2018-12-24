@@ -65,7 +65,7 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">顧客が一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.partners.detail({ partnerId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>

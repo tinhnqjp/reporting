@@ -9,50 +9,48 @@
           <button-edit back="admin.workers.list" state="admin.workers.edit" params="{workerId: vm.worker._id}"></button-edit>
         </div>
       </div>
-      <div class="table-responsive">
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                社名
-              </th>
-              <td class="col-xs-10" ng-bind="vm.worker.name"></td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                備考
-              </th>
-              <td class="col-xs-10" ng-bind="vm.worker.description"></td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                電話番号
-              </th>
-              <td class="col-xs-10" ng-bind="vm.worker.phone"></td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                担当者
-              </th>
-              <td class="col-xs-10" ng-bind="vm.worker.manager"></td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                ユーザーID
-              </th>
-              <td class="col-xs-10" ng-bind="vm.worker.account.username"></td>
-            </tr>
-            <tr>
-              <th class="col-xs-2">
-                協力者
-              </th>
-              <td class="col-xs-10">
-                {{vm.worker.partner.name}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table class="table table-bordered table-detail">
+        <tbody>
+          <tr>
+            <th class="col-xs-2">
+              社名
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.name"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              備考
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.description"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              電話番号
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.phone"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              担当者
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.manager"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              ユーザーID
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.account.username"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              協力者
+            </th>
+            <td class="col-xs-10">
+              {{vm.worker.partner.name}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div class="form-group mgnb text-center">
         <button-edit back="admin.workers.list" state="admin.workers.edit" params="{workerId: vm.worker._id}"></button-edit>
       </div>
