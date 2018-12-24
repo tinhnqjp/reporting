@@ -2,12 +2,12 @@
   'use strict';
 
   angular
-    .module('units.admin')
-    .controller('UnitListController', UnitListController);
+    .module('reports.admin')
+    .controller('ReportListController', ReportListController);
 
-  UnitListController.$inject = ['$scope', 'UnitsService', 'UnitsApi', '$window', '$location'];
+  ReportListController.$inject = ['$scope', 'ReportsService', 'ReportsApi', '$window', '$location'];
 
-  function UnitListController($scope, UnitsService, UnitsApi, $window, $location) {
+  function ReportListController($scope, ReportsService, ReportsApi, $window, $location) {
     var vm = this;
     onCreate();
 
@@ -17,19 +17,19 @@
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('units', clear);
+      vm.condition = $scope.prepareCondition('reports', clear);
     }
 
     function handleSearch() {
       $scope.handleShowWaiting();
-      UnitsApi.list(vm.condition)
+      ReportsApi.list(vm.condition)
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.total;
-          $scope.conditionFactoryUpdate('units', vm.condition);
+          $scope.conditionFactoryUpdate('reports', vm.condition);
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
@@ -66,8 +66,8 @@
       $scope.handleShowConfirm({
         message: 'この部署を削除します。よろしいですか？'
       }, function () {
-        var unit = new UnitsService({ _id: _id });
-        unit.$remove(function () {
+        var report = new ReportsService({ _id: _id });
+        report.$remove(function () {
           handleSearch();
           $scope.handleShowToast('部署の削除が完了しました。');
         });

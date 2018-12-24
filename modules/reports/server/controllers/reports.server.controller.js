@@ -4,7 +4,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  Unit = mongoose.model('Unit'),
+  Report = mongoose.model('Report'),
   path = require('path'),
   moment = require('moment'),
   _ = require('lodash'),
@@ -12,13 +12,13 @@ var mongoose = require('mongoose'),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 exports.create = function (req, res) {
-  var unit = new Unit(req.body);
-  unit.save(function (err) {
+  var report = new Report(req.body);
+  report.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '部署を登録できません。' });
     }
-    return res.json(unit);
+    return res.json(report);
   });
 };
 
@@ -27,30 +27,30 @@ exports.read = function (req, res) {
 };
 
 exports.update = function (req, res) {
-  var unit = req.model;
-  unit = _.extend(unit, req.body);
-  unit.save(function (err) {
+  var report = req.model;
+  report = _.extend(report, req.body);
+  report.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '部署を変更できません。' });
     }
-    res.json(unit);
+    res.json(report);
   });
 };
 
 exports.delete = function (req, res) {
-  var unit = req.model;
-  unit.remove(function (err) {
+  var report = req.model;
+  report.remove(function (err) {
     if (err) {
       logger.error(err);
       return res.status(400).send({ message: '部署を削除できません。' });
     }
-    res.json(unit);
+    res.json(report);
   });
 };
 
 exports.list = function (req, res) {
-  Unit.find().sort('-created').exec(function (err, result) {
+  Report.find().sort('-created').exec(function (err, result) {
     if (err) {
       logger.error(err);
       return res.status(422).send({
@@ -69,7 +69,7 @@ exports.paging = function (req, res) {
   var sort = help.getSort(condition);
   var limit = help.getLimit(condition);
 
-  Unit.paginate(query, {
+  Report.paginate(query, {
     sort: sort,
     page: page,
     limit: limit
@@ -81,22 +81,22 @@ exports.paging = function (req, res) {
   });
 };
 
-exports.unitByID = function (req, res, next, id) {
+exports.reportByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: '部署が見つかりません。'
     });
   }
 
-  Unit.findById(id).exec(function (err, unit) {
+  Report.findById(id).exec(function (err, report) {
     if (err) {
       logger.error(err);
       return next(err);
-    } else if (!unit) {
+    } else if (!report) {
       return next(new Error('部署が見つかりません。'));
     }
 
-    req.model = unit;
+    req.model = report;
     next();
   });
 };
@@ -110,9 +110,9 @@ function getQuery(condition) {
     var key_lower = condition.keyword.toLowerCase();
     var key_upper = condition.keyword.toUpperCase();
     var or_arr = [
-      { unitname: { $regex: '.*' + condition.keyword + '.*' } },
-      { unitname: { $regex: '.*' + key_lower + '.*' } },
-      { unitname: { $regex: '.*' + key_upper + '.*' } },
+      { reportname: { $regex: '.*' + condition.keyword + '.*' } },
+      { reportname: { $regex: '.*' + key_lower + '.*' } },
+      { reportname: { $regex: '.*' + key_upper + '.*' } },
       { description: { $regex: '.*' + condition.keyword + '.*' } },
       { description: { $regex: '.*' + key_lower + '.*' } },
       { description: { $regex: '.*' + key_upper + '.*' } }

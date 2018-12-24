@@ -1,5 +1,5 @@
 <div class="container form-edit">
-  <form name="vm.unitForm" ng-submit="vm.update(vm.unitForm.$valid)" novalidate>
+  <form name="vm.reportForm" ng-submit="vm.update(vm.reportForm.$valid)" novalidate>
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
         <div class="row mg10b">
@@ -7,7 +7,7 @@
             <form-title></form-title>
           </div>
           <div class="col-xs-6 text-right">
-            <button-save back="admin.units.list"></button-save>
+            <button-save back="admin.reports.list"></button-save>
           </div>
         </div>
         <table class="table table-bordered table-detail">
@@ -18,7 +18,7 @@
                 <span class="text-red">*</span>
               </th>
               <td class="col-xs-10">
-                <input type="text" name="name" class="form-control" ng-model="vm.unit.name" placeholder="社名を入力"
+                <input type="text" name="name" class="form-control" ng-model="vm.report.name" placeholder="社名を入力"
                   required autocomplete="off" maxlength="30">
               </td>
             </tr>
@@ -28,24 +28,24 @@
                 <span class="text-red">*</span>
               </th>
               <td class="col-xs-10">
-                <input type="text" name="description" class="form-control" ng-model="vm.unit.description"
+                <input type="text" name="description" class="form-control" ng-model="vm.report.description"
                   placeholder="備考を入力" required autocomplete="off" maxlength="50">
               </td>
             </tr>
           </tbody>
         </table>
         <div class="messages" ng-if="vm.isSaveClick">
-          <div ng-messages="vm.unitForm.name.$error" role="alert">
+          <div ng-messages="vm.reportForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">社名を入力してください。</li>
             <li class="text-red" ng-message="maxLength">社名は30桁以内を入力してください。</li>
           </div>
-          <div ng-messages="vm.unitForm.description.$error" role="alert">
+          <div ng-messages="vm.reportForm.description.$error" role="alert">
             <li class="text-red" ng-message="required">備考を入力してください。</li>
             <li class="text-red" ng-message="maxLength">備考は50桁以内を入力してください。</li>
           </div>
         </div>
         <div class="form-group mgnb text-center">
-          <button-save back="admin.units.list"></button-save>
+          <button-save back="admin.reports.list"></button-save>
         </div>
       </div>
     </div>

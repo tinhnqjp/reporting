@@ -94,7 +94,7 @@ exports.delete = function (req, res) {
 };
 
 /**
- * List of Presents
+ * List
  */
 exports.list = function (req, res) {
   Partner.find().sort('-created').exec(function (err, partners) {

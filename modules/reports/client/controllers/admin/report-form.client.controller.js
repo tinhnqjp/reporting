@@ -2,14 +2,14 @@
   'use strict';
 
   angular
-    .module('units.admin')
-    .controller('UnitFormController', UnitFormController);
+    .module('reports.admin')
+    .controller('ReportFormController', ReportFormController);
 
-  UnitFormController.$inject = ['$scope', '$state', 'unitResolve'];
+  ReportFormController.$inject = ['$scope', '$state', 'reportResolve'];
 
-  function UnitFormController($scope, $state, unit) {
+  function ReportFormController($scope, $state, report) {
     var vm = this;
-    vm.unit = unit;
+    vm.report = report;
     vm.update = update;
 
     function update(isValid) {
@@ -18,15 +18,15 @@
       }, function () {
         if (!isValid) {
           vm.isSaveClick = true;
-          $scope.$broadcast('show-errors-check-validity', 'vm.unitForm');
+          $scope.$broadcast('show-errors-check-validity', 'vm.reportForm');
           return false;
         }
-        vm.unit.createOrUpdate()
+        vm.report.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);
 
         function successCallback(res) {
-          $state.go('admin.units.list');
+          $state.go('admin.reports.list');
           $scope.handleShowToast('この部署の保存が完了しました。');
         }
 

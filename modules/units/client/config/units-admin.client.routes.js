@@ -22,7 +22,7 @@
         controllerAs: 'vm',
         data: {
           roles: ['admin'],
-          pageTitle: '食べ物一覧'
+          pageTitle: '部署一覧'
         }
       })
       .state('admin.units.create', {
@@ -34,7 +34,7 @@
           unitResolve: newUnit
         },
         data: {
-          pageTitle: '食べ物登録'
+          pageTitle: '部署登録'
         }
       })
       .state('admin.units.edit', {
@@ -46,7 +46,7 @@
           unitResolve: getUnit
         },
         data: {
-          pageTitle: '食べ物編集'
+          pageTitle: '部署編集'
         }
       })
       .state('admin.units.detail', {
@@ -58,7 +58,7 @@
           unitResolve: getUnit
         },
         data: {
-          pageTitle: '食べ物詳細'
+          pageTitle: '部署詳細'
         }
       });
 

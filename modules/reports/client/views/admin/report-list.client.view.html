@@ -1,7 +1,7 @@
 <div class="container" ng-init="vm.open = false">
   <table-search>
     <table-search-button>
-      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.units.create">
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.reports.create">
         <span class="glyphicon glyphicon-plus"></span> 登録
       </a>
     </table-search-button>
@@ -64,13 +64,13 @@
             <tr>
               <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">顧客が一件も登録されていません。</td>
             </tr>
-            <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.units.detail({ unitId: item._id })">
+            <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.reports.detail({ reportId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w150" ui-sref-ignore>
-                <a class="btn btn-xs btn-primary" ui-sref="admin.units.edit({unitId: item._id})"><i class="fa fa-pencil"
+                <a class="btn btn-xs btn-primary" ui-sref="admin.reports.edit({reportId: item._id})"><i class="fa fa-pencil"
                     aria-hidden="true"></i> 編集</a>
                 <a class="btn btn-xs btn-danger" ng-click="vm.remove(item._id)"><i class="fa fa-trash" aria-hidden="true"></i>
                   削除</a>
