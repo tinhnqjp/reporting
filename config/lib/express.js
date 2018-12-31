@@ -122,7 +122,8 @@ module.exports.initSession = function (app, db) {
     name: config.sessionKey,
     store: new MongoStore({
       db: db,
-      collection: config.sessionCollection
+      collection: config.sessionCollection,
+      url: config.db.uri
     })
   }));
 

@@ -46,10 +46,10 @@
   UnitsApi.$inject = ['$http'];
   function UnitsApi($http) {
     this.list = function (condition) {
-      return $http.post('/api/units/list', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/units/list', { condition: condition }, {});
     };
     this.export = function (condition) {
-      return $http.post('/api/units/export', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/units/export', { condition: condition }, {});
     };
     return this;
   }

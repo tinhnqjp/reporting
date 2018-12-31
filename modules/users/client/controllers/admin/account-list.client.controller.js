@@ -5,9 +5,9 @@
     .module('users.admin')
     .controller('AccountListController', AccountListController);
 
-  AccountListController.$inject = ['$scope', 'AdminService', 'UsersApi', '$window', '$location'];
+  AccountListController.$inject = ['$scope', 'AdminService', 'UsersApi', '$window', '$location', '$http'];
 
-  function AccountListController($scope, AdminService, UsersApi, $window, $location) {
+  function AccountListController($scope, AdminService, UsersApi, $window, $location, $http) {
     var vm = this;
     onCreate();
 
@@ -29,7 +29,7 @@
           vm.docs = res.docs;
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
-          vm.condition.total = res.total;
+          vm.condition.total = res.totalPages;
           $scope.conditionFactoryUpdate('admin', vm.condition);
         })
         .error(function (err) {
@@ -95,6 +95,10 @@
           $scope.handleShowToast('アカウントの削除が完了しました。');
         });
       });
+    };
+
+    vm.test = function () {
+      $http.post('/api/users/testTransaction', null, {});
     };
   }
 }());

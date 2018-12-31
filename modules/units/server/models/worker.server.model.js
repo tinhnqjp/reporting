@@ -4,7 +4,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  paginate = require('mongoose-paginate'),
+  paginate = require('mongoose-paginate-v2'),
   Schema = mongoose.Schema,
   relationship = require('mongoose-relationship');
 
@@ -23,6 +23,7 @@ var WorkerSchema = new Schema({
   // アカウント
   account: { type: Schema.ObjectId, ref: 'User' },
   partner: { type: Schema.ObjectId, ref: 'Partner', childPath: 'workers' },
+  deleted: { type: Boolean, default: false },
   created: { type: Date, default: Date.now }
 });
 WorkerSchema.plugin(paginate);

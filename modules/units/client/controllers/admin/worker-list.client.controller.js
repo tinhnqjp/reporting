@@ -27,10 +27,10 @@
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
-					console.log("​handleSearch -> vm.docs", vm.docs)
+          console.log("​handleSearch -> vm.docs", vm.docs)
           vm.condition.count = res.docs ? res.docs.length : 0;
           vm.condition.page = res.page;
-          vm.condition.total = res.total;
+          vm.condition.total = res.totalPages;
           $scope.conditionFactoryUpdate('worker', vm.condition);
         })
         .error(function (err) {

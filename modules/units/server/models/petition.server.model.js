@@ -4,9 +4,8 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  paginate = require('mongoose-paginate'),
-  Schema = mongoose.Schema,
-  relationship = require('mongoose-relationship');
+  paginate = require('mongoose-paginate-v2'),
+  Schema = mongoose.Schema;
 
 /**
  * Petition Schema

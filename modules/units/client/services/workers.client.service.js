@@ -46,10 +46,10 @@
   WorkerApi.$inject = ['$http'];
   function WorkerApi($http) {
     this.list = function (condition) {
-      return $http.post('/api/workers/list', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/workers/list', { condition: condition }, {});
     };
     this.export = function (condition) {
-      return $http.post('/api/workers/export', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/workers/export', { condition: condition }, {});
     };
     return this;
   }

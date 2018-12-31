@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
   path = require('path'),
-  paginate = require('mongoose-paginate'),
+  paginate = require('mongoose-paginate-v2'),
   config = require(path.resolve('./config/config')),
   Schema = mongoose.Schema,
   crypto = require('crypto'),
@@ -17,10 +17,8 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   // 氏名
   name: { type: String, default: '', require: true, maxlength: 50 },
-  // 社名
-  company: { type: String, default: '', require: true, maxlength: 50 },
   // ユーザーID
-  username: { type: String, trim: true, unique: true, require: true, maxlength: 12 },
+  username: { type: String, trim: true, require: true, maxlength: 12 },
   // パスワード
   password: { type: String, default: '' },
   // 役割
@@ -41,6 +39,8 @@ var UserSchema = new Schema({
     default: ['user'],
     required: true
   },
+  unit: { type: Schema.ObjectId, ref: 'Unit' },
+  deleted: { type: Boolean, default: false },
   // System info
   updated: { type: Date },
   created: { type: Date, default: Date.now },

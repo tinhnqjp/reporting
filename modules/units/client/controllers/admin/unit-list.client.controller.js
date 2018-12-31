@@ -28,7 +28,7 @@
           vm.docs = res.docs;
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
-          vm.condition.total = res.total;
+          vm.condition.total = res.totalPages;
           $scope.conditionFactoryUpdate('units', vm.condition);
         })
         .error(function (err) {

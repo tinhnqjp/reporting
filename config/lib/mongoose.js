@@ -23,7 +23,8 @@ module.exports.loadModels = function (callback) {
 module.exports.connect = function (callback) {
   mongoose.Promise = config.db.promise;
 
-  var options = _.merge(config.db.options || {}, { useMongoClient: true });
+  var options = _.merge(config.db.options || {}, { useNewUrlParser: true, useCreateIndex: true, replicaSet: 'replicaset' });
+  console.log('​module.exports.connect -> options', options);
 
   mongoose
     .connect(config.db.uri, options)
@@ -42,9 +43,8 @@ module.exports.connect = function (callback) {
 };
 
 module.exports.disconnect = function (cb) {
-  mongoose.connection.db
-    .close(function (err) {
-      console.info(chalk.yellow('Disconnected from MongoDB.'));
-      return cb(err);
-    });
+  mongoose.connection.close(function (err) {
+    console.info(chalk.yellow('Disconnected from MongoDB.'));
+    return cb(err);
+  });
 };

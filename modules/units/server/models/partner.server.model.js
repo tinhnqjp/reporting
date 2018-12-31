@@ -4,9 +4,8 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  paginate = require('mongoose-paginate'),
-  Schema = mongoose.Schema,
-  relationship = require('mongoose-relationship');
+  paginate = require('mongoose-paginate-v2'),
+  Schema = mongoose.Schema;
 
 /**
  * Partner Schema
@@ -20,6 +19,7 @@ var PartnerSchema = new Schema({
   phone: { type: String, trim: true },
   account: { type: Schema.ObjectId, ref: 'User' },
   workers: [{ type: Schema.ObjectId, ref: 'Worker' }],
+  deleted: { type: Boolean, default: false },
   created: { type: Date, default: Date.now }
 });
 PartnerSchema.plugin(paginate);

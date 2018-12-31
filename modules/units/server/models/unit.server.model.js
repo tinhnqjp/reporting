@@ -4,7 +4,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  paginate = require('mongoose-paginate'),
+  paginate = require('mongoose-paginate-v2'),
   Schema = mongoose.Schema;
 
 /**

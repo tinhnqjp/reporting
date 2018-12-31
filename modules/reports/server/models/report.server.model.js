@@ -4,7 +4,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  paginate = require('mongoose-paginate'),
+  paginate = require('mongoose-paginate-v2'),
   Schema = mongoose.Schema;
 
 /**
@@ -34,6 +34,12 @@ var ReportSchema = new Schema({
   status: { type: Number, default: 1 },
   // 提出日
   created: { type: Date, default: Date.now },
+  // Thông tin hỗ trợ Quan hệ, tìm kiếm
+  // 部署
+  unit: { type: Schema.ObjectId, ref: 'Unit' },
+  partner: { type: Schema.ObjectId, ref: 'Partner' },
+  partner_id: { type: String, default: '' },
+  search: { type: String, default: '' },
 
   // ///////////////////////////////////////////////////////////////////
   // ////////////////// アプリ Input from app ///////////////////////////
@@ -54,7 +60,7 @@ var ReportSchema = new Schema({
   // 終了
   end: { type: Date },
   // 提出先 (id)
-  unit: { type: Schema.ObjectId, ref: 'Unit' },
+  unit_id: { type: String, default: '' },
   // 提出先 (name)
   unit_name: { type: String, default: '' },
   // 営業所
@@ -82,6 +88,9 @@ var ReportSchema = new Schema({
   saler: { type: String, default: '' },
   // PATH PDF
   pdf: { type: String, default: '' },
+  // // GPS
+  // longitude: { type: String, default: '' },
+  // latitude: { type: String, default: '' },
   // ------------------------- 洗浄報告書 Clean Report------------------------------
   clean: {
     // 内機

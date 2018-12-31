@@ -46,10 +46,10 @@
   ReportsApi.$inject = ['$http'];
   function ReportsApi($http) {
     this.list = function (condition) {
-      return $http.post('/api/reports/list', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/reports/list', { condition: condition }, {});
     };
     this.export = function (condition) {
-      return $http.post('/api/reports/export', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/reports/export', { condition: condition }, {});
     };
     return this;
   }
