@@ -80,7 +80,7 @@ UserSchema.statics.generateRandomPassphrase = function () {
 UserSchema.statics.uniqueUserName = function (username, id) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
-    var query = { username: username };
+    var query = { username: username, deleted: false };
     if (id) {
       query._id = { '$ne': id };
     }

@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
   Worker = mongoose.model('Worker'),
+  Petition = mongoose.model('Petition'),
   User = mongoose.model('User'),
   path = require('path'),
   moment = require('moment'),
@@ -18,7 +19,7 @@ exports.create = function (req, res) {
   var password = getPass(req, res);
   var worker = new Worker(req.body);
 
-  User.findOne({ username: username }).exec((err, user) => {
+  User.findOne({ username: username, deleted: false }).exec((err, user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '下請けを登録できません。' });
@@ -29,6 +30,12 @@ exports.create = function (req, res) {
     User.createAccount('user', username, password)
       .then((user) => {
         worker.account = user;
+        if (worker.petition) {
+          return Petition.findByIdAndRemove(worker.petition).exec();
+        }
+        return Promise.resolve({});
+      })
+      .then(() => {
         worker.save(function (err) {
           if (err) {
             logger.error(err);
@@ -52,7 +59,7 @@ exports.update = function (req, res) {
   var username = getUserName(req, res);
   var worker = req.model;
 
-  User.findOne({ username: username, _id: { '$ne': worker.account._id } }).exec((err, user) => {
+  User.findOne({ username: username, deleted: false, _id: { '$ne': worker.account._id } }).exec((err, user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '下請けを変更できません。' });
@@ -84,17 +91,25 @@ exports.update = function (req, res) {
 
 exports.delete = function (req, res) {
   var worker = req.model;
-  worker.remove(function (err) {
+  worker.deleted = true;
+  worker.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(400).send({ message: '下請けを削除できません。' });
     }
-    return res.json(worker);
+    User.findByIdAndUpdate(worker.account, { deleted: true }, function (err) {
+      if (err) {
+        logger.error(err);
+        return res.status(400).send({ message: '下請けを削除できません。' });
+      }
+      return res.json(worker);
+    });
+
   });
 };
 
 exports.list = function (req, res) {
-  Worker.find().sort('-created').exec(function (err, result) {
+  Worker.find({ deleted: false }).sort('-created').exec(function (err, result) {
     if (err) {
       logger.error(err);
       return res.status(422).send({
@@ -154,7 +169,7 @@ exports.workerByID = function (req, res, next, id) {
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
   var query = {};
-  var and_arr = [];
+  var and_arr = [{ deleted: false }];
   if (condition.keyword && condition.keyword !== '') {
     var key_lower = condition.keyword.toLowerCase();
     var key_upper = condition.keyword.toUpperCase();

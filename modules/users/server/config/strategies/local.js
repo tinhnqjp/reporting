@@ -17,7 +17,8 @@ module.exports = function () {
       $or: [
         { username: usernameOrEmail.toLowerCase() },
         { email: usernameOrEmail.toLowerCase() }
-      ]
+      ],
+      deleted: false
     }, function (err, user) {
       if (err) return done(err);
       if (!user || !user.authenticate(password) || !checkRole(user.roles))

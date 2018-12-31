@@ -31,7 +31,8 @@
         controller: 'WorkerFormController',
         controllerAs: 'vm',
         resolve: {
-          workerResolve: newWorker
+          workerResolve: newWorker,
+          petitionResolve: newPetition
         },
         data: {
           pageTitle: '下請け登録'
@@ -43,7 +44,8 @@
         controller: 'WorkerFormController',
         controllerAs: 'vm',
         resolve: {
-          workerResolve: getWorker
+          workerResolve: getWorker,
+          petitionResolve: newPetition
         },
         data: {
           pageTitle: '下請け編集'
@@ -60,6 +62,30 @@
         data: {
           pageTitle: '下請け詳細'
         }
+      })
+      // petition
+      .state('admin.workers.petition', {
+        url: '/petition',
+        templateUrl: '/modules/units/client/views/admin/worker-petition-list.client.view.html',
+        controller: 'WorkerPetitionListController',
+        controllerAs: 'vm',
+        data: {
+          roles: ['admin'],
+          pageTitle: '申請一覧'
+        }
+      })
+      .state('admin.workers.petition_create', {
+        url: '/petition/:petitionId/create',
+        templateUrl: '/modules/units/client/views/admin/worker-form.client.view.html',
+        controller: 'WorkerFormController',
+        controllerAs: 'vm',
+        resolve: {
+          workerResolve: newWorker,
+          petitionResolve: getPetition
+        },
+        data: {
+          pageTitle: '登録申請'
+        }
       });
 
     getWorker.$inject = ['$stateParams', 'WorkerService'];
@@ -73,6 +99,19 @@
     function newWorker(WorkerService) {
 
       return new WorkerService();
+    }
+
+    getPetition.$inject = ['$stateParams', 'PetitionService'];
+    function getPetition($stateParams, PetitionService) {
+      return PetitionService.get({
+        petitionId: $stateParams.petitionId
+      }).$promise;
+    }
+
+    newPetition.$inject = ['PetitionService'];
+    function newPetition(PetitionService) {
+
+      return new PetitionService();
     }
   }
 }());

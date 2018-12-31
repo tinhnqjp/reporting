@@ -5,11 +5,12 @@
     .module('units.admin')
     .controller('WorkerFormController', WorkerFormController);
 
-  WorkerFormController.$inject = ['$scope', '$state', 'workerResolve', 'PartnerService'];
+  WorkerFormController.$inject = ['$scope', '$state', 'workerResolve', 'PartnerService', 'petitionResolve'];
 
-  function WorkerFormController($scope, $state, worker, PartnerService) {
+  function WorkerFormController($scope, $state, worker, PartnerService, petition) {
     var vm = this;
     vm.worker = worker;
+    vm.petition = petition;
     vm.update = update;
     vm.password = null;
     onCreate();
@@ -19,6 +20,13 @@
       });
       if (!vm.worker._id) {
         vm.password = $scope.generateRandomPassphrase();
+      }
+      if (vm.petition._id) {
+        vm.worker.name = vm.petition.name;
+        vm.worker.phone = vm.petition.phone;
+        vm.worker.manager = vm.petition.manager;
+        vm.worker.partner = vm.petition.partner;
+        vm.worker.petition = vm.petition._id;
       }
     }
 

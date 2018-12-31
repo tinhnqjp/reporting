@@ -88,7 +88,7 @@ exports.m_registry = function (req, res) {
   if (!password)
     return res.status(400).send({ message: 'パスワードを入力してください。' });
 
-  User.findOne({ username: username }).select('id username roles created').exec((err, _user) => {
+  User.findOne({ username: username, deleted: false }).select('id username roles created').exec((err, _user) => {
     if (err) {
       logger.error(err);
       return res.status(500).send({ message: 'サーバーエラーが発生しました。' });
@@ -113,7 +113,7 @@ exports.m_registry = function (req, res) {
 // ----------------------------------------------------------------
 function verifyLogin(username, password) {
   return new Promise(function (resolve, reject) {
-    User.findOne({ username: username }).exec((err, user) => {
+    User.findOne({ username: username, deleted: false }).exec((err, user) => {
       if (err) {
         logger.error(err);
         return reject({ status: 500, message: 'サーバーエラーが発生しました。' });

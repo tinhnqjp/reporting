@@ -23,7 +23,7 @@ var SHEET_NAME = 'AccountList';
 exports.create = function (req, res) {
   var user = new User(req.body);
 
-  User.findOne({ username: req.body.username }).exec((err, _user) => {
+  User.findOne({ username: req.body.username, deleted: false }).exec((err, _user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: 'アカウントを登録できません。' });
@@ -47,7 +47,7 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var user = req.model;
   if (user.username !== req.body.username) {
-    User.findOne({ username: req.body.username }).exec((err, _user) => {
+    User.findOne({ username: req.body.username, deleted: false }).exec((err, _user) => {
       if (_user)
         return res.status(422).send({ message: 'IDが既存しますのでアカウントを変更できません。' });
       user = _.extend(user, req.body);
@@ -73,8 +73,8 @@ exports.update = function (req, res) {
 
 exports.delete = function (req, res) {
   var user = req.model;
-
-  user.remove(function (err) {
+  user.deleted = true;
+  user.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(400).send({ message: 'アカウントを削除できません。' });
@@ -308,7 +308,7 @@ exports.import = function (req, res) {
           });
         });
       } else {
-        User.findOne({ username: username }).exec((err, _user) => {
+        User.findOne({ username: username, deleted: false }).exec((err, _user) => {
           if (err)
             return reject({ status: 500, message: 'サーバーエラーが発生しました。' });
 
@@ -335,7 +335,8 @@ exports.import = function (req, res) {
   }
   function removeUser(user) {
     return new Promise((resolve, reject) => {
-      user.remove(err => {
+      user.deleted = true;
+      user.save(err => {
         if (!err)
           return resolve({ action: 3 });
         return resolve({ action: 0 });
@@ -420,7 +421,7 @@ exports.report = function (req, res) {
   var result = {};
   User.aggregate([
     { $unwind: '$roles' },
-    { $group: { _id: '$roles', count: { $sum: 1 } } }
+    { $group: { _id: '$roles', count: { $sum: 1 } }, deleted: false }
   ]).exec()
     .then(function (user) {
       result.user = user;
@@ -446,7 +447,7 @@ exports.report = function (req, res) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
-  var and_arr = [];
+  var and_arr = [{ deleted: false }];
   if (condition.roles) {
     and_arr.push({ roles: { $in: condition.roles } });
   }

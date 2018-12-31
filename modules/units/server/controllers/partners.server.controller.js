@@ -17,7 +17,7 @@ exports.create = function (req, res) {
   var password = getPass(req, res);
   var partner = new Partner(req.body);
 
-  User.findOne({ username: username }).exec((err, user) => {
+  User.findOne({ username: username, deleted: false }).exec((err, user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '協力者を登録できません。' });
@@ -51,7 +51,7 @@ exports.update = function (req, res) {
   var username = getUserName(req, res);
   var partner = req.model;
 
-  User.findOne({ username: username, _id: { '$ne': partner.account._id } }).exec((err, user) => {
+  User.findOne({ username: username, deleted: false, _id: { '$ne': partner.account._id } }).exec((err, user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '協力者を変更できません。' });
@@ -83,12 +83,19 @@ exports.update = function (req, res) {
 
 exports.delete = function (req, res) {
   var partner = req.model;
-  partner.remove(function (err) {
+  partner.deleted = true;
+  partner.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(400).send({ message: '協力者を削除できません。' });
     }
-    return res.json(partner);
+    User.findByIdAndUpdate(partner.account, { deleted: true }, function (err) {
+      if (err) {
+        logger.error(err);
+        return res.status(400).send({ message: '協力者を削除できません。' });
+      }
+      return res.json(partner);
+    });
   });
 };
 
@@ -96,7 +103,7 @@ exports.delete = function (req, res) {
  * List
  */
 exports.list = function (req, res) {
-  Partner.find().sort('-created').exec(function (err, partners) {
+  Partner.find({ deleted: false }).sort('-created').exec(function (err, partners) {
     if (err) {
       logger.error(err);
       return res.status(422).send({
@@ -156,7 +163,7 @@ exports.partnerByID = function (req, res, next, id) {
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
   var query = {};
-  var and_arr = [];
+  var and_arr = [{ deleted: false }];
   if (condition.keyword && condition.keyword !== '') {
     var key_lower = condition.keyword.toLowerCase();
     var key_upper = condition.keyword.toUpperCase();
