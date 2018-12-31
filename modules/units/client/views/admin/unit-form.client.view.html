@@ -26,11 +26,10 @@
               <tr>
                 <th class="col-xs-2">
                   備考
-                  <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
                   <input type="text" name="description" class="form-control" ng-model="vm.unit.description"
-                    placeholder="備考を入力" required autocomplete="off" maxlength="50">
+                    placeholder="備考を入力" autocomplete="off" maxlength="50">
                 </td>
               </tr>
             </tbody>
@@ -42,7 +41,6 @@
             <li class="text-red" ng-message="maxLength">社名は30桁以内を入力してください。</li>
           </div>
           <div ng-messages="vm.unitForm.description.$error" role="alert">
-            <li class="text-red" ng-message="required">備考を入力してください。</li>
             <li class="text-red" ng-message="maxLength">備考は50桁以内を入力してください。</li>
           </div>
         </div>

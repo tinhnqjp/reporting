@@ -45,24 +45,29 @@
               </tr>
               <tr>
                 <th class="col-xs-2">
-                  社名
+                  部署
+                  <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <input type="text" name="company" class="form-control" ng-model="vm.user.company" placeholder="社名を入力"
-                      maxlength="50" maxlength-validator="50" autocomplete="off">
+                  <ui-select name="unit" ng-model="vm.user.unit" theme="bootstrap" required>
+                    <ui-select-match placeholder="部署を選択">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="item in vm.units | filter: $select.search">
+                      <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                  </ui-select>
                 </td>
               </tr>
               <tr>
-                  <th class="col-xs-2">
-                  役割
-                  </th>
-                  <td class="col-xs-10">
-                      <select class="form-control" 
-                              title="Select period" ng-model="vm.role"
-                              ng-selected="$first" ng-options="role.id as role.name for role in roles">
-                              <option value="" style="display: none"></option>
-                      </select>
-                  </td>
+                <th class="col-xs-2">
+                役割
+                </th>
+                <td class="col-xs-10">
+                  <select class="form-control" 
+                    title="Select period" ng-model="vm.role"
+                    ng-selected="$first" ng-options="role.id as role.name for role in roles">
+                    <option value="" style="display: none"></option>
+                  </select>
+                </td>
               </tr>
             </tbody>
           </table>

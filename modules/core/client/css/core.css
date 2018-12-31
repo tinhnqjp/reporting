@@ -421,6 +421,9 @@ a.text-muted:focus {
   height: auto !important;
 }
 
+.ui-select-bootstrap .ui-select-toggle>a.btn {
+  margin-top: initial;
+}
 /* +++++++++++++++ FORM EDIt +++++++++++++++ */
 .form-edit h4, .form-detail h4 {
 	margin-top: 5px;

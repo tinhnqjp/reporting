@@ -8,7 +8,9 @@ var unitsPolicy = require('../policies/units.server.policy'),
 
 module.exports = function (app) {
   // Units collection routes
-  app.route('/api/units').post(unitsPolicy.isAllowed, units.create);
+  app.route('/api/units')
+    .post(unitsPolicy.isAllowed, units.create)
+    .get(unitsPolicy.isAllowed, units.list);
   app.route('/api/units/list').post(unitsPolicy.isAllowed, units.paging);
 
   // Single unit routes

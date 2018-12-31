@@ -93,7 +93,10 @@ exports.list = function (req, res) {
   User.paginate(query, {
     sort: sort,
     page: page,
-    limit: limit
+    limit: limit,
+    populate: [
+      { path: 'unit', select: 'name' }
+    ]
   }).then(function (result) {
     return res.json(result);
   }, err => {
@@ -109,17 +112,19 @@ exports.userByID = function (req, res, next, id) {
     });
   }
 
-  User.findById(id, '-salt -password -providerData').exec(function (err, user) {
-    if (err) {
-      logger.error(err);
-      return next(err);
-    } else if (!user) {
-      return next(new Error('Failed to load user ' + id));
-    }
+  User.findById(id, '-salt -password -providerData')
+    .populate('unit', 'name')
+    .exec(function (err, user) {
+      if (err) {
+        logger.error(err);
+        return next(err);
+      } else if (!user) {
+        return next(new Error('Failed to load user ' + id));
+      }
 
-    req.model = user;
-    next();
-  });
+      req.model = user;
+      next();
+    });
 };
 exports.import = function (req, res) {
   var filePath;

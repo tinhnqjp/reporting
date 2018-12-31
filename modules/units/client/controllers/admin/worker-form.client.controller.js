@@ -17,6 +17,10 @@
     function onCreate() {
       PartnerService.query(function (data) {
         vm.partners = data;
+
+        if (vm.worker.partner) {
+          vm.worker.partner = _.find(vm.partners, { '_id': vm.worker.partner._id });
+        }
       });
       if (!vm.worker._id) {
         vm.password = $scope.generateRandomPassphrase();

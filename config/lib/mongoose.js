@@ -24,7 +24,6 @@ module.exports.connect = function (callback) {
   mongoose.Promise = config.db.promise;
 
   var options = _.merge(config.db.options || {}, { useNewUrlParser: true, useCreateIndex: true, replicaSet: 'replicaset' });
-  console.log('​module.exports.connect -> options', options);
 
   mongoose
     .connect(config.db.uri, options)

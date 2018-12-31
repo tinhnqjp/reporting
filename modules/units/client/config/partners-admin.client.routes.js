@@ -22,7 +22,7 @@
         controllerAs: 'vm',
         data: {
           roles: ['admin'],
-          pageTitle: '協力者一覧'
+          pageTitle: '協力会社一覧'
         }
       })
       .state('admin.partners.create', {
@@ -34,7 +34,7 @@
           partnerResolve: newPartner
         },
         data: {
-          pageTitle: '協力者登録'
+          pageTitle: '協力会社登録'
         }
       })
       .state('admin.partners.edit', {
@@ -46,7 +46,7 @@
           partnerResolve: getPartner
         },
         data: {
-          pageTitle: '協力者編集'
+          pageTitle: '協力会社編集'
         }
       })
       .state('admin.partners.detail', {
@@ -58,7 +58,7 @@
           partnerResolve: getPartner
         },
         data: {
-          pageTitle: '協力者詳細'
+          pageTitle: '協力会社詳細'
         }
       });
 

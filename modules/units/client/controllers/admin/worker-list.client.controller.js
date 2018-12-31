@@ -5,13 +5,17 @@
     .module('units.admin')
     .controller('WorkerListController', WorkerListController);
 
-  WorkerListController.$inject = ['$scope', 'WorkerService', 'WorkerApi', '$window', '$location'];
+  WorkerListController.$inject = ['$scope', 'WorkerService', 'WorkerApi', 'PartnerService'];
 
-  function WorkerListController($scope, WorkerService, WorkerApi, $window, $location) {
+  function WorkerListController($scope, WorkerService, WorkerApi, PartnerService) {
     var vm = this;
     onCreate();
 
     function onCreate() {
+      PartnerService.query(function (data) {
+        vm.partners = data;
+      });
+
       prepareCondition(false);
       handleSearch();
     }

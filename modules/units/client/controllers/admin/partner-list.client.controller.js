@@ -34,7 +34,7 @@
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '協力者の取得が失敗しました。';
+          var message = (err) ? err.message || err.data.message : '協力会社の取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }
@@ -65,12 +65,12 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: 'この協力者を削除します。よろしいですか？'
+        message: 'この協力会社を削除します。よろしいですか？'
       }, function () {
         var unit = new PartnerService({ _id: _id });
         unit.$remove(function () {
           handleSearch();
-          $scope.handleShowToast('協力者の削除が完了しました。');
+          $scope.handleShowToast('協力会社の削除が完了しました。');
         });
       });
     };

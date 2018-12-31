@@ -63,7 +63,7 @@ exports.list = function (req, res) {
  * @version 2018/12/24
  */
 exports.petition = function (req, res) {
-  var pattern = /^(([0-9]{9,13}$)|([0-9]{3}-[0-9]{3}-[0-9]{4}$)|([0-9]{2}-[0-9]{4}-[0-9]{4}$)|([0-9]{3}-[0-9]{4}-[0-9]{4}$))/;
+  var pattern = /^([0-9]{9,13}$)/;
   req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
   req.checkBody('name', 'サーバーエラーが発生しました。').notEmpty();
   req.checkBody('phone', 'サーバーエラーが発生しました。').notEmpty().matches(pattern);

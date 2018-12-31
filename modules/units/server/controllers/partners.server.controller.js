@@ -20,10 +20,10 @@ exports.create = function (req, res) {
   User.findOne({ username: username, deleted: false }).exec((err, user) => {
     if (err) {
       logger.error(err);
-      return res.status(422).send({ message: '協力者を登録できません。' });
+      return res.status(422).send({ message: '協力会社を登録できません。' });
     }
     if (user)
-      return res.status(422).send({ message: 'IDが既存しますので協力者を登録できません。' });
+      return res.status(422).send({ message: 'IDが既存しますので協力会社を登録できません。' });
 
     User.createAccount('partner', username, password)
       .then((user) => {
@@ -31,14 +31,14 @@ exports.create = function (req, res) {
         partner.save(function (err) {
           if (err) {
             logger.error(err);
-            return res.status(422).send({ message: '協力者を登録できません。' });
+            return res.status(422).send({ message: '協力会社を登録できません。' });
           }
           return res.json(partner);
         });
       })
       .catch((err) => {
         logger.error(err);
-        return res.status(422).send({ message: '協力者を登録できません。' });
+        return res.status(422).send({ message: '協力会社を登録できません。' });
       });
   });
 };
@@ -54,10 +54,10 @@ exports.update = function (req, res) {
   User.findOne({ username: username, deleted: false, _id: { '$ne': partner.account._id } }).exec((err, user) => {
     if (err) {
       logger.error(err);
-      return res.status(422).send({ message: '協力者を変更できません。' });
+      return res.status(422).send({ message: '協力会社を変更できません。' });
     }
     if (user)
-      return res.status(422).send({ message: 'IDが既存しますので協力者を変更できません。' });
+      return res.status(422).send({ message: 'IDが既存しますので協力会社を変更できません。' });
 
     partner = _.extend(partner, req.body);
     var password = null;
@@ -69,14 +69,14 @@ exports.update = function (req, res) {
         partner.save(function (err) {
           if (err) {
             logger.error(err);
-            return res.status(422).send({ message: '協力者を変更できません。' });
+            return res.status(422).send({ message: '協力会社を変更できません。' });
           }
           return res.json(partner);
         });
       })
       .catch((err) => {
         logger.error(err);
-        return res.status(422).send({ message: '協力者を変更できません。' });
+        return res.status(422).send({ message: '協力会社を変更できません。' });
       });
   });
 };
@@ -87,12 +87,12 @@ exports.delete = function (req, res) {
   partner.save(function (err) {
     if (err) {
       logger.error(err);
-      return res.status(400).send({ message: '協力者を削除できません。' });
+      return res.status(400).send({ message: '協力会社を削除できません。' });
     }
     User.findByIdAndUpdate(partner.account, { deleted: true }, function (err) {
       if (err) {
         logger.error(err);
-        return res.status(400).send({ message: '協力者を削除できません。' });
+        return res.status(400).send({ message: '協力会社を削除できません。' });
       }
       return res.json(partner);
     });
@@ -140,7 +140,7 @@ exports.paging = function (req, res) {
 exports.partnerByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: '協力者が見つかりません。'
+      message: '協力会社が見つかりません。'
     });
   }
 
@@ -152,7 +152,7 @@ exports.partnerByID = function (req, res, next, id) {
         logger.error(err);
         return next(err);
       } else if (!partner) {
-        return next(new Error('協力者が見つかりません。'));
+        return next(new Error('協力会社が見つかりません。'));
       }
 
       req.model = partner;

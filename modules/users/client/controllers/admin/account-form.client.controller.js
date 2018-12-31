@@ -5,9 +5,9 @@
     .module('users.admin')
     .controller('AccountController', AccountController);
 
-  AccountController.$inject = ['$scope', '$state', 'userResolve'];
+  AccountController.$inject = ['$scope', '$state', 'userResolve', 'UnitsService'];
 
-  function AccountController($scope, $state, user) {
+  function AccountController($scope, $state, user, UnitsService) {
     var vm = this;
     vm.user = user;
     vm.update = update;
@@ -19,6 +19,14 @@
       } else {
         vm.user.roles = [];
       }
+
+      UnitsService.query(function (data) {
+        vm.units = data;
+        if (vm.user.unit) {
+          vm.user.unit = _.find(vm.units, { '_id': vm.user.unit._id });
+        }
+      });
+
     }
 
     function update(isValid) {

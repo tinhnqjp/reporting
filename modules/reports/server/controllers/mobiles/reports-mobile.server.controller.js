@@ -80,24 +80,45 @@ exports.histories = function (req, res) {
 };
 
 exports.create = function (req, res) {
+  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
   req.checkBody('data', 'サーバーエラーが発生しました。').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
   }
-
+  var userId = req.body.userId;
   var report = new Report(req.body.data);
-  report.number = moment()
-    .valueOf()
-    .toString();
-  report.save(function (err) {
+  User.findById(userId).exec((err, user) => {
     if (err) {
       logger.error(err);
       return res
         .status(422)
         .send({ message: 'サーバーエラーが発生しました。' });
     }
-    return res.end();
+    if (!user) {
+      return res
+        .status(422)
+        .send({ message: 'このデータは無効または削除されています。' });
+    }
+    if (user.roles[0] === 'partner' ||
+    user.roles[0] === 'user' ||
+    user.roles[0] === 'dispatcher' ||
+    user.roles[0] === 'employee') {
+      report.number = moment()
+        .valueOf()
+        .toString();
+      report.save(function (err) {
+        if (err) {
+          logger.error(err);
+          return res
+            .status(422)
+            .send({ message: 'サーバーエラーが発生しました。' });
+        }
+        return res.end();
+      });
+    } else {
+      return res.status(422).send({ message: 'アクセス権限が必要。' });
+    }
   });
 };
 

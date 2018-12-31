@@ -133,7 +133,8 @@ exports.paging = function (req, res) {
     page: page,
     limit: limit,
     populate: [
-      { path: 'account', select: 'username' }
+      { path: 'account', select: 'username' },
+      { path: 'partner', select: 'name' }
     ]
   }).then(function (result) {
     return res.json(result);
@@ -195,6 +196,9 @@ function getQuery(condition) {
   if (condition.created_max) {
     var max = moment(condition.created_max).endOf('day');
     and_arr.push({ created: { '$lte': max } });
+  }
+  if (condition.partner) {
+    and_arr.push({ partner: condition.partner });
   }
 
   if (and_arr.length > 0) {

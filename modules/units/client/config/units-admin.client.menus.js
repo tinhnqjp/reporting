@@ -12,7 +12,7 @@
     menuService.addMenuItem('topbar', {
       position: 3,
       class: 'fa fa-food-circle-o',
-      title: '協力者管理',
+      title: '協力会社管理',
       state: 'admin.partners.list',
       parrent_state: 'admin.partners'
     });

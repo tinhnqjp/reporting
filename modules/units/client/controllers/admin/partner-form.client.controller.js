@@ -27,7 +27,7 @@
         return false;
       }
       $scope.handleShowConfirm({
-        message: 'この協力者を保存します。よろしいですか？'
+        message: 'この協力会社を保存します。よろしいですか？'
       }, function () {
         if (vm.password) {
           vm.partner.account.password = vm.password;
@@ -38,11 +38,11 @@
 
         function successCallback(res) {
           $state.go('admin.partners.detail', { partnerId: vm.partner._id });
-          $scope.handleShowToast('この協力者の保存が完了しました。');
+          $scope.handleShowToast('この協力会社の保存が完了しました。');
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '協力者の保存が失敗しました。';
+          var message = (res) ? res.message || res.data.message : '協力会社の保存が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });
