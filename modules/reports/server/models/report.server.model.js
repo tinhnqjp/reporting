@@ -209,12 +209,64 @@ var ReportSchema = new Schema({
       detail: { type: String } // Multiple lines
     }]
   },
+  // ------------------------- 写真報告書 Picture Report------------------------------
+  picture: {
+    // 店舗外観写真
+    store_image: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
+    // 機器
+    machines: [{
+      // 管理No
+      number: { type: Number }, // Int
+      sets: [{
+        // コメント
+        comment: { type: String },
+        // Before写真
+        before: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
+        // After写真
+        after: { type: String } // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
+      }]
+    }]
+  },
   // ------------------------- 修理報告書 Repair Report------------------------------
   repair: {
+    // 作業内容
+    work_kind: { type: String }, // Đây là field  title trong Master data repair_work_kind
     // 内機 (Internal machine)
-    internals: [],
+    internals: [{
+      // 設置場所
+      posision: { type: String },
+      // メーカー
+      maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // タイプ
+      type: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 機器型式
+      model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 製造番号
+      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 外装パネル型式
+      exterior_type: { type: String, maxlength: 14 }, // Free input
+      // 製造年月
+      made_date: { type: String, maxlength: 7 }, // YYYY/MM (MM có thể không nhập YYYY/-)
+      // 室内吸込
+      indoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      // 室内吹出
+      outdoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      // 高圧
+      high_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      // 低圧
+      low_pressure: { type: Number } // Mpa Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      // // 吐出管
+      // discharge_pipe
+      // // 吸入管
+      // suction_pipe
+    }],
     // 外機 (External machine)
-    externals: []
+    externals: [],
+    // 写真データ
+    image1: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
+    image2: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
+    // 作業内容
+    work_content: { type: String } // Multiple lines
   },
   // ------------------------- 設置報告書 Construct Report------------------------------
   construct: {
@@ -222,11 +274,6 @@ var ReportSchema = new Schema({
     internals: [],
     // 外機 (External machine)
     externals: []
-  },
-  // ------------------------- 写真報告書 Picture Report------------------------------
-  picture: {
-    // 機器
-    machines: []
   }
 });
 ReportSchema.plugin(paginate);

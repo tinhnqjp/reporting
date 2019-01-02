@@ -51,6 +51,9 @@
     this.export = function (condition) {
       return $http.post('/api/reports/export', { condition: condition }, {});
     };
+    this.config = function () {
+      return $http.post('/api/mobile/reports/config', {}, {});
+    };
     return this;
   }
 

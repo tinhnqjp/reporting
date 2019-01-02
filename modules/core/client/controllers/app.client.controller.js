@@ -224,7 +224,11 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
 
   $scope.picker = {
     created_min: { open: false },
-    created_max: { open: false }
+    created_max: { open: false },
+    start: { open: false },
+    end: { open: false },
+    work_start: { open: false },
+    work_end: { open: false }
   };
   $scope.openCalendar = function (e, picker) {
     $scope.picker[picker].open = true;

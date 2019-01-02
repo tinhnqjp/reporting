@@ -1,0 +1,190 @@
+<form name="vm.modalInternalForm" ng-submit="confirmInternal(vm.modalInternalForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+      <h4 class="modal-title-confirm">内機</h4>
+  </div>
+  <div class="modal-body">
+    <uib-accordion>
+      <div uib-accordion-group class="panel-primary" is-open="status.open1">
+        <uib-accordion-heading>
+          内機情報 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open1, 'glyphicon-chevron-right': !status.open1}"></i>
+        </uib-accordion-heading>
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  管理No
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="internal.number" placeholder="管理Noを入力" autocomplete="off">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.maker" placeholder="メーカーを入力" ng-click="modalMaker(internal.maker)">
+                </td>
+                <th class="col-xs-2">
+                  タイプ
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.type" placeholder="タイプを入力" ng-click="modalType(internal.type)">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.model" placeholder="機器型式を入力" maxlength="13">
+                </td>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.serial" placeholder="製造番号を入力" maxlength="12">
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div uib-accordion-group class="panel-primary" is-open="status.open2">
+        <uib-accordion-heading>
+          作業箇所 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open2, 'glyphicon-chevron-right': !status.open2}"></i>
+        </uib-accordion-heading>
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.drain_pump == item.id" ng-click="tapThree(item.id, 'drain_pump')">
+              <div class="title">
+                <span>ドレンポンプ</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.hose == item.id" ng-click="tapThree(item.id, 'hose')">
+              <div class="title">
+                <span>ホース内</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.heat_exchanger == item.id" ng-click="tapThree(item.id, 'heat_exchanger')">
+              <div class="title">
+                <span>熱交換器</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.drain_pan == item.id" ng-click="tapThree(item.id, 'drain_pan')">
+              <div class="title">
+                <span>ドレンパン</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.grill == item.id" ng-click="tapThree(item.id, 'grill')">
+              <div class="title">
+                <span>グリル</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in three_taps" ng-if="internal.filter == item.id" ng-click="tapThree(item.id, 'filter')">
+              <div class="title">
+                <span>フィルター</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div uib-accordion-group class="panel-primary" is-open="status.open3">
+        <uib-accordion-heading>
+          作業前 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open3, 'glyphicon-chevron-right': !status.open3}"></i>
+        </uib-accordion-heading>
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-4">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="internal.before_confirmed == item.id" ng-click="tapFour(item.id, 'before_confirmed')">
+              <div class="title">
+                <span>動作確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-info" ng-repeat="item in two_taps" ng-if="internal.damage == item.id" ng-click="tapTwo(item.id, 'damage')">
+              <div class="title">
+                <span>破損確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div uib-accordion-group class="panel-primary" is-open="status.open4">
+        <uib-accordion-heading>
+          作業後 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open4, 'glyphicon-chevron-right': !status.open4}"></i>
+        </uib-accordion-heading>
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="internal.drainage == item.id" ng-click="tapFour(item.id, 'drainage')">
+              <div class="title">
+                <span>排水確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="internal.noise_and_vibration == item.id" ng-click="tapFour(item.id, 'noise_and_vibration')">
+              <div class="title">
+                <span>異音・振動</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="internal.after_confirmed == item.id" ng-click="tapFour(item.id, 'after_confirmed')">
+              <div class="title">
+                <span>動作確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in two_taps" ng-if="internal.measure == item.id" ng-click="tapTwo(item.id, 'measure')">
+              <div class="title">
+                <span>測定（冷暖）</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uib-accordion>
+    
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
+        <li class="text-red" ng-message="required">氏名を入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_start.$error" role="alert">
+        <li class="text-red" ng-message="datetime">開始時間の入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_end.$error" role="alert">
+        <li class="text-red" ng-message="datetime">終了時間の入力形式に誤りがあります。</li>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

@@ -22,9 +22,67 @@
     // .config(calendarCf)
     .config(httpConnectionConfig)
     .run(uibPaginationConfig)
-    .run(uibDatepickerConfig)
-    .run(uibDatepickerPopupConfig)
-    .run(runConfig);
+    .run(runConfig)
+    .constant('uiDatetimePickerConfig', {
+      showWeeks: false,
+      format: 'yyyy/MM/dd',
+      dateFormat: 'yyyy/MM/dd HH:mm',
+      defaultTime: '00:00:00',
+      html5Types: {
+        date: 'yyyy-MM-dd',
+        'datetime-local': 'yyyy-MM-ddTHH:mm:ss.sss',
+        'month': 'yyyy-MM'
+      },
+      initialPicker: 'date',
+      reOpenDefault: false,
+      enableDate: true,
+      enableTime: true,
+      buttonBar: {
+        show: true,
+        now: {
+          show: false,
+          text: 'Now',
+          cls: 'btn-sm btn-default'
+        },
+        today: {
+          show: true,
+          text: '今日',
+          cls: 'btn-sm btn-default'
+        },
+        clear: {
+          show: true,
+          text: 'クリア',
+          cls: 'btn-sm btn-default'
+        },
+        date: {
+          show: true,
+          text: '日付',
+          cls: 'btn-sm btn-default'
+        },
+        time: {
+          show: true,
+          text: '時間',
+          cls: 'btn-sm btn-default'
+        },
+        close: {
+          show: true,
+          text: '閉じる',
+          cls: 'btn-sm btn-default'
+        },
+        cancel: {
+          show: false,
+          text: 'Cancel',
+          cls: 'btn-sm btn-default'
+        }
+      },
+      closeOnDateSelection: false,
+      closeOnTimeNow: false,
+      appendToBody: false,
+      altInputFormats: [],
+      ngModelOptions: {},
+      saveAs: false,
+      readAs: false
+    });
 
   uibPaginationConfig.$inject = ['uibPaginationConfig'];
   function uibPaginationConfig(uibPaginationConfig) {
@@ -34,20 +92,6 @@
     uibPaginationConfig.nextText = '次';
     uibPaginationConfig.maxSize = '5';
     uibPaginationConfig.boundaryLinks = 'true';
-  }
-
-  uibDatepickerConfig.$inject = ['uibDatepickerConfig'];
-  function uibDatepickerConfig(uibDatepickerConfig) {
-    uibDatepickerConfig.showWeeks = false;
-    uibDatepickerConfig.format = 'yyyy/MM/dd';
-  }
-
-  uibDatepickerPopupConfig.$inject = ['uibDatepickerPopupConfig'];
-  function uibDatepickerPopupConfig(uibDatepickerPopupConfig) {
-    uibDatepickerPopupConfig.closeText = 'Close';
-    uibDatepickerPopupConfig.showWeeks = false;
-    uibDatepickerPopupConfig.placement = 'auto bottom';
-    uibDatepickerPopupConfig.format = 'yyyy/MM/dd';
   }
 
   // toastConfig.$inject = ['toastrConfig'];

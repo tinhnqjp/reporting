@@ -1,0 +1,30 @@
+<form name="vm.modalWorkerForm" ng-submit="confirmMaker(vm.modalWorkerForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+      <h4 class="modal-title-confirm">メーカー選択</h4>
+  </div>
+  <div class="modal-body">
+    <div class="table-custom" style="border:0px;">
+      <table class="table table-detail">
+        <tbody>
+          <tr>
+            <td class="col-xs-12">
+              <input type="text" name="makerinput" class="form-control" ng-model="maker.input" placeholder="フリー入力" autocomplete="off">
+            </td>
+          </tr>
+          <tr>
+            <td class="col-xs-12">
+              <h4>メーカー選択</h4>
+              <div class="list-group">
+                <button type="button" class="list-group-item" ng-repeat="item in makers" ng-click="selectMaker(item)">{{item}}</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

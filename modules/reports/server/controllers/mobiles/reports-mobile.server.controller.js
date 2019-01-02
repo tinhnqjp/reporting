@@ -213,7 +213,7 @@ exports.config = function (req, res) {
       'LG'
     ],
     // タイプ
-    type: [
+    types: [
       '天カセ四方向',
       '天カセ二方向',
       '天カセ一方向',
@@ -228,12 +228,16 @@ exports.config = function (req, res) {
       'ユニットクーラー',
       'ファンコイル'
     ],
+    // 冷媒
+    type_taps: [{ id: false, value: '冷' }, { id: true, value: '暖' }],
+    // 破損確認 無/有
+    two_taps: [{ id: false, value: '無' }, { id: true, value: '有' }],
     // 作業箇所
-    three_taps: ['－', '▲', '●'],
+    three_taps: [{ id: 1, value: '－' }, { id: 2, value: '▲' }, { id: 3, value: '●' }],
     // 作業前（後）
-    four_taps: ['－', '△', '○', '×'],
+    four_taps: [{ id: 1, value: '－' }, { id: 2, value: '△' }, { id: 3, value: '○' }, { id: 4, value: '×' }],
     // 作業結果
-    work_status: ['完了', '継続'],
+    work_status: [{ id: true, value: '完了' }, { id: false, value: '継続' }],
     // 営業所
     locations: [
       '東京本社　〒160-0023 東京都新宿区西新宿7-20-1　住友不動産西新宿ビル22F',

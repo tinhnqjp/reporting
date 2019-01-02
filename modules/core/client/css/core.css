@@ -424,6 +424,33 @@ a.text-muted:focus {
 .ui-select-bootstrap .ui-select-toggle>a.btn {
   margin-top: initial;
 }
+
+.box-part {
+  border-radius:0px;
+  padding:10px 2px;
+  margin:2px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.box-part:active  {
+  background:#3367a8;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+}
+.box-part:hover {
+  background:#4183D7;
+}
+
+.box-part .text {
+  margin:10px 0px;
+}
+.box-part .fa {
+   color:#FFF;
+}
+.box-part .taps {
+  margin: 5px;
+  font-size: 30px;
+}
 /* +++++++++++++++ FORM EDIt +++++++++++++++ */
 .form-edit h4, .form-detail h4 {
 	margin-top: 5px;
@@ -495,6 +522,14 @@ a.text-muted:focus {
 
 .ngdialog.ngdialog-theme-default {
   padding-top: 100px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+  background: #fff;
+}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content .modal-header-confirm {
+  text-align: center;
+  border-bottom: 1px solid #eeeeee;
 }
 
 /* +++++++++++++++ TAG +++++++++++++++ */

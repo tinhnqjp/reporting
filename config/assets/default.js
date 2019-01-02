@@ -31,6 +31,7 @@ module.exports = {
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/ng-dialog/js/ngDialog.min.js',
         'public/lib/angular-file-upload/dist/angular-file-upload.min.js',
+        'public/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js',
         'public/lib/angular-ui-select/dist/select.min.js',
         'public/lib/lodash/lodash.js',
         'public/lib/moment/moment.js',

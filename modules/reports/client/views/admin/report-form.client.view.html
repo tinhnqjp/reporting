@@ -1,3 +1,17 @@
+<script type="text/ng-template" id="group-template.html">
+  <div class="panel-heading">
+    <h4 class="panel-title" style="color:#fa39c3">
+      <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading">
+        <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
+          {{heading}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+        </span>
+      </a>
+    </h4>
+  </div>
+  <div class="panel-collapse collapse" uib-collapse="!isOpen">
+    <div class="table-custom" ng-transclude></div>
+  </div>
+</script>
 <div class="container form-edit">
   <form name="vm.reportForm" ng-submit="vm.update(vm.reportForm.$valid)" novalidate>
     <div class="row">
@@ -10,31 +24,213 @@
             <button-save back="admin.reports.list"></button-save>
           </div>
         </div>
-        <div class="table-custom">
-          <table class="table table-detail">
-            <tbody>
-              <tr>
-                <th class="col-xs-2">
-                  報告書名
-                  <span class="text-red">*</span>
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="name" class="form-control" ng-model="vm.report.name" placeholder="社名を入力"
-                    required autocomplete="off" maxlength="30">
-                </td>
-              </tr>
-              <tr>
-                <th class="col-xs-2">
-                  備考
-                </th>
-                <td class="col-xs-10">
-                  <input type="text" name="description" class="form-control" ng-model="vm.report.description"
-                    placeholder="備考を入力" autocomplete="off" maxlength="50">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <uib-accordion>
+          <div uib-accordion-group class="panel-primary" is-open="false">
+            <uib-accordion-heading>
+              基本情報 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+            </uib-accordion-heading>
+            <div class="table-custom" style="border:0px">
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <th class="col-xs-2">
+                      納入先
+                      <span class="text-red">*</span>
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" name="supplier" class="form-control" ng-model="vm.report.supplier" placeholder="納入先を入力"
+                        required autocomplete="off">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      住所
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" name="address1" class="form-control" ng-model="vm.report.address1" placeholder="住所を入力" autocomplete="off">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" name="address2" class="form-control" ng-model="vm.report.address2" placeholder="" autocomplete="off">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      開始
+                      <span class="text-red">*</span>
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.report.start"
+                        is-open="picker.start.open" ng-click="openCalendar($event, 'start')" placeholder="開始を入力">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      終了
+                      <span class="text-red">*</span>
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.report.end"
+                        is-open="picker.end.open" ng-click="openCalendar($event, 'end')" placeholder="終了を入力">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                        内機
+                    </th>
+                    <td class="col-xs-4">
+                      <div class="input-group">
+                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_internal" placeholder="内機を入力">
+                        <span class="input-group-addon">台</span>
+                      </div>
+                    </td>
+                    <th class="col-xs-2">
+                        外機
+                    </th>
+                    <td class="col-xs-4">
+                      <div class="input-group">
+                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_external" placeholder="外機を入力">
+                        <span class="input-group-addon">台</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                        ルーム（内）
+                    </th>
+                    <td class="col-xs-4">
+                      <div class="input-group">
+                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_internal_room" placeholder="ルーム（内）を入力">
+                        <span class="input-group-addon">台</span>
+                      </div>
+                    </td>
+                    <th class="col-xs-2">
+                        ルーム（外）
+                    </th>
+                    <td class="col-xs-4">
+                      <div class="input-group">
+                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_external_room" placeholder="ルーム（外）を入力">
+                        <span class="input-group-addon">台</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="col-xs-2">
+                      提出先
+                    </th>
+                    <td class="col-xs-4">
+                      <ui-select name="unit_id" ng-model="vm.report.unit_id" theme="bootstrap" required>
+                        <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="item in vm.units | filter: $select.search">
+                          <span ng-bind-html="item.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <th class="col-xs-2">
+                      作業結果
+                    </th>
+                    <td class="col-xs-4">
+                      <select name="work_status" class="form-control" ng-model="vm.report.work_status">
+                        <option value>作業結果を選択</option>
+                        <option ng-repeat="item in vm.configs.clean.work_status" value="{{item}}">{{item}}</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div uib-accordion-group class="panel-primary" is-open="false">
+            <uib-accordion-heading>
+              作業者 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+            </uib-accordion-heading>
+            <div class="table-custom" style="border:0px">
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <td class="col-xs-12" colspan="4">
+                      <div class="col-xs-2" ng-repeat="item in vm.report.workers" ng-click="vm.modalWorker(item)">
+                        <div class="box-part text-center label-success">
+                            <i class="fa fa-user-o fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>{{item.name}}</span>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-2">
+                        <div class="box-part text-center label-success" ng-click="vm.modalWorker()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                                <span>追加</span>
+                            </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      責任者
+                    </th>
+                    <td class="col-xs-4">
+                      <ui-select name="manager" ng-model="vm.report.manager" theme="bootstrap" required>
+                        <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="item in vm.report.workers | filter: $select.search">
+                          <span ng-bind-html="item.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <th class="col-xs-2">
+                        営業担当者
+                    </th>
+                    <td class="col-xs-4">
+                      <input type="text" name="saler" class="form-control" ng-model="vm.report.saler" placeholder="営業担当者を入力"
+                        required autocomplete="off">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div uib-accordion-group class="panel-primary" is-open="true">
+            <uib-accordion-heading>
+                内機一覧 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+            </uib-accordion-heading>
+            <div class="table-custom" style="border:0px">
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <td class="col-xs-12" colspan="4">
+                      <div class="col-xs-2" ng-repeat="item in vm.report.clean.internals" ng-click="vm.modalInternal(item)">
+                        <div class="box-part text-center label-info">
+                            <i class="fa fa-credit-card-alt fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>{{item.number}}</span>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-2">
+                        <div class="box-part text-center label-info" ng-click="vm.modalInternal()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                                <span>追加</span>
+                            </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </uib-accordion>
+        
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.reportForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">社名を入力してください。</li>

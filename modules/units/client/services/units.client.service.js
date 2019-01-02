@@ -51,6 +51,9 @@
     this.export = function (condition) {
       return $http.post('/api/units/export', { condition: condition }, {});
     };
+    this.units = function () {
+      return $http.post('/api/mobile/units/list', {}, {});
+    };
     return this;
   }
 
