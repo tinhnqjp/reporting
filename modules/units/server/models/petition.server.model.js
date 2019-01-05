@@ -17,6 +17,8 @@ var PetitionSchema = new Schema({
   phone: { type: String, trim: true },
   // 担当者
   manager: { type: String, trim: true },
+  // 申請種類（1: Create - 2: Delete）
+  action: { type: Number },
   partner: { type: Schema.ObjectId, ref: 'Partner' },
   created: { type: Date, default: Date.now }
 });

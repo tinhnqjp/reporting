@@ -426,11 +426,12 @@ a.text-muted:focus {
 }
 
 .box-part {
-  border-radius:0px;
+  border-radius:0;
   padding:10px 2px;
   margin:2px;
   color: #fff;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .box-part:active  {
@@ -442,7 +443,7 @@ a.text-muted:focus {
 }
 
 .box-part .text {
-  margin:10px 0px;
+  margin:10px 0;
 }
 .box-part .fa {
    color:#FFF;
@@ -451,6 +452,14 @@ a.text-muted:focus {
   margin: 5px;
   font-size: 30px;
 }
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default {
+  border:0
+}
+.dropdown-menu {
+	top: unset;
+}
+
 /* +++++++++++++++ FORM EDIt +++++++++++++++ */
 .form-edit h4, .form-detail h4 {
 	margin-top: 5px;
@@ -490,6 +499,47 @@ a.text-muted:focus {
   vertical-align: middle;
 }
 
+.form-report .table-custom, .ngdialog-content .table-custom {
+  border:0;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+.form-report .table-custom .table, .ngdialog-content .table-custom .table {
+  margin-bottom: 0;
+}
+.ngdialog-content .modal-body {
+  padding: 0;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  background-color: #eee;
+  border-color: #ddd;
+  color: #000;
+}
+.img-thumbnail {
+  height: 100px;
+}
+
+.modal-checkbox .label {
+  border:1px solid #ccc;
+  padding:10px;
+  margin:0 0 10px;
+  display:block; 
+}
+
+.modal-checkbox label:hover {
+  background:#eee;
+  cursor:pointer;
+}
+.modal-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  float: right;
+}
 /* +++++++++++++++ LIST SEARCH +++++++++++++++ */
 .table-list {
   background-color: #fff;
@@ -499,7 +549,7 @@ a.text-muted:focus {
   color: #fff !important;
 }
 .table-list .table {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 .table-list .table tbody td{
   padding: 4px;

@@ -1,4 +1,4 @@
-<form name="vm.modalForm" ng-submit="confirmForm(vm.modalMakerForm.$valid)" novalidate>
+<form name="vm.modalDesForm" ng-submit="confirmForm(vm.modalDesForm.$valid)" novalidate>
   <div class="modal-body">
     <div class="table-custom">
       <table class="table table-detail">
@@ -6,7 +6,7 @@
           <tr>
             <td class="col-xs-12">
               <div class="row pdn">
-                <div class="col-xs-6 text-left"><h4>メーカー選択</h4></div>
+                <div class="col-xs-6 text-left"><h4>冷媒種類選択</h4></div>
                 <div class="col-xs-6 text-right">
                   <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
                   <button class="btn btn-primary btn-sm" type="submit">完了</button>
@@ -16,14 +16,14 @@
           </tr>
           <tr>
             <td class="col-xs-12">
-              <input type="text" name="makerinput" class="form-control" ng-model="input" placeholder="フリー入力" autocomplete="off">
+              <input type="text" class="form-control" ng-model="input" placeholder="フリー入力">
             </td>
           </tr>
           <tr>
             <td class="col-xs-12">
-              <h4>メーカー選択</h4>
+              <h4>冷媒種類選択</h4>
               <div class="list-group">
-                <button type="button" class="list-group-item" ng-repeat="item in makers" 
+                <button type="button" class="list-group-item" ng-repeat="item in refrigerant_kinds"
                 ng-class="{'active': item == selected }" ng-click="selectValue(item)">{{item}}</button>
               </div>
             </td>

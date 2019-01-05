@@ -1,4 +1,4 @@
-<form name="vm.modalForm" ng-submit="confirmForm(vm.modalMakerForm.$valid)" novalidate>
+<form name="vm.modalForm" ng-submit="confirmForm(vm.modalForm.$valid)" novalidate>
   <div class="modal-body">
     <div class="table-custom">
       <table class="table table-detail">
@@ -6,7 +6,7 @@
           <tr>
             <td class="col-xs-12">
               <div class="row pdn">
-                <div class="col-xs-6 text-left"><h4>メーカー選択</h4></div>
+                <div class="col-xs-6 text-left"><h4>指摘事項</h4></div>
                 <div class="col-xs-6 text-right">
                   <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
                   <button class="btn btn-primary btn-sm" type="submit">完了</button>
@@ -16,14 +16,14 @@
           </tr>
           <tr>
             <td class="col-xs-12">
-              <input type="text" name="makerinput" class="form-control" ng-model="input" placeholder="フリー入力" autocomplete="off">
+              <textarea class="form-control" ng-model="input" placeholder="フリー入力"></textarea>
             </td>
           </tr>
           <tr>
             <td class="col-xs-12">
-              <h4>メーカー選択</h4>
+              <h4>定型文</h4>
               <div class="list-group">
-                <button type="button" class="list-group-item" ng-repeat="item in makers" 
+                <button type="button" class="list-group-item" ng-repeat="item in descriptions"
                 ng-class="{'active': item == selected }" ng-click="selectValue(item)">{{item}}</button>
               </div>
             </td>

@@ -33,6 +33,7 @@ module.exports = {
         'public/lib/angular-file-upload/dist/angular-file-upload.min.js',
         'public/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js',
         'public/lib/angular-ui-select/dist/select.min.js',
+        'public/lib/checklist-model/checklist-model.js',
         'public/lib/lodash/lodash.js',
         'public/lib/moment/moment.js',
         'public/lib/moment/locale/ja.js',

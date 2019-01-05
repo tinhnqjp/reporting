@@ -40,6 +40,8 @@ var UserSchema = new Schema({
     required: true
   },
   unit: { type: Schema.ObjectId, ref: 'Unit' },
+  // 有効期限
+  expire: { type: Date },
   deleted: { type: Boolean, default: false },
   // System info
   updated: { type: Date },

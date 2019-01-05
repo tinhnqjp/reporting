@@ -12,10 +12,10 @@
     <div class="table-custom" ng-transclude></div>
   </div>
 </script>
-<div class="container form-edit">
+<div class="container form-edit form-report">
   <form name="vm.reportForm" ng-submit="vm.update(vm.reportForm.$valid)" novalidate>
     <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
+      <div class="col-lg-12">
         <div class="row mg10b">
           <div class="col-xs-6">
             <form-title></form-title>
@@ -24,12 +24,11 @@
             <button-save back="admin.reports.list"></button-save>
           </div>
         </div>
-        <uib-accordion>
-          <div uib-accordion-group class="panel-primary" is-open="false">
-            <uib-accordion-heading>
-              基本情報 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-            </uib-accordion-heading>
-            <div class="table-custom" style="border:0px">
+        <!-- 基本情報 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">基本情報</div>
+          <div class="panel-body">
+            <div class="table-custom" >
               <table class="table table-detail">
                 <tbody>
                   <tr>
@@ -61,21 +60,23 @@
                   <tr>
                     <th class="col-xs-2">
                       開始
-                      <span class="text-red">*</span>
                     </th>
                     <td class="col-xs-10" colspan="3">
-                      <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.report.start"
-                        is-open="picker.start.open" ng-click="openCalendar($event, 'start')" placeholder="開始を入力">
+                      <input type="text" id="start" name="start" datetime-picker="" datepicker-options="dateOptions"
+                        timepicker-options="timeOptions" ng-click="openCalendar($event, 'start')" placeholder="開始を入力"
+                        is-open="open.start" autocomplete="off" class="form-control" ng-model="vm.report.start"
+                        required ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
                     </td>
                   </tr>
                   <tr>
                     <th class="col-xs-2">
                       終了
-                      <span class="text-red">*</span>
                     </th>
                     <td class="col-xs-10" colspan="3">
-                      <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.report.end"
-                        is-open="picker.end.open" ng-click="openCalendar($event, 'end')" placeholder="終了を入力">
+                      <input type="text" id="end" name="end" datetime-picker="" datepicker-options="dateOptions"
+                        timepicker-options="timeOptions" ng-click="openCalendar($event, 'end')" placeholder="終了を入力"
+                        is-open="open.end" autocomplete="off" class="form-control" ng-model="vm.report.end"
+                        required ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
                     </td>
                   </tr>
                   <tr>
@@ -84,7 +85,7 @@
                     </th>
                     <td class="col-xs-4">
                       <div class="input-group">
-                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_internal" placeholder="内機を入力">
+                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_internal" placeholder="内機を入力" min="0" max="999">
                         <span class="input-group-addon">台</span>
                       </div>
                     </td>
@@ -93,7 +94,7 @@
                     </th>
                     <td class="col-xs-4">
                       <div class="input-group">
-                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_external" placeholder="外機を入力">
+                        <input type="number" class="form-control" name="number_of_external" ng-model="vm.report.clean.number_of_external" placeholder="外機を入力" min="0" max="999">
                         <span class="input-group-addon">台</span>
                       </div>
                     </td>
@@ -104,7 +105,7 @@
                     </th>
                     <td class="col-xs-4">
                       <div class="input-group">
-                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_internal_room" placeholder="ルーム（内）を入力">
+                        <input type="number" class="form-control" name="number_of_internal_room" ng-model="vm.report.clean.number_of_internal_room" placeholder="ルーム（内）を入力" min="0" max="999">
                         <span class="input-group-addon">台</span>
                       </div>
                     </td>
@@ -113,7 +114,7 @@
                     </th>
                     <td class="col-xs-4">
                       <div class="input-group">
-                        <input type="number" class="form-control" ng-model="vm.report.clean.number_of_external_room" placeholder="ルーム（外）を入力">
+                        <input type="number" class="form-control" name="number_of_external_room" ng-model="vm.report.clean.number_of_external_room" placeholder="ルーム（外）を入力" min="0" max="999">
                         <span class="input-group-addon">台</span>
                       </div>
                     </td>
@@ -124,7 +125,7 @@
                       提出先
                     </th>
                     <td class="col-xs-4">
-                      <ui-select name="unit_id" ng-model="vm.report.unit_id" theme="bootstrap" required>
+                      <ui-select name="unit" ng-model="vm.report.unit" theme="bootstrap">
                         <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="item in vm.units | filter: $select.search">
                           <span ng-bind-html="item.name | highlight: $select.search"></span>
@@ -135,9 +136,8 @@
                       作業結果
                     </th>
                     <td class="col-xs-4">
-                      <select name="work_status" class="form-control" ng-model="vm.report.work_status">
-                        <option value>作業結果を選択</option>
-                        <option ng-repeat="item in vm.configs.clean.work_status" value="{{item}}">{{item}}</option>
+                      <select  class="form-control" ng-model="vm.report.work_result" ng-options="item.id as item.value for item in vm.configs.work_status">
+                        <option value="">作業結果を選択</option>
                       </select>
                     </td>
                   </tr>
@@ -145,12 +145,12 @@
               </table>
             </div>
           </div>
-
-          <div uib-accordion-group class="panel-primary" is-open="false">
-            <uib-accordion-heading>
-              作業者 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-            </uib-accordion-heading>
-            <div class="table-custom" style="border:0px">
+        </div>
+        <!-- 作業者 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">作業者</div>
+          <div class="panel-body">
+            <div class="table-custom" >
               <table class="table table-detail">
                 <tbody>
                   <tr>
@@ -178,7 +178,7 @@
                       責任者
                     </th>
                     <td class="col-xs-4">
-                      <ui-select name="manager" ng-model="vm.report.manager" theme="bootstrap" required>
+                      <ui-select name="manager" ng-model="vm.report.manager" theme="bootstrap">
                         <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="item in vm.report.workers | filter: $select.search">
                           <span ng-bind-html="item.name | highlight: $select.search"></span>
@@ -190,19 +190,19 @@
                     </th>
                     <td class="col-xs-4">
                       <input type="text" name="saler" class="form-control" ng-model="vm.report.saler" placeholder="営業担当者を入力"
-                        required autocomplete="off">
+                        autocomplete="off">
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-
-          <div uib-accordion-group class="panel-primary" is-open="true">
-            <uib-accordion-heading>
-                内機一覧 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-            </uib-accordion-heading>
-            <div class="table-custom" style="border:0px">
+        </div>
+        <!-- 内機一覧 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">内機一覧</div>
+          <div class="panel-body">
+            <div class="table-custom" >
               <table class="table table-detail">
                 <tbody>
                   <tr>
@@ -229,15 +229,148 @@
               </table>
             </div>
           </div>
-        </uib-accordion>
-        
-        <div class="messages" ng-if="vm.isSaveClick">
-          <div ng-messages="vm.reportForm.name.$error" role="alert">
-            <li class="text-red" ng-message="required">社名を入力してください。</li>
-            <li class="text-red" ng-message="maxLength">社名は30桁以内を入力してください。</li>
+        </div>
+        <!-- 外機一覧 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">外機一覧</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <td class="col-xs-12" colspan="4">
+                      <div class="col-xs-2" ng-repeat="item in vm.report.clean.externals" ng-click="vm.modalExternal(item)">
+                        <div class="box-part text-center label-success">
+                            <i class="fa fa-credit-card-alt fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>{{item.number}}</span>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-2">
+                        <div class="box-part text-center label-success" ng-click="vm.modalExternal()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                                <span>追加</span>
+                            </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div ng-messages="vm.reportForm.description.$error" role="alert">
-            <li class="text-red" ng-message="maxLength">備考は50桁以内を入力してください。</li>
+        </div>
+        <!-- 見取り図 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">見取り図</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <td class="col-xs-12" colspan="4">
+                      <div class="col-xs-2" ng-repeat="item in vm.report.drawings" ng-click="vm.modalDrawings(item)">
+                        <div class="box-part text-center label-success">
+                          <img class="img-responsive" src="{{item}}">
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- その他作業 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">その他作業</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <td class="col-xs-12" colspan="4">
+                      <div class="col-xs-2" ng-repeat="item in vm.report.clean.other_works" ng-click="vm.modalOtherWork(item)">
+                        <div class="box-part text-center label-default">
+                            <i class="fa fa-wrench fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>{{item.title}}</span>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-2">
+                        <div class="box-part text-center label-default" ng-click="vm.modalOtherWork()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                                <span>追加</span>
+                            </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- サイン -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">サイン</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <th class="col-xs-2">
+                      サイン
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <img class="img-responsive img-thumbnail" src="{{vm.report.signature}}">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-xs-2">
+                      営業所
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <input type="text" name="location" class="form-control" ng-model="vm.report.location" placeholder="営業所を選択" autocomplete="off"
+                      ng-click="vm.modalLocation(vm.report.location)">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="messages" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.reportForm.supplier.$error" role="alert">
+            <li class="text-red" ng-message="required">納入先を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.start.$error" role="alert">
+            <li class="text-red" ng-message="datetime">開始の入力形式に誤りがあります。</li>
+            <li class="text-red" ng-message="end">開始と終了の入力内容を確認してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.end.$error" role="alert">
+            <li class="text-red" ng-message="datetime">終了の入力形式に誤りがあります。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_internal.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_external.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_internal_room.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_external_room.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
           </div>
         </div>
         <div class="form-group mgnb text-center">

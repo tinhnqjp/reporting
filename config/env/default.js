@@ -71,6 +71,10 @@ module.exports = {
     }
   },
   shared: {
+  },
+  other: {
+    // First time number
+    number: 1
   }
 
 };

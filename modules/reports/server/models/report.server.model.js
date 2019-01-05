@@ -39,7 +39,12 @@ var ReportSchema = new Schema({
   unit: { type: Schema.ObjectId, ref: 'Unit' },
   partner: { type: Schema.ObjectId, ref: 'Partner' },
   partner_id: { type: String, default: '' },
-  search: { type: String, default: '' },
+  search: { type: String, default: '' }, // supplier + '-' + number
+  role: { type: String, default: '' }, // Role của người đã send report (gán lúc create)
+  // 備考
+  note: { type: String, default: '' }, // Multiple lines (dành riêng cho CMS)
+  // PATH PDF
+  pdf: { type: String, default: '' },
 
   // ///////////////////////////////////////////////////////////////////
   // ////////////////// アプリ Input from app ///////////////////////////
@@ -48,21 +53,23 @@ var ReportSchema = new Schema({
   // ------------------------- Common ------------------------------
   // 報告書種類 （1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ）
   // Loại Report (1: Clean - 2: Repair - 3: Construct - 4: Picture - 5: Free)
-  kind: { type: Number, default: '' },
-  // 納入先
+  kind: { type: Number },
+  // 納入先 (Picture report sẽ là 作業実施店舗名)
   supplier: { type: String, trim: true, default: '' },
   // 住所 (1)
   address1: { type: String, trim: true, default: '' },
   // 住所 (2)
   address2: { type: String, trim: true, default: '' },
   // 開始
-  start: { type: Date },
+  start: { type: Date }, // YYYY/MM/DD HH:mm (Picure report có format: YYY/MM/DD)
   // 終了
-  end: { type: Date },
+  end: { type: Date }, // YYYY/MM/DD HH:mm (Picure report không có end)
   // 提出先 (id)
   unit_id: { type: String, default: '' },
   // 提出先 (name)
   unit_name: { type: String, default: '' },
+  // 作業結果
+  work_result: { type: Boolean }, // Select (true: 完了, false: 継続)
   // 営業所
   location: { type: String, default: '' },
   // 見取り図 (Ảnh từ màn hình drag - Từ app gửi lên 1 list Base64)
@@ -86,27 +93,23 @@ var ReportSchema = new Schema({
   manager: { type: String, default: '' },
   // 営業担当者
   saler: { type: String, default: '' },
-  // PATH PDF
-  pdf: { type: String, default: '' },
   // // GPS
   // longitude: { type: String, default: '' },
   // latitude: { type: String, default: '' },
   // ------------------------- 洗浄報告書 Clean Report------------------------------
   clean: {
     // 内機
-    number_of_internal: { type: Number }, // Int
+    number_of_internal: { type: Number, max: 999, min: 0 }, // Int
     // 外機
-    number_of_external: { type: Number }, // Int
+    number_of_external: { type: Number, max: 999, min: 0 }, // Int
     // ルーム（内）
-    number_of_internal_room: { type: Number }, // Int
+    number_of_internal_room: { type: Number, max: 999, min: 0 }, // Int
     // ルーム（外）
-    number_of_external_room: { type: Number }, // Int
-    // 作業結果
-    work_result: { type: Boolean }, // Select (true: 完了, false: 継続)
+    number_of_external_room: { type: Number, max: 999, min: 0 }, // Int
     // 内機 (Internal machine)
     internals: [{
       // 管理No
-      number: { type: Number }, // Int
+      number: { type: Number, required: true }, // Int
       // 写真撮影機器
       has_picture: { type: Boolean, default: false }, // Button tap to change (false: bar, true: circle)
       // メーカー
@@ -176,6 +179,8 @@ var ReportSchema = new Schema({
     }],
     // 外機 (External machine)
     externals: [{
+      // 管理No
+      number: { type: Number, required: true }, // Int
       // 写真撮影機器
       has_picture: { type: Boolean, default: false }, // Button tap to change (false: bar, true: circle)
       // メーカー
@@ -188,6 +193,8 @@ var ReportSchema = new Schema({
       refrigerant_kind: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 製造年月
       made_date: { type: String, maxlength: 7 }, // YYYY/MM (MM có thể không nhập YYYY/-)
+      // 対応内機
+      internals: { type: String }, // Chuỗi các number của Máy trong nhà, ngăn cách nhau bởi dấu [,]
       // 作業前 -> 異音・振動
       before_noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
       // 破損・凹み
@@ -216,7 +223,7 @@ var ReportSchema = new Schema({
     // 機器
     machines: [{
       // 管理No
-      number: { type: Number }, // Int
+      number: { type: Number, required: true }, // Int
       sets: [{
         // コメント
         comment: { type: String },
@@ -230,9 +237,11 @@ var ReportSchema = new Schema({
   // ------------------------- 修理報告書 Repair Report------------------------------
   repair: {
     // 作業内容
-    work_kind: { type: String }, // Đây là field  title trong Master data repair_work_kind
+    work_kind: { type: String }, // Đây là field title trong Master data repair_work_kind
     // 内機 (Internal machine)
     internals: [{
+      // 管理No
+      number: { type: Number, required: true }, // Int
       // 設置場所
       posision: { type: String },
       // メーカー
@@ -248,32 +257,153 @@ var ReportSchema = new Schema({
       // 製造年月
       made_date: { type: String, maxlength: 7 }, // YYYY/MM (MM có thể không nhập YYYY/-)
       // 室内吸込
-      indoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      indoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 室内吹出
-      outdoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      outdoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 高圧
-      high_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
+      high_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 低圧
-      low_pressure: { type: Number } // Mpa Float có dạng: 123.12 (phía trước tối đa 3 số, phía sau tối đa 2 số)
-      // // 吐出管
-      // discharge_pipe
-      // // 吸入管
-      // suction_pipe
+      low_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 吐出管
+      discharge_pipe: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 吸入管
+      suction_pipe: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // U
+      u: { type: Number }, // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // V
+      v: { type: Number }, // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // W
+      w: { type: Number } // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
     }],
     // 外機 (External machine)
-    externals: [],
+    externals: [{
+      // 管理No
+      number: { type: Number, required: true }, // Int
+      // 設置場所
+      posision: { type: String },
+      // メーカー
+      maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 機器型式
+      model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 対応内機
+      internals: { type: String }, // Chuỗi các number của Máy trong nhà, ngăn cách nhau bởi dấu [,]
+      // 冷媒種類
+      refrigerant_kind: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 規定量
+      specified_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 製造番号
+      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 製造年月
+      made_date: { type: String, maxlength: 7 }, // YYYY/MM (MM có thể không nhập YYYY/-)
+      // 回収量
+      recovery_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 充填量
+      filling_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 備考
+      remarks: { type: String, maxlength: 15 },
+      // 対象機
+      target: { type: Number }, // Chọn giữa 内機 và 外機
+      // 室内吸込
+      indoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 室内吹出
+      outdoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 高圧
+      high_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 低圧
+      low_pressure: { type: Number }, // Mpa Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 吐出管
+      discharge_pipe: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 吸入管
+      suction_pipe: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // U
+      u: { type: Number }, // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // V
+      v: { type: Number }, // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // W
+      w: { type: Number } // Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+    }],
     // 写真データ
     image1: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
     image2: { type: String }, // Đường dẫn đến image (trên sv), từ mobile gửi lên Base64
-    // 作業内容
+    // 報告内容
     work_content: { type: String } // Multiple lines
   },
   // ------------------------- 設置報告書 Construct Report------------------------------
   construct: {
+    // 作業内容
+    work_kind: { type: String }, // Đây là field title trong Master data construct_work_kind
+    // 日目
+    day: { type: Number },
     // 内機 (Internal machine)
-    internals: [],
+    internals: [{
+      // 管理No
+      number: { type: Number, required: true }, // Int
+      // 系統名
+      lineage_name: { type: String },
+      // 既設機器 -> メーカー
+      old_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 既設機器 -> 機器型式
+      old_model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 既設機器 -> 製造番号
+      old_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 新規機器 -> メーカー
+      new_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 新規機器 -> 機器型式
+      new_model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 新規機器 -> 製造番号
+      new_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 耐圧試験
+      pressure_test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      // 通水確認
+      Water_flow: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      // 試運転
+      test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      // 吸込温度
+      suction_temperature: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 吹出温度
+      blowing_temperature: { type: Number } // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+    }],
     // 外機 (External machine)
-    externals: []
+    externals: [{
+      // 管理No
+      number: { type: Number, required: true }, // Int
+      // 系統名
+      lineage_name: { type: String },
+      // 既設機器 -> メーカー
+      old_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 既設機器 -> 機器型式
+      old_model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 既設機器 -> 製造番号
+      old_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 新規機器 -> メーカー
+      new_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 新規機器 -> 機器型式
+      new_model: { type: String, default: '', maxlength: 13 }, // Free input
+      // 新規機器 -> 製造番号
+      new_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      // 既設仕様
+      old_spec: { type: String }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 新規仕様
+      new_spec: { type: String }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 冷媒種類
+      recovery_refrigerant_kind: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 回収量
+      recovery_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 冷媒種類
+      specified_refrigerant_kind: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 規定量
+      specified_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 設置時追加充填量
+      filling_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
+      // 対象機
+      target: { type: Number }, // Chọn giữa 内機 và 外機
+      // 備考
+      remarks: { type: String, maxlength: 15 }
+    }],
+    // 工事概要
+    summary: { type: String }, // Multiple lines
+    // その他特記事項
+    other_note: { type: String } // Multiple lines
   }
 });
 ReportSchema.plugin(paginate);

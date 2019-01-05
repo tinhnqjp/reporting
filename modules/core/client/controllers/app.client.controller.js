@@ -10,9 +10,14 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   $scope.NO_VIDEO_PATH = '/modules/core/client/img/video-default.png';
   $scope.formatDate = 'yyyy/MM/dd';
   $scope.itemsPerPage = 20;
-  $scope.regexKana = /^[\u3040-\u309f]*$/;
-  $scope.regexPass = /^[A-Za-z0-9]*$/;
-
+  $scope.regexKana = /^[\u3040-\u309f|ー]*$/;
+  $scope.regexAlphaNumeric = /^[A-Za-z0-9]*$/;
+  $scope.dateOptions = {
+    showWeeks: false
+  };
+  $scope.timeOptions = {
+    showMeridian: false
+  };
   /** roles */
   $scope.roles = [
     { id: 'admin', name: 'システム管理', class: 'label-danger' },
@@ -205,20 +210,22 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   };
 
   $scope.tableIndex = function (condition, index) {
-    return ((condition.page - 1) * condition.limit) + index + 1;
+    if (condition.page && condition.limit) {
+      return ((condition.page - 1) * condition.limit) + index + 1;
+    }
+    return index + 1;
   };
 
   $scope.tableReport = function (condition) {
-    var total = condition.total ? condition.total : 0;
-    var page = condition.page ? condition.page : 0;
-    var count = condition.count ? condition.count : 0;
-    var out = '全 ' + total + ' 件';
-    if (total > 0) {
-      var min = ((page - 1) * condition.limit) + 1;
-      var max = min + count - 1;
+    var out = '';
+    if (condition.total) {
+      out = '全 ' + condition.total + ' 件';
+      var min = ((condition.page - 1) * condition.limit) + 1;
+      var max = min + condition.count - 1;
       out += '中 ' + min + ' 件目 〜 ' + max + ' 件目を表示';
+    } else {
+      out = '全 0 件';
     }
-
     return out;
   };
 
@@ -230,9 +237,24 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     work_start: { open: false },
     work_end: { open: false }
   };
-  $scope.openCalendar = function (e, picker) {
+  $scope.openCalendarSearch = function (e, picker) {
     $scope.picker[picker].open = true;
   };
 
+
+  $scope.open = {};
+  $scope.openCalendar = function (e, date) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if ($scope.open[date] === true) {
+      $scope.open = {};
+    } else {
+      $scope.open = {};
+      $scope.open[date] = true;
+    }
+  };
+
+  $scope.tab = {};
 
 }

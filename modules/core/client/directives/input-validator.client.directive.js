@@ -33,6 +33,8 @@
       const KANA = 'kana';
       const ZIP = 'zip';
       const TEL = 'tel';
+      const FLOAT = 'float';
+      const MADE_DATE = 'made_date';
 
       element.bind('blur', function (e) {
         var option = {};
@@ -86,6 +88,14 @@
           case TEL:
             pattern = /^([0-9]{9,13}$)/;
             ngModel.$setValidity(TEL, validator.matches(value, pattern));
+            break;
+          case FLOAT:
+            pattern = /^[\d.]+$/;
+            ngModel.$setValidity(FLOAT, validator.matches(value, pattern));
+            break;
+          case MADE_DATE:
+            pattern = /20\d{2}\/(0[1-9]|1[0-2]|-)/;
+            ngModel.$setValidity(MADE_DATE, validator.matches(value, pattern));
             break;
           default:
             break;

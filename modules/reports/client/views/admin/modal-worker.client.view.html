@@ -1,11 +1,19 @@
 <form name="vm.modalWorkerForm" ng-submit="confirmWorker(vm.modalWorkerForm.$valid)" novalidate>
-  <div class="modal-header-confirm">
-      <h4 class="modal-title-confirm">作業者</h4>
-  </div>
   <div class="modal-body">
     <div class="table-custom" style="border:0px;">
       <table class="table table-detail">
         <tbody>
+          <tr>
+            <td class="col-xs-12" colspan="2">
+              <div class="row pdn">
+                <div class="col-xs-6 text-left"><h4>作業者</h4></div>
+                <div class="col-xs-6 text-right">
+                  <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+                  <button class="btn btn-primary btn-sm" type="submit">完了</button>
+                </div>
+              </div>
+            </td>
+          </tr>
           <tr>
             <th class="col-xs-2">
               氏名
@@ -13,7 +21,7 @@
             </th>
             <td class="col-xs-10">
               <input type="text" name="wokername" class="form-control" ng-model="worker.name" placeholder="氏名を入力"
-                required autocomplete="off">
+                required autocomplete="off" auto-focus>
             </td>
           </tr>
           <tr>
@@ -29,8 +37,10 @@
               開始時間
             </th>
             <td class="col-xs-10" colspan="3">
-              <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="worker.work_start"
-                is-open="picker.work_start.open" ng-click="openCalendar($event, 'work_start')" placeholder="開始を入力">
+              <input type="text" id="work_start" name="work_start" datetime-picker="" datepicker-options="dateOptions"
+                timepicker-options="timeOptions" ng-click="openCalendar($event, 'work_start')" placeholder="開始時間を入力"
+                is-open="open.work_start" autocomplete="off" class="form-control" ng-model="worker.work_start"
+                required ng-pattern="datetimeFormat" ng-change="handlerStartEndBlur()">
             </td>
           </tr>
           <tr>
@@ -38,27 +48,27 @@
               終了時間
             </th>
             <td class="col-xs-10" colspan="3">
-              <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="worker.work_end"
-                is-open="picker.work_end.open" ng-click="openCalendar($event, 'work_end')" placeholder="終了を入力">
+              <input type="text" id="work_end" name="work_end" datetime-picker="" datepicker-options="dateOptions"
+                timepicker-options="timeOptions" ng-click="openCalendar($event, 'work_end')" placeholder="終了時間を入力"
+                is-open="open.work_end" autocomplete="off" class="form-control" ng-model="worker.work_end"
+                required ng-pattern="datetimeFormat" ng-change="handlerStartEndBlur()">
             </td>
           </tr>
         </tbody>
       </table>
       <div ng-if="isSaveClick">
+        <hr>
         <div ng-messages="vm.modalWorkerForm.wokername.$error" role="alert">
           <li class="text-red" ng-message="required">氏名を入力してください。</li>
         </div>
         <div ng-messages="vm.modalWorkerForm.work_start.$error" role="alert">
-          <li class="text-red" ng-message="datetime">開始時間の入力形式に誤りがあります。</li>
+          <li class="text-red" ng-message="datetime">開始時間のの入力形式に誤りがあります。</li>
+          <li class="text-red" ng-message="work_end">開始時間のと終了時間の入力内容を確認してください。</li>
         </div>
         <div ng-messages="vm.modalWorkerForm.work_end.$error" role="alert">
           <li class="text-red" ng-message="datetime">終了時間の入力形式に誤りがあります。</li>
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
-    <button class="btn btn-primary" type="submit">完了</button>
   </div>
 </form>

@@ -86,6 +86,7 @@ exports.create = function (req, res) {
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
   }
+  var kind = req.body.kind || 1;
   var userId = req.body.userId;
   var report = new Report(req.body.data);
   User.findById(userId).exec((err, user) => {
@@ -101,12 +102,17 @@ exports.create = function (req, res) {
         .send({ message: 'このデータは無効または削除されています。' });
     }
     if (user.roles[0] === 'partner' ||
-    user.roles[0] === 'user' ||
-    user.roles[0] === 'dispatcher' ||
-    user.roles[0] === 'employee') {
+      user.roles[0] === 'user' ||
+      user.roles[0] === 'dispatcher' ||
+      user.roles[0] === 'employee') {
       report.number = moment()
         .valueOf()
         .toString();
+
+      report.author = user._id;
+      report.author_name = user.name;
+      report.status = 1;
+      report.kind = kind;
       report.save(function (err) {
         if (err) {
           logger.error(err);
@@ -181,7 +187,7 @@ function getListReports(userIds, keyword, kind, page) {
       limit: limit
     }).then(
       function (result) {
-        resolve(result.docs);
+        resolve(result);
       },
       err => {
         reject(err);
@@ -228,6 +234,8 @@ exports.config = function (req, res) {
       'ユニットクーラー',
       'ファンコイル'
     ],
+    // 写真撮影機器
+    pic_taps: [{ id: false, value: '－' }, { id: true, value: '○' }],
     // 冷媒
     type_taps: [{ id: false, value: '冷' }, { id: true, value: '暖' }],
     // 破損確認 無/有
@@ -270,7 +278,6 @@ exports.config = function (req, res) {
       'ダクト',
       '換気扇',
       '制気口',
-      '空気清浄機',
       '加湿器',
       '防虫網',
       '防鳥網',
@@ -349,74 +356,45 @@ exports.config = function (req, res) {
       }
     ],
     // 作業内容(Chỉ dùng cho Construct)
-    construct_work_kind: [
-      {
-        id: 1, // Sử dụng trường hợp cần so sánh
-        title: '故障診断', // Dùng để hiển thị lên dialog select
-        content: '◎上記機器の故障診断実施\n状況：\n原因：\n処置：\n現状：\n指摘事項：\nその他：' // Nếu option này được chọn, thì set content nào vào 報告内容
-      },
-      {
-        id: 2,
-        title: '修理',
-        content: '◎上記機器の修理作業実施\n作業内容：\n指摘事項：'
-      },
-      {
-        id: 3,
-        title: '修理',
-        content: '◎保守点検作業実施\n作業内容：\n指摘事項：\nその他'
-      },
-      {
-        id: 4,
-        title: '現場調査（入替現場調査）',
-        content: '◎空調機入替工事の現場調査実施。\n○○系統　●台\n（※機器情報、設置状況　等記入）'
-      },
-      {
-        id: 5,
-        title: '現場調査（新設現場調査）',
-        content: '◎空調機新設工事の現場調査実施\n○○系統　●台\n（※機器情報、設置状況　等記入）'
-      },
-      {
-        id: 6,
-        title: '現場調査（照明現場調査）',
-        content: '◎照明現場調査実施\n・調査場所：\n　・台数：\n　・逆富士型：　〇台\n　・ダウンライト：　〇台（開口φ〇〇）\n　・スクエア：　〇台（開口寸法　〇〇㎜）\n　・ブレーカー位置：\n　・必要な鍵：'
-      },
-      {
-        id: 7,
-        title: '現場調査（EMS現場調査）',
-        content: '◎EMS現場調査実施\n　・キュービクル設置場所：\n　・計測点：\n　・必要な鍵：\n　・室外機設置場所：\n　・室外機台数：　〇台\n　・その他特記事項：\n　・ガスメーター：'
-      },
-      {
-        id: 8,
-        title: '現場調査（空調機洗浄現場調査）',
-        content: '◎空調機洗浄作業の現場調査実施\n（※調査機器、内容を記載）'
-      },
-      {
-        id: 9,
-        title: '現場調査（その他）',
-        content: '〇〇〇の現場調査実施\n（※調査機器、内容を記載）'
-      },
-      {
-        id: 10,
-        title: '他（ダクト清掃）',
-        content: '◎ダクト清掃実施\n作業内容：\n指摘事項：'
-      },
-      {
-        id: 11,
-        title: '他（照明工事）',
-        content: '◎照明工事実施\n　・工事場所：\n　・作業台数：\n　・逆富士型：　〇台\n　・ダウンライト：　〇台\n　・スクエア：　〇台\n　・通線作業実施'
-      },
-      {
-        id: 12,
-        title: '他（EMS工事）',
-        content: '◎EMS工事実施\n　・作業場所：\n　・作業内容：\n　・屋外配管作業\n　・アダプタ取付け作業\n　・停電作業\n　・通線作業\n　・主装置取付け\n　・電力系取付け\n　・CT取付け'
-      },
-      {
-        id: 13,
-        title: '他（その他）',
-        content: '作業内容：\n指摘事項：'
-      }
-    ]
-
+    construct_work_kind: [{
+      id: 1, // Sử dụng trường hợp cần so sánh
+      title: '入替', // Dùng để hiển thị lên dialog select
+      content: '○○系統　空調機更新工事　（室外機　〇台、室内機　〇台）\n作業内容：\n　・冷媒回収作業・室内外機撤去作業\n　・配管接続工事・室内機据付工事\n　・室外機据付工事・窒素耐圧試験・真空乾燥作業\n　・試運転調整費\n指摘事項：' // Nếu option này được chọn, thì set content nào vào 報告内容
+    }, {
+      id: 2,
+      title: '新設',
+      content: '○○系統　空調機新設工事　（室外機　〇台、室内機　〇台）\n作業内容：\n　・配管工事・室内機据付工事\n　・室外機据付工事・窒素耐圧試験・真空乾燥作業\n　・試運転調整費\n指摘事項：'
+    }, {
+      id: 3,
+      title: '移設',
+      content: '○○系統　空調機移設工事　（室外機　〇台、室内機　〇台）\n作業内容：\n指摘事項：'
+    }, {
+      id: 4,
+      title: '現場調査（入替現場調査）',
+      content: '◎空調機入替工事の現場調査実施\n　○○系統　●台\n（※機器情報、設置状況　等記入）\n後日、御見積書提出致します。'
+    }, {
+      id: 5,
+      title: '現場調査（新設現場調査）',
+      content: '◎空調機新設工事の現場調査実施\n　○○系統　●台\n（※機器情報、設置状況　等記入）\n後日、御見積書提出致します。'
+    }, {
+      id: 6,
+      title: '現場調査（照明現場調査）',
+      content: '◎照明現場調査実施\n　・調査場所：\n　・台数：\n　・逆富士型：　〇台\n　・ダウンライト：　〇台（開口φ〇〇）\n　・スクエア：　〇台（開口寸法　〇〇㎜）\n　・ブレーカー位置：\n　・必要な鍵：'
+    }, {
+      id: 7,
+      title: '現場調査（EMS現場調査）',
+      content: '◎EMS現場調査実施\n　・キュービクル設置場所：\n　・計測点：\n　・必要な鍵：\n　・室外機設置場所：\n　・室外機台数：　〇台\n　・その他特記事項：\n　・ガスメーター：'
+    }, {
+      id: 8,
+      title: '現場調査（その他）',
+      content: '◎〇〇〇の現場調査実施。\n（※調査機器、内容を記載）\n後日、御見積書提出致します。'
+    }, {
+      id: 9,
+      title: '他',
+      content: ''
+    }],
+    // 対象機
+    targets: ['内機', '外機']
   };
 
   return res.json(config);
