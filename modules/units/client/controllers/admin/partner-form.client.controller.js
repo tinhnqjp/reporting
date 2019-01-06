@@ -18,6 +18,10 @@
       if (!vm.partner._id) {
         vm.password = $scope.generateRandomPassphrase();
       }
+
+      if (vm.partner.account.expire) {
+        vm.partner.account.expire = $scope.parseDate(vm.partner.account.expire);
+      }
     }
 
     function update(isValid) {

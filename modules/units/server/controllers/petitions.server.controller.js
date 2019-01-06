@@ -51,7 +51,8 @@ exports.paging = function (req, res) {
     page: page,
     limit: limit,
     populate: [
-      { path: 'partner', select: 'name' }
+      { path: 'partner', select: 'name' },
+      { path: 'workerId', select: 'name phone manager' }
     ]
   }).then(function (result) {
     return res.json(result);
@@ -71,6 +72,7 @@ exports.petitionByID = function (req, res, next, id) {
   Petition
     .findById(id)
     .populate('partner', 'name')
+    .populate('workerId', 'name phone manager')
     .exec(function (err, petition) {
       if (err) {
         return next(err);
@@ -105,6 +107,9 @@ function getQuery(condition) {
       { manager: { $regex: '.*' + key_upper + '.*' } }
     ];
     and_arr.push({ $or: or_arr });
+  }
+  if (condition.action) {
+    and_arr.push({ action: condition.action });
   }
   if (condition.created_min) {
     and_arr.push({ created: { '$gte': condition.created_min } });

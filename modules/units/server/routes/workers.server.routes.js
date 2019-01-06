@@ -10,6 +10,7 @@ module.exports = function (app) {
   // Units collection routes
   app.route('/api/workers').post(workersPolicy.isAllowed, workers.create);
   app.route('/api/workers/list').post(workersPolicy.isAllowed, workers.paging);
+  app.route('/api/workers/deletePetition').post(workersPolicy.isAllowed, workers.deletePetition);
 
   // Single worker routes
   app.route('/api/workers/:workerId')

@@ -32,6 +32,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/workers/report',
       permissions: '*'
+    }, {
+      resources: '/api/workers/deletePetition',
+      permissions: '*'
     }]
   }]);
 };

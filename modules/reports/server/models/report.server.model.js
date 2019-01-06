@@ -5,7 +5,15 @@
  */
 var mongoose = require('mongoose'),
   paginate = require('mongoose-paginate-v2'),
+  path = require('path'),
+  config = require(path.resolve('./config/config')),
   Schema = mongoose.Schema;
+
+var CounterSchema = new Schema({
+  _id: { type: String, required: true },
+  seq: { type: Number, default: 0 }
+});
+mongoose.model('Counter', CounterSchema);
 
 /**
  * Report Schema
@@ -53,7 +61,7 @@ var ReportSchema = new Schema({
   // ------------------------- Common ------------------------------
   // 報告書種類 （1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ）
   // Loại Report (1: Clean - 2: Repair - 3: Construct - 4: Picture - 5: Free)
-  kind: { type: Number },
+  kind: { type: Number, default: 1 },
   // 納入先 (Picture report sẽ là 作業実施店舗名)
   supplier: { type: String, trim: true, default: '' },
   // 住所 (1)
@@ -406,5 +414,37 @@ var ReportSchema = new Schema({
     other_note: { type: String } // Multiple lines
   }
 });
+
+ReportSchema.pre('save', function (next) {
+  var doc = this;
+  if (this.isNew) {
+    // number
+    var sqDefault = config.other.number;
+    var Counter = mongoose.model('Counter');
+    Counter.findById({ _id: 'entityId' }, function (error, counter) {
+      if (error)
+        return next(error);
+      if (counter) {
+        counter.seq = counter.seq + 1;
+      } else {
+        counter = new Counter({
+          _id: 'entityId',
+          seq: sqDefault
+        });
+      }
+      counter.save(function (err) {
+        if (err)
+          return next(err);
+        doc.number = counter.seq;
+        doc.pdf = config.uploads.reports.pdf.dest + doc._id + '.pdf';
+        doc.search = (doc.supplier ? doc.supplier : '') + '-' + doc.number;
+        console.log(33333333);
+        next();
+      });
+
+    });
+  }
+});
+
 ReportSchema.plugin(paginate);
 mongoose.model('Report', ReportSchema);

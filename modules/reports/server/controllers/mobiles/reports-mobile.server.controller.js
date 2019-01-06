@@ -7,9 +7,13 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   Report = mongoose.model('Report'),
   User = mongoose.model('User'),
+  Unit = mongoose.model('Unit'),
   Partner = mongoose.model('Partner'),
+  Worker = mongoose.model('Worker'),
   path = require('path'),
   moment = require('moment'),
+  fs = require('fs'),
+  config = require(path.resolve('./config/config')),
   help = require(path.resolve(
     './modules/core/server/controllers/help.server.controller'
   )),
@@ -86,7 +90,6 @@ exports.create = function (req, res) {
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
   }
-  var kind = req.body.kind || 1;
   var userId = req.body.userId;
 
   User.findById(userId).exec((err, user) => {
@@ -105,25 +108,51 @@ exports.create = function (req, res) {
       user.roles[0] === 'user' ||
       user.roles[0] === 'dispatcher' ||
       user.roles[0] === 'employee') {
-
+      var unit = {};
       var report = new Report(req.body.data);
-      report.number = moment()
-        .valueOf()
-        .toString();
 
-      report.author = user._id;
-      report.author_name = user.name;
-      report.status = 1;
-      report.kind = kind;
-      report.save(function (err) {
-        if (err) {
-          logger.error(err);
+      checkUnit(report.unit_id)
+        .then(function (_unit) {
+          unit = _unit;
+          if (report.signature) {
+            var signature_path = config.uploads.reports.signature.dest;
+            createImage(signature_path, report.signature)
+              .then(function (fileName) {
+                return Promise.resolve(fileName);
+              });
+          } else {
+            return Promise.resolve('');
+          }
+        })
+        .then(function (signature) {
+          report.signature = signature;
+
+          if (report.drawings && report.drawings.length > 0) {
+            var drawings_path = config.uploads.reports.drawings.dest;
+            var promises = [];
+            report.drawings.forEach(draw => {
+              promises.push(createImage(drawings_path, draw));
+            });
+            return Promise.all(promises);
+          } else {
+            return Promise.resolve([]);
+          }
+        })
+        .then(function (drawings) {
+          report.drawings = drawings;
+          return findPartner(user);
+        })
+        .then(function (partner) {
+          return createReport(report, user, unit, partner._id);
+        })
+        .then(function (report) {
+          res.end();
+        })
+        .catch(function (err) {
           return res
             .status(422)
-            .send({ message: 'サーバーエラーが発生しました。' });
-        }
-        return res.end();
-      });
+            .send({ message: err.message });
+        });
     } else {
       return res.status(422).send({ message: 'アクセス権限が必要。' });
     }
@@ -401,3 +430,85 @@ exports.config = function (req, res) {
 
   return res.json(config);
 };
+
+function createReport(report, user, unit, partnerId) {
+  return new Promise((resolve, reject) => {
+    report.author = user._id;
+    report.author_name = user.name;
+    report.role = user.roles[0];
+    report.status = 1;
+    report.partner = partnerId;
+    report.partner_id = partnerId;
+    report.logs = [{
+      author: user._id,
+      author_name: user.name,
+      action: 1,
+      time: Date.now()
+    }];
+
+    report.unit = unit;
+    report.unit_id = unit._id;
+    report.unit_name = unit.name;
+
+    report.save(function (err) {
+      if (err) {
+        logger.error(err);
+        reject({ message: 'サーバーエラーが発生しました。' });
+      }
+      resolve(report);
+    });
+  });
+}
+
+function checkUnit(unitId) {
+  return new Promise((resolve, reject) => {
+    if (!unitId) {
+      reject({ message: 'サーバーエラーが発生しました。' });
+    }
+    Unit.findById(unitId).exec((err, unit) => {
+      if (err) {
+        logger.error(err);
+        reject({ message: 'サーバーエラーが発生しました。' });
+      }
+      if (!unit) {
+        reject({ message: '提出先が削除されました。インタネット環境でアプリを再起動してください。' });
+      }
+      resolve(unit);
+    });
+  });
+}
+
+function findPartner(user) {
+  return new Promise((resolve, reject) => {
+    if (!user) {
+      reject({ message: 'サーバーエラーが発生しました。' });
+    }
+    if (user.roles[0] === 'user') {
+      Worker.findWorker(user._id)
+        .then(function (worker) {
+          resolve(worker.partner);
+        })
+        .catch(function (err) {
+          reject(err);
+        });
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+function createImage(path, input) {
+  return new Promise((resolve, reject) => {
+    var data = input.replace(/^data:image\/\w+;base64,/, '');
+    var fileName = path + moment().valueOf().toString() + '.jpg';
+
+    fs.writeFile(fileName, data, { encoding: 'base64' }, function (err) {
+      if (err) {
+        logger.error(err);
+        reject({ message: 'ファイルのアップロードに失敗しました。' });
+      } else {
+        resolve(fileName);
+      }
+    });
+  });
+}

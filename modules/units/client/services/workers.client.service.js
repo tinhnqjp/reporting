@@ -51,6 +51,9 @@
     this.export = function (condition) {
       return $http.post('/api/workers/export', { condition: condition }, {});
     };
+    this.deletePetition = function (workerId, petitionId) {
+      return $http.post('/api/workers/deletePetition', { workerId: workerId, petitionId: petitionId }, {});
+    };
     return this;
   }
 

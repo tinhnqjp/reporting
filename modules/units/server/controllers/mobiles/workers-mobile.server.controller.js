@@ -65,9 +65,16 @@ exports.list = function (req, res) {
 exports.petition = function (req, res) {
   var pattern = /^([0-9]{9,13}$)/;
   req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
-  req.checkBody('name', 'サーバーエラーが発生しました。').notEmpty();
-  req.checkBody('phone', 'サーバーエラーが発生しました。').notEmpty().matches(pattern);
-  req.checkBody('manager', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('action', 'サーバーエラーが発生しました。').notEmpty();
+  var action = req.body.action;
+  if (action === 1) {
+    req.checkBody('name', 'サーバーエラーが発生しました。').notEmpty();
+    req.checkBody('phone', 'サーバーエラーが発生しました。').notEmpty().matches(pattern);
+    req.checkBody('manager', 'サーバーエラーが発生しました。').notEmpty();
+  } else {
+    req.checkBody('workerId', 'サーバーエラーが発生しました。').notEmpty();
+  }
+
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(helper.getMessage(errors));
@@ -77,6 +84,7 @@ exports.petition = function (req, res) {
   var name = req.body.name;
   var phone = req.body.phone;
   var manager = req.body.manager;
+  var workerId = req.body.workerId;
   Partner.findOne({ account: userId }).exec((err, partner) => {
     if (err) {
       logger.error(err);
@@ -85,20 +93,49 @@ exports.petition = function (req, res) {
     if (!partner)
       return res.status(400).send({ message: 'このデータは無効または削除されています。' });
 
-    var petiton = new Petition({
-      name: name,
-      phone: phone,
-      manager: manager,
-      partner: partner
-    });
-    petiton.save(function (err) {
-      if (err) {
-        logger.error(err);
-        return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
+    var petiton = {};
+    if (action === 1) {
+      petiton = new Petition({
+        name: name,
+        phone: phone,
+        manager: manager,
+        partner: partner,
+        action: 1
+      });
+      petiton.save(function (err) {
+        if (err) {
+          logger.error(err);
+          return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
+        }
+        res.end();
+      });
+    } else {
+      var exist = false;
+      if (partner.workers && partner.workers.length > 0) {
+        partner.workers.forEach(worker => {
+          if (worker.toString() === workerId) {
+            exist = true;
+          }
+        });
       }
-      res.end();
-    });
-  });
+      if (exist) {
+        petiton = new Petition({
+          workerId: workerId,
+          partner: partner,
+          action: 2
+        });
 
+        petiton.save(function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
+          }
+          res.end();
+        });
+      } else {
+        return res.status(422).send({ message: '下請けが削除されました。インタネット環境でアプリを再起動してください。' });
+      }
+    }
+  });
 };
 

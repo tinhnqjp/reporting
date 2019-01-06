@@ -54,6 +54,20 @@
               </tr>
               <tr>
                 <th class="col-xs-2">
+                  協力会社
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
+                    <ui-select-match placeholder="協力会社を選択">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="item in vm.partners | filter: $select.search">
+                      <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
                   ユーザーID
                   <span class="text-red">*</span>
                 </th>
@@ -76,18 +90,16 @@
               </tr>
               <tr>
                 <th class="col-xs-2">
-                  協力会社
-                  <span class="text-red">*</span>
+                  有効期限
                 </th>
                 <td class="col-xs-10">
-                  <ui-select name="partner" ng-model="vm.worker.partner" theme="bootstrap" required>
-                    <ui-select-match placeholder="協力会社を選択">{{$select.selected.name}}</ui-select-match>
-                    <ui-select-choices repeat="item in vm.partners | filter: $select.search">
-                      <span ng-bind-html="item.name | highlight: $select.search"></span>
-                    </ui-select-choices>
-                  </ui-select>
+                  <input type="text" id="expire" name="expire" datetime-picker="" datepicker-options="dateOptions"
+                    timepicker-options="timeOptions" ng-click="openCalendar($event, 'expire')" placeholder="有効期限を入力"
+                    is-open="open.expire" autocomplete="off" class="form-control" ng-model="vm.worker.account.expire"
+                    ng-pattern="datetimeFormat">
                 </td>
               </tr>
+              
             </tbody>
           </table>
         </div>

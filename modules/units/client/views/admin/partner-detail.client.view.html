@@ -36,7 +36,18 @@
               </th>
               <td class="col-xs-10" ng-bind="vm.partner.account.username"></td>
             </tr>
-            
+            <tr>
+              <th class="col-xs-2">
+                有効期限
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.account.expire | dateTimeFormat"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                登録時間
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.created | dateTimeFormat"></td>
+            </tr>
           </tbody>
         </table>
       </div>

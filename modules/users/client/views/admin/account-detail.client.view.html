@@ -38,6 +38,12 @@
                     <label-role role="vm.user.roles" roles="roles"></label-role>
                 </td>
               </tr>
+              <tr>
+                <th class="col-xs-2">
+                  登録時間
+                </th>
+                <td class="col-xs-10" ng-bind="vm.user.created | dateTimeFormat"></td>
+              </tr>
             </tbody>
           </table>
         </div>

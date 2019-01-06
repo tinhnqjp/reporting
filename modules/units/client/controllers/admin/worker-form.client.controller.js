@@ -32,6 +32,9 @@
         vm.worker.partner = vm.petition.partner;
         vm.worker.petition = vm.petition._id;
       }
+      if (vm.worker.account.expire) {
+        vm.worker.account.expire = $scope.parseDate(vm.worker.account.expire);
+      }
     }
 
     function update(isValid) {
@@ -46,6 +49,10 @@
         if (vm.password) {
           vm.worker.account.password = vm.password;
         }
+        console.log(vm.worker.account.expire);
+        // if (vm.worker.account.expire) {
+        //   vm.worker.account.expire = $scope.parseDate(vm.worker.account.expire);
+        // }
         vm.worker.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);

@@ -16,6 +16,7 @@ exports.create = function (req, res) {
   var username = getUserName(req, res);
   var password = getPass(req, res);
   var partner = new Partner(req.body);
+  var expire = req.body.account.expire;
 
   User.findOne({ username: username, deleted: false }).exec((err, user) => {
     if (err) {
@@ -25,7 +26,7 @@ exports.create = function (req, res) {
     if (user)
       return res.status(422).send({ message: 'IDが既存しますので協力会社を登録できません。' });
 
-    User.createAccount('partner', username, password)
+    User.createAccount('partner', username, password, partner.name, expire)
       .then((user) => {
         partner.account = user;
         partner.save(function (err) {
@@ -61,10 +62,14 @@ exports.update = function (req, res) {
 
     partner = _.extend(partner, req.body);
     var password = null;
+    var expire = null;
     if (req.body.account.password) {
       password = req.body.account.password;
     }
-    User.updateAccount(partner.account._id, null, username, password)
+    if (req.body.account.expire) {
+      expire = req.body.account.expire;
+    }
+    User.updateAccount(partner.account._id, null, username, password, partner.name, expire)
       .then(() => {
         partner.save(function (err) {
           if (err) {
@@ -127,7 +132,7 @@ exports.paging = function (req, res) {
     page: page,
     limit: limit,
     populate: [
-      { path: 'account', select: 'username' }
+      { path: 'account', select: 'username expire' }
     ]
   }).then(function (result) {
     return res.json(result);
@@ -146,7 +151,7 @@ exports.partnerByID = function (req, res, next, id) {
 
   Partner
     .findById(id)
-    .populate('account', 'username')
+    .populate('account', 'username expire')
     .exec(function (err, partner) {
       if (err) {
         logger.error(err);

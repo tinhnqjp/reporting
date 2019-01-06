@@ -4,6 +4,7 @@ var m_users = require('../controllers/mobiles/users-mobile.server.controller');
 
 
 module.exports = function (app) {
+  app.route('/api/mobile/auth/expire').post(m_users.expire);
   /**
   * @function ログイン
   * @param username(ユーザーID)

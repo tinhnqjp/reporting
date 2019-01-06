@@ -61,6 +61,36 @@ module.exports = {
         limits: { fileSize: 5 * 1024 * 1024 }
       }
     },
+    reports: {
+      drawings: {
+        dest: './modules/reports/client/img/drawings/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      signature: {
+        dest: './modules/reports/client/img/signature/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      picture: {
+        store_image: './modules/reports/client/img/store_image/',
+        before: './modules/reports/client/img/before/',
+        after: './modules/reports/client/img/after/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      repair: {
+        image1: './modules/reports/client/img/image1/',
+        image2: './modules/reports/client/img/image2/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      pdf: {
+        dest: './modules/users/client/pdf/'
+      },
+      excel: {
+        dest: './modules/users/client/excels/import',
+        limits: { fileSize: 100 * 1024 * 1024 },
+        export: './modules/users/client/excels/export/',
+        template: './modules/users/client/excels/template/Export.xlsx'
+      }
+    },
     users: {
       excel: {
         dest: './modules/users/client/excels/import',

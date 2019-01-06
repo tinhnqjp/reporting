@@ -64,6 +64,17 @@
                   <label class="alert alert-warning" ng-if="vm.password">{{vm.password}}</label>
                 </td>
               </tr>
+              <tr>
+                <th class="col-xs-2">
+                  有効期限
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" id="expire" name="expire" datetime-picker="" datepicker-options="dateOptions"
+                    timepicker-options="timeOptions" ng-click="openCalendar($event, 'expire')" placeholder="有効期限を入力"
+                    is-open="open.expire" autocomplete="off" class="form-control" ng-model="vm.partner.account.expire"
+                    ng-pattern="datetimeFormat">
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

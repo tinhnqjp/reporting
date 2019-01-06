@@ -36,9 +36,22 @@ WorkerSchema.pre('remove', function (next) {
   User.remove({ _id: this.account }, next);
 });
 
-WorkerSchema.statics.common = function () {
+WorkerSchema.statics.findWorker = function (user_id) {
   return new Promise(function (resolve, reject) {
-    return resolve(true);
+    var Worker = mongoose.model('Worker');
+    Worker.findOne({ account: user_id, deleted: false })
+      .populate('partner', 'name')
+      .exec((err, worker) => {
+        console.log('​WorkerSchema.statics.findWorker -> worker', worker);
+        if (err) {
+          reject(err);
+        }
+        if (!worker) {
+          reject({ message: '下請けが削除されました。インタネット環境でアプリを再起動してください。' });
+        }
+
+        resolve(worker);
+      });
   });
 };
 mongoose.model('Worker', WorkerSchema);

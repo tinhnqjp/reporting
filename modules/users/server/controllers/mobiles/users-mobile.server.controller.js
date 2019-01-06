@@ -7,7 +7,35 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
   path = require('path'),
+  helper = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller'));
+
+/**
+ * Get expire of partner or worker
+ * @param userId partner/worker
+ * @returns { results: object user }
+ * @version 2018/12/24
+ */
+exports.expire = function (req, res) {
+  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(400).send(helper.getMessage(errors));
+  }
+
+  var userId = req.body.userId;
+  User.findOne({ _id: userId, deleted: false }).select('_id name username expire created').exec((err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
+    }
+    if (!user)
+      return res.status(422).send({ message: 'このデータは無効または削除されています。' });
+
+    return res.jsonp(user);
+  });
+};
+
 
 /**
 * @function ログイン

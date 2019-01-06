@@ -5,10 +5,11 @@
     .module('units.admin')
     .controller('WorkerPetitionListController', WorkerPetitionListController);
 
-  WorkerPetitionListController.$inject = ['$scope', 'PetitionService', 'PetitionApi', '$window', '$location'];
+  WorkerPetitionListController.$inject = ['$scope', 'PetitionService', 'PetitionApi', 'WorkerApi', 'actionResolve'];
 
-  function WorkerPetitionListController($scope, PetitionService, PetitionApi, $window, $location) {
+  function WorkerPetitionListController($scope, PetitionService, PetitionApi, WorkerApi, action) {
     var vm = this;
+    vm.action = action;
     onCreate();
 
     function onCreate() {
@@ -18,6 +19,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('petition', clear);
+      vm.condition.action = vm.action;
     }
 
     function handleSearch() {
@@ -71,6 +73,22 @@
           handleSearch();
           $scope.handleShowToast('申請の削除が完了しました。');
         });
+      });
+    };
+
+    vm.petitionDelete = function (workerId, petitionId) {
+      $scope.handleShowConfirm({
+        message: 'この下請けを削除します。よろしいですか？'
+      }, function () {
+        WorkerApi.deletePetition(workerId, petitionId)
+          .success(function (res) {
+            handleSearch();
+            $scope.handleShowToast('申請の削除が完了しました。');
+          })
+          .error(function (err) {
+            var message = (err) ? err.message || err.data.message : '申請の取得が失敗しました。';
+            $scope.handleShowToast(message, true);
+          });
       });
     };
   }

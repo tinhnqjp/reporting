@@ -1,6 +1,7 @@
 <div class="container" ng-init="vm.open = false">
   <table-search>
     <table-search-button>
+      <button-back back="admin.workers.list"></button-back>
     </table-search-button>
     <table-search-content>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -39,6 +40,7 @@
     <!-- 各ボタン -->
     <div class="col-xs-12">
       <div class="title-group">
+        <p class="mgn title-group__inline-title mg20r"><b>下請け登録申請一覧</b></p>
         <p class="mgn title-group__inline-title">{{tableReport(vm.condition)}}</p>
       </div>
     </div>
@@ -64,8 +66,7 @@
             <tr>
               <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
             </tr>
-            <tr ng-repeat="item in vm.docs track by $index" class="clickable"
-               ui-sref="admin.workers.detail({ workerId: item._id })">
+            <tr ng-repeat="item in vm.docs track by $index">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.phone }}</td>

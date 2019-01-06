@@ -37,17 +37,29 @@
           </tr>
           <tr>
             <th class="col-xs-2">
+              協力会社
+            </th>
+            <td class="col-xs-10">
+              {{vm.worker.partner.name}}
+            </td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
               ユーザーID
             </th>
             <td class="col-xs-10" ng-bind="vm.worker.account.username"></td>
           </tr>
           <tr>
             <th class="col-xs-2">
-              協力会社
+              有効期限
             </th>
-            <td class="col-xs-10">
-              {{vm.worker.partner.name}}
-            </td>
+            <td class="col-xs-10" ng-bind="vm.worker.account.expire | dateTimeFormat"></td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+              登録時間
+            </th>
+            <td class="col-xs-10" ng-bind="vm.worker.created | dateTimeFormat"></td>
           </tr>
         </tbody>
       </table>

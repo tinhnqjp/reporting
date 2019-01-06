@@ -101,6 +101,7 @@
     "request": "^2.88.0",
     "run-sequence": "~2.1.0",
     "serve-favicon": "^2.5.0",
+    "sharp": "^0.21.1",
     "socket.io": "^2.1.1",
     "underscore": "^1.9.1",
     "validator": "~8.0.0",

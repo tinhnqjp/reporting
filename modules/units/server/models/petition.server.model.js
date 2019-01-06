@@ -19,6 +19,8 @@ var PetitionSchema = new Schema({
   manager: { type: String, trim: true },
   // 申請種類（1: Create - 2: Delete）
   action: { type: Number },
+  // Khi (2: Delete) thì cần gửi ID worker
+  workerId: { type: Schema.ObjectId, ref: 'Worker' },
   partner: { type: Schema.ObjectId, ref: 'Partner' },
   created: { type: Date, default: Date.now }
 });

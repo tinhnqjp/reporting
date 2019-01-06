@@ -64,14 +64,19 @@
         }
       })
       // petition
-      .state('admin.workers.petition', {
-        url: '/petition',
-        templateUrl: '/modules/units/client/views/admin/worker-petition-list.client.view.html',
+      .state('admin.workers.petition_list_create', {
+        url: '/petition-create',
+        templateUrl: '/modules/units/client/views/admin/worker-petition-create-list.client.view.html',
         controller: 'WorkerPetitionListController',
         controllerAs: 'vm',
+        resolve: {
+          actionResolve: function () {
+            return 1;
+          }
+        },
         data: {
           roles: ['admin'],
-          pageTitle: '申請一覧'
+          pageTitle: '下請け登録申請一覧'
         }
       })
       .state('admin.workers.petition_create', {
@@ -85,6 +90,34 @@
         },
         data: {
           pageTitle: '登録申請'
+        }
+      })
+      .state('admin.workers.petition_list_delete', {
+        url: '/petition-delete',
+        templateUrl: '/modules/units/client/views/admin/worker-petition-delete-list.client.view.html',
+        controller: 'WorkerPetitionListController',
+        controllerAs: 'vm',
+        resolve: {
+          actionResolve: function () {
+            return 2;
+          }
+        },
+        data: {
+          roles: ['admin'],
+          pageTitle: '下請け削除申請一覧'
+        }
+      })
+      .state('admin.workers.petition_delete', {
+        url: '/petition/:petitionId/delete',
+        templateUrl: '/modules/units/client/views/admin/worker-form.client.view.html',
+        controller: 'WorkerFormController',
+        controllerAs: 'vm',
+        resolve: {
+          workerResolve: newWorker,
+          petitionResolve: getPetition
+        },
+        data: {
+          pageTitle: '削除申請'
         }
       });
 

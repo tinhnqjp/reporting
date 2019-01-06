@@ -124,7 +124,7 @@ UserSchema.statics.generateAccount = function (roles) {
   });
 };
 
-UserSchema.statics.createAccount = function (roles, username, password) {
+UserSchema.statics.createAccount = function (roles, username, password, name, expire) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
     User.uniqueUserName(username)
@@ -136,6 +136,8 @@ UserSchema.statics.createAccount = function (roles, username, password) {
           user.username = username;
           user.password = password;
           user.roles = roles;
+          user.name = name;
+          user.expire = expire;
           user.save(function (err) {
             if (err) reject(err);
             resolve(user);
@@ -148,7 +150,7 @@ UserSchema.statics.createAccount = function (roles, username, password) {
   });
 };
 
-UserSchema.statics.updateAccount = function (userId, roles, username, password) {
+UserSchema.statics.updateAccount = function (userId, roles, username, password, name, expire) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
     User.uniqueUserName(username, userId)
@@ -164,6 +166,8 @@ UserSchema.statics.updateAccount = function (userId, roles, username, password) 
             if (roles) {
               user.roles = roles;
             }
+            user.name = name;
+            user.expire = expire;
             user.save(function (err) {
               if (err) reject(err);
               resolve(user);

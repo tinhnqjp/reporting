@@ -18,6 +18,7 @@ exports.create = function (req, res) {
   var username = getUserName(req, res);
   var password = getPass(req, res);
   var worker = new Worker(req.body);
+  var expire = req.body.account.expire;
 
   User.findOne({ username: username, deleted: false }).exec((err, user) => {
     if (err) {
@@ -27,7 +28,7 @@ exports.create = function (req, res) {
     if (user)
       return res.status(422).send({ message: 'IDが既存しますので下請けを登録できません。' });
 
-    User.createAccount('user', username, password)
+    User.createAccount('user', username, password, worker.name, expire)
       .then((user) => {
         worker.account = user;
         if (worker.petition) {
@@ -69,10 +70,15 @@ exports.update = function (req, res) {
 
     worker = _.extend(worker, req.body);
     var password = null;
+    var expire = null;
     if (req.body.account.password) {
       password = req.body.account.password;
     }
-    User.updateAccount(worker.account._id, null, username, password)
+    if (req.body.account.expire) {
+      expire = req.body.account.expire;
+      console.log('​exports.update -> expire', expire);
+    }
+    User.updateAccount(worker.account._id, null, username, password, worker.name, expire)
       .then(() => {
         worker.save(function (err) {
           if (err) {
@@ -108,6 +114,55 @@ exports.delete = function (req, res) {
   });
 };
 
+exports.deletePetition = function (req, res) {
+  var workerId = req.body.workerId;
+  var petitionId = req.body.petitionId;
+  if (!mongoose.Types.ObjectId.isValid(workerId)) {
+    return res.status(400).send({
+      message: '下請けが見つかりません。'
+    });
+  }
+  if (!mongoose.Types.ObjectId.isValid(petitionId)) {
+    return res.status(400).send({
+      message: '申請が見つかりません。'
+    });
+  }
+
+  Worker
+    .findById(workerId)
+    .exec(function (err, worker) {
+      if (err) {
+        logger.error(err);
+        return res.status(400).send({ message: '下請けを削除できません。' });
+      }
+      if (!worker) {
+        return res.status(400).send({ message: '下請けが見つかりません。' });
+      }
+
+      worker.deleted = true;
+      worker.save(function (err) {
+        if (err) {
+          logger.error(err);
+          return res.status(400).send({ message: '下請けを削除できません。' });
+        }
+        User.findByIdAndUpdate(worker.account, { deleted: true }, function (err) {
+          if (err) {
+            logger.error(err);
+            return res.status(400).send({ message: '下請けを削除できません。' });
+          }
+
+          Petition.findByIdAndRemove(petitionId).exec(function (err) {
+            if (err) {
+              logger.error(err);
+              return res.status(400).send({ message: '下請けを削除できません。' });
+            }
+            res.json(worker);
+          });
+        });
+      });
+    });
+};
+
 exports.list = function (req, res) {
   Worker.find({ deleted: false }).sort('-created').exec(function (err, result) {
     if (err) {
@@ -133,7 +188,7 @@ exports.paging = function (req, res) {
     page: page,
     limit: limit,
     populate: [
-      { path: 'account', select: 'username' },
+      { path: 'account', select: 'username expire' },
       { path: 'partner', select: 'name' }
     ]
   }).then(function (result) {
@@ -153,7 +208,7 @@ exports.workerByID = function (req, res, next, id) {
 
   Worker
     .findById(id)
-    .populate('account', 'username')
+    .populate('account', 'username expire')
     .populate('partner', 'name')
     .exec(function (err, worker) {
       if (err) {
