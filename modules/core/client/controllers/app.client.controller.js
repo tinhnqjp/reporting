@@ -25,8 +25,12 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     { id: 'bsoperator', name: '営業者', class: 'label-info' },
     { id: 'dispatcher', name: '手配者', class: 'label-success' },
     { id: 'employee', name: '一般社員', class: 'label-primary' }
-    // { id: 'partner', name: '協力業者' },
-    // { id: 'user', name: '下請け' }
+  ];
+  $scope.reportRoles = [
+    { id: 'dispatcher', name: '手配者', class: 'label-success' },
+    { id: 'employee', name: '一般社員', class: 'label-primary' },
+    { id: 'partner', name: '協力業者', class: 'label-danger' },
+    { id: 'user', name: '下請け', class: 'label-warning' }
   ];
 
   // 状態 1: 提出 - 2: 確認済 - 3: 承認済 - 4: 確定済

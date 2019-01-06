@@ -125,14 +125,6 @@
         </uib-accordion-heading>
         <div class="table-custom" style="border:0px;">
           <div class="col-xs-3">
-            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.drainage == item.id" ng-click="tapFour(item.id, 'drainage')">
-              <div class="title">
-                <span>排水確認</span>
-              </div>
-              <span class="taps">{{item.value}}</span>
-            </div>
-          </div>
-          <div class="col-xs-3">
             <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.after_noise_and_vibration == item.id" ng-click="tapFour(item.id, 'after_noise_and_vibration')">
               <div class="title">
                 <span>異音・振動</span>

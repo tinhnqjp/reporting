@@ -40,7 +40,7 @@
         });
 
       if (vm.report.manager) {
-        vm.report.manager = _.find(vm.report.workers, { '_id': vm.report.manager });
+        vm.report.manager = _.find(vm.report.workers, { 'name': vm.report.manager });
       }
 
       vm.report.signature = $scope.getImageDefault(vm.report.signature);
@@ -57,6 +57,7 @@
         vm.report.unit_id = vm.report.unit._id;
         vm.report.unit_name = vm.report.unit.name;
       }
+      console.log(vm.report.manager);
       $scope.handleShowConfirm({
         message: 'この報告書を保存します。よろしいですか？'
       }, function () {

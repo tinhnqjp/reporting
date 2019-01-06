@@ -180,7 +180,7 @@
                     <td class="col-xs-4">
                       <ui-select name="manager" ng-model="vm.report.manager" theme="bootstrap">
                         <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
-                        <ui-select-choices repeat="item in vm.report.workers | filter: $select.search">
+                        <ui-select-choices repeat="item.name as item in vm.report.workers | filter: $select.search">
                           <span ng-bind-html="item.name | highlight: $select.search"></span>
                         </ui-select-choices>
                       </ui-select>
@@ -364,7 +364,6 @@
             </div>
           </div>
         </div>
-        {{vm.reportForm.$error}}
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.reportForm.supplier.$error" role="alert">
             <li class="text-red" ng-message="required">納入先を入力してください。</li>

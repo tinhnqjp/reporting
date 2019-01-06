@@ -90,6 +90,7 @@ exports.reportByID = function (req, res, next, id) {
   }
 
   Report.findById(id).exec(function (err, report) {
+    console.log('​exports.reportByID -> report', report);
     if (err) {
       logger.error(err);
       return next(err);
@@ -105,27 +106,77 @@ exports.reportByID = function (req, res, next, id) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
+  var key_lower = '';
+  var key_upper = '';
+  var or_arr = [];
+
   var query = {};
   var and_arr = [];
   if (condition.keyword && condition.keyword !== '') {
-    var key_lower = condition.keyword.toLowerCase();
-    var key_upper = condition.keyword.toUpperCase();
-    var or_arr = [
-      { reportname: { $regex: '.*' + condition.keyword + '.*' } },
-      { reportname: { $regex: '.*' + key_lower + '.*' } },
-      { reportname: { $regex: '.*' + key_upper + '.*' } },
-      { description: { $regex: '.*' + condition.keyword + '.*' } },
-      { description: { $regex: '.*' + key_lower + '.*' } },
-      { description: { $regex: '.*' + key_upper + '.*' } }
+    key_lower = condition.keyword.toLowerCase();
+    key_upper = condition.keyword.toUpperCase();
+    or_arr = [
+      { search: { $regex: '.*' + condition.keyword + '.*' } },
+      { search: { $regex: '.*' + key_lower + '.*' } },
+      { search: { $regex: '.*' + key_upper + '.*' } }
     ];
     and_arr.push({ $or: or_arr });
   }
+  if (condition.unit) {
+    and_arr.push({ unit: condition.unit });
+  }
+  if (condition.role) {
+    and_arr.push({ role: condition.role });
+  }
+  if (condition.status) {
+    and_arr.push({ status: condition.status });
+  }
+  if (condition.kind) {
+    and_arr.push({ kind: condition.kind });
+  }
+  if (condition.location) {
+    and_arr.push({ location: condition.location });
+  }
+  if (condition.manager && condition.manager !== '') {
+    key_lower = condition.manager.toLowerCase();
+    key_upper = condition.manager.toUpperCase();
+    or_arr = [
+      { manager: { $regex: '.*' + condition.manager + '.*' } },
+      { manager: { $regex: '.*' + key_lower + '.*' } },
+      { manager: { $regex: '.*' + key_upper + '.*' } }
+    ];
+    and_arr.push({ $or: or_arr });
+  }
+  if (condition.author_name && condition.author_name !== '') {
+    key_lower = condition.author_name.toLowerCase();
+    key_upper = condition.author_name.toUpperCase();
+    or_arr = [
+      { author_name: { $regex: '.*' + condition.author_name + '.*' } },
+      { author_name: { $regex: '.*' + key_lower + '.*' } },
+      { author_name: { $regex: '.*' + key_upper + '.*' } }
+    ];
+    and_arr.push({ $or: or_arr });
+  }
+
+  if (condition.start_min) {
+    and_arr.push({ start: { '$gte': condition.start_min } });
+  }
+  if (condition.start_max) {
+    and_arr.push({ start: { '$lte': moment(condition.start_max).endOf('day') } });
+  }
+
+  if (condition.end_min) {
+    and_arr.push({ end: { '$gte': condition.end_min } });
+  }
+  if (condition.end_max) {
+    and_arr.push({ end: { '$lte': moment(condition.end_max).endOf('day') } });
+  }
+
   if (condition.created_min) {
     and_arr.push({ created: { '$gte': condition.created_min } });
   }
   if (condition.created_max) {
-    var max = moment(condition.created_max).endOf('day');
-    and_arr.push({ created: { '$lte': max } });
+    and_arr.push({ created: { '$lte': moment(condition.created_max).endOf('day') } });
   }
   if (and_arr.length > 0) {
     query = { $and: and_arr };
@@ -133,3 +184,4 @@ function getQuery(condition) {
 
   return query;
 }
+

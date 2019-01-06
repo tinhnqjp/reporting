@@ -5,13 +5,31 @@
     .module('reports.admin')
     .controller('ReportListController', ReportListController);
 
-  ReportListController.$inject = ['$scope', 'ReportsService', 'ReportsApi', '$window', '$location'];
+  ReportListController.$inject = ['$scope', 'ReportsService', 'ReportsApi', 'UnitsApi', '$location'];
 
-  function ReportListController($scope, ReportsService, ReportsApi, $window, $location) {
+  function ReportListController($scope, ReportsService, ReportsApi, UnitsApi, $location) {
     var vm = this;
     onCreate();
 
     function onCreate() {
+      UnitsApi.units()
+        .success(function (res) {
+          vm.units = res;
+        })
+        .error(function (err) {
+          var message = (err) ? err.message || err.data.message : '報告書の取得が失敗しました。';
+          $scope.handleShowToast(message, true);
+        });
+
+      ReportsApi.config()
+        .success(function (res) {
+          vm.configs = res;
+          console.log('​onCreate ->  vm.configs', vm.configs);
+        })
+        .error(function (err) {
+          var message = (err) ? err.message || err.data.message : '報告書の取得が失敗しました。';
+          $scope.handleShowToast(message, true);
+        });
       prepareCondition(false);
       handleSearch();
     }

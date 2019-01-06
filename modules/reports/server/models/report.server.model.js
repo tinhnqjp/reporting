@@ -438,11 +438,12 @@ ReportSchema.pre('save', function (next) {
         doc.number = counter.seq;
         doc.pdf = config.uploads.reports.pdf.dest + doc._id + '.pdf';
         doc.search = (doc.supplier ? doc.supplier : '') + '-' + doc.number;
-        console.log(33333333);
         next();
       });
 
     });
+  } else {
+    next();
   }
 });
 
