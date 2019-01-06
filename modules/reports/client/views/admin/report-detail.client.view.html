@@ -17,7 +17,6 @@
             <tr>
               <th class="col-xs-2">
                 納入先
-                <span class="text-red">*</span>
               </th>
               <td class="col-xs-10" colspan="3">
                 {{vm.report.supplier}}
@@ -36,34 +35,28 @@
               <th class="col-xs-2">
                 開始
               </th>
-              <td class="col-xs-10" colspan="3">
+              <td class="col-xs-4">
                   {{vm.report.start | dateTimeFormat}}
               </td>
-            </tr>
-            <tr>
               <th class="col-xs-2">
                 終了
               </th>
-              <td class="col-xs-10" colspan="3">
-                  {{vm.report.end | dateTimeFormat}}
+              <td class="col-xs-4">
+                {{vm.report.end | dateTimeFormat}}
               </td>
             </tr>
             <tr>
               <th class="col-xs-2">
-                  内機
+                内機
               </th>
               <td class="col-xs-4">
-                <div class="input-group">
-                    {{vm.report.clean.number_of_internal}}台
-                </div>
+                {{vm.report.clean.number_of_internal}}台
               </td>
               <th class="col-xs-2">
                   外機
               </th>
               <td class="col-xs-4">
-                <div class="input-group">
-                    {{vm.report.clean.number_of_external}}台
-                </div>
+                {{vm.report.clean.number_of_external}}台
               </td>
             </tr>
             <tr>
@@ -90,13 +83,14 @@
                 提出先
               </th>
               <td class="col-xs-4">
-                  {{vm.report.supplier}}
+                  {{vm.report.unit_name}}
               </td>
               <th class="col-xs-2">
                 作業結果
               </th>
               <td class="col-xs-4">
-                {{vm.report.work_result}}
+                <span ng-if="vm.report.work_result">完了</span>
+                <span ng-if="!vm.report.work_result">継続</span>
               </td>
             </tr>
           </tbody>
