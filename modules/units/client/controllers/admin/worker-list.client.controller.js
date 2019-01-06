@@ -33,7 +33,7 @@
           vm.docs = res.docs;
           vm.condition.count = res.docs ? res.docs.length : 0;
           vm.condition.page = res.page;
-          vm.condition.total = res.totalPages;
+          vm.condition.total = res.totalDocs;
           $scope.conditionFactoryUpdate('worker', vm.condition);
         })
         .error(function (err) {

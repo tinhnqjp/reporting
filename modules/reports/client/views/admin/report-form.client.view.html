@@ -65,7 +65,7 @@
                       <input type="text" id="start" name="start" datetime-picker="" datepicker-options="dateOptions"
                         timepicker-options="timeOptions" ng-click="openCalendar($event, 'start')" placeholder="開始を入力"
                         is-open="open.start" autocomplete="off" class="form-control" ng-model="vm.report.start"
-                        required ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
+                        ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
                     </td>
                   </tr>
                   <tr>
@@ -76,7 +76,7 @@
                       <input type="text" id="end" name="end" datetime-picker="" datepicker-options="dateOptions"
                         timepicker-options="timeOptions" ng-click="openCalendar($event, 'end')" placeholder="終了を入力"
                         is-open="open.end" autocomplete="off" class="form-control" ng-model="vm.report.end"
-                        required ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
+                        ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
                     </td>
                   </tr>
                   <tr>
@@ -344,7 +344,27 @@
             </div>
           </div>
         </div>
-
+        <!-- CMS -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">CMS</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <th class="col-xs-2">
+                      備考
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <textarea class="form-control" ng-model="vm.report.note" placeholder="備考を入力"></textarea>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{vm.reportForm.$error}}
         <div class="messages" ng-if="vm.isSaveClick">
           <div ng-messages="vm.reportForm.supplier.$error" role="alert">
             <li class="text-red" ng-message="required">納入先を入力してください。</li>

@@ -88,7 +88,7 @@ exports.create = function (req, res) {
   }
   var kind = req.body.kind || 1;
   var userId = req.body.userId;
-  var report = new Report(req.body.data);
+
   User.findById(userId).exec((err, user) => {
     if (err) {
       logger.error(err);
@@ -105,6 +105,8 @@ exports.create = function (req, res) {
       user.roles[0] === 'user' ||
       user.roles[0] === 'dispatcher' ||
       user.roles[0] === 'employee') {
+
+      var report = new Report(req.body.data);
       report.number = moment()
         .valueOf()
         .toString();
