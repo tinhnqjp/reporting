@@ -61,6 +61,22 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     return Notification.success({ message: msg, title: '<i class="glyphicon glyphicon-ok"></i> 完了' });
   };
 
+  // Hiển thị hình ảnh khi click vào image
+  $scope.handleShowImage = function (url) {
+    $scope.url = url;
+    ngDialog.openConfirm({
+      templateUrl: '/modules/core/client/views/modal-image.client.view.html',
+      scope: $scope,
+      appendClassName: 'ngdialog-custom',
+      showClose: false,
+      width: 900
+    }).then(function (res) {
+      delete $scope.url;
+    }, function (res) {
+      delete $scope.url;
+    });
+  };
+
   // Hiển thị confirm xác nhận
   $scope.handleShowConfirm = function (content, resolve, reject) {
     $scope.dialog = content;

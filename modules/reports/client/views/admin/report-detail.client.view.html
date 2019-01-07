@@ -332,10 +332,8 @@
             <tbody>
               <tr>
                 <td class="col-xs-12" colspan="4">
-                  <div class="col-xs-2" ng-repeat="item in vm.report.drawings">
-                    <div class="box-part text-center label-success">
-                      <img class="img-responsive" src="{{item}}">
-                    </div>
+                  <div class="col-xs-3" ng-repeat="item in vm.report.drawings">
+                    <img class="thumbnail img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
                   </div>
                 </td>
               </tr>
@@ -376,15 +374,14 @@
                 サイン
               </th>
               <td class="col-xs-10" colspan="3">
-                <img class="img-responsive img-thumbnail" src="{{vm.report.signature}}">
+                <img class="img-thumbnail img-responsive" src="{{vm.report.signature}}" ng-click="handleShowImage(vm.report.signature)">
               </td>
             </tr>
             <tr>
               <th class="col-xs-2">
                 営業所
               </th>
-              <td class="col-xs-10" colspan="3">
-                {{vm.report.location}}
+              <td class="col-xs-10" colspan="3" ng-bind="vm.report.location">
               </td>
             </tr>
           </tbody>
@@ -399,8 +396,7 @@
               <th class="col-xs-2">
                 備考
               </th>
-              <td class="col-xs-10" colspan="3">
-                {{vm.report.note}}
+              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.note">
               </td>
             </tr>
           </tbody>

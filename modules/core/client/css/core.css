@@ -386,6 +386,10 @@ a.text-muted:focus {
   color: #ff9800
 }
 
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
 .clickable {
   cursor: pointer;
 }

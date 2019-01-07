@@ -20,7 +20,7 @@ var _ = require('lodash'),
  * @version 2018/12/24
  */
 exports.list = function (req, res) {
-  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(helper.getMessage(errors));
@@ -64,15 +64,16 @@ exports.list = function (req, res) {
  */
 exports.petition = function (req, res) {
   var pattern = /^([0-9]{9,13}$)/;
-  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
-  req.checkBody('action', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
+  req.checkBody('action', '申請種類を入力してください。').notEmpty();
   var action = req.body.action;
   if (action === 1) {
-    req.checkBody('name', 'サーバーエラーが発生しました。').notEmpty();
-    req.checkBody('phone', 'サーバーエラーが発生しました。').notEmpty().matches(pattern);
-    req.checkBody('manager', 'サーバーエラーが発生しました。').notEmpty();
+    req.checkBody('name', '氏名を入力してください。').notEmpty();
+    req.checkBody('phone', '電話番号を入力してください。').notEmpty();
+    req.checkBody('phone', '電話番号の入力形式に誤りがあります。').matches(pattern);
+    req.checkBody('manager', '担当者を入力してください。').notEmpty();
   } else {
-    req.checkBody('workerId', 'サーバーエラーが発生しました。').notEmpty();
+    req.checkBody('workerId', '下請けを入力してください。').notEmpty();
   }
 
   var errors = req.validationErrors();

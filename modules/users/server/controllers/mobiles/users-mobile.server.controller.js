@@ -17,7 +17,7 @@ var _ = require('lodash'),
  * @version 2018/12/24
  */
 exports.expire = function (req, res) {
-  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(helper.getMessage(errors));

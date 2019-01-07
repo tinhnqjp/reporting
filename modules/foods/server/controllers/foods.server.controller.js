@@ -192,8 +192,7 @@ function getQuery(condition) {
     and_arr.push({ created: { '$gte': condition.created_min } });
   }
   if (condition.created_max) {
-    var max = moment(condition.created_max).endOf('day');
-    and_arr.push({ created: { '$lte': max } });
+    and_arr.push({ created: { '$lte': condition.created_max } });
   }
 
   if (and_arr.length > 0) {

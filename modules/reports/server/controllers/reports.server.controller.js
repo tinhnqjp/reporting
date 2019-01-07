@@ -90,7 +90,6 @@ exports.reportByID = function (req, res, next, id) {
   }
 
   Report.findById(id).exec(function (err, report) {
-    console.log('​exports.reportByID -> report', report);
     if (err) {
       logger.error(err);
       return next(err);
@@ -162,21 +161,21 @@ function getQuery(condition) {
     and_arr.push({ start: { '$gte': condition.start_min } });
   }
   if (condition.start_max) {
-    and_arr.push({ start: { '$lte': moment(condition.start_max).endOf('day') } });
+    and_arr.push({ start: { '$lte': condition.start_max } });
   }
 
   if (condition.end_min) {
     and_arr.push({ end: { '$gte': condition.end_min } });
   }
   if (condition.end_max) {
-    and_arr.push({ end: { '$lte': moment(condition.end_max).endOf('day') } });
+    and_arr.push({ end: { '$lte': condition.end_max } });
   }
 
   if (condition.created_min) {
     and_arr.push({ created: { '$gte': condition.created_min } });
   }
   if (condition.created_max) {
-    and_arr.push({ created: { '$lte': moment(condition.created_max).endOf('day') } });
+    and_arr.push({ created: { '$lte': condition.created_max } });
   }
   if (and_arr.length > 0) {
     query = { $and: and_arr };

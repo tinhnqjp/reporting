@@ -29,6 +29,7 @@
           $scope.handleShowToast(message, true);
         });
 
+      console.log(vm.report.signature);
       vm.report.signature = $scope.getImageDefault(vm.report.signature);
     }
   }

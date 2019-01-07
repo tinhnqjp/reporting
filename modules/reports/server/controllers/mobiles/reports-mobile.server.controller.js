@@ -12,6 +12,7 @@ var _ = require('lodash'),
   Worker = mongoose.model('Worker'),
   path = require('path'),
   moment = require('moment'),
+  crypto = require('crypto'),
   fs = require('fs'),
   config = require(path.resolve('./config/config')),
   help = require(path.resolve(
@@ -22,7 +23,7 @@ var _ = require('lodash'),
   ));
 
 exports.histories = function (req, res) {
-  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
@@ -84,8 +85,9 @@ exports.histories = function (req, res) {
 };
 
 exports.create = function (req, res) {
-  req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
-  req.checkBody('data', 'サーバーエラーが発生しました。').notEmpty();
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
+  req.checkBody('data', 'データーを入力してください。').notEmpty();
+  req.checkBody('data.kind', '報告書種類を入力してください。').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
@@ -111,15 +113,12 @@ exports.create = function (req, res) {
       var unit = {};
       var report = new Report(req.body.data);
 
-      checkUnit(report.unit_id)
+      checkUnit(report)
         .then(function (_unit) {
           unit = _unit;
           if (report.signature) {
             var signature_path = config.uploads.reports.signature.dest;
-            createImage(signature_path, report.signature)
-              .then(function (fileName) {
-                return Promise.resolve(fileName);
-              });
+            return createImage(signature_path, report.signature);
           } else {
             return Promise.resolve('');
           }
@@ -446,9 +445,11 @@ function createReport(report, user, unit, partnerId) {
       time: Date.now()
     }];
 
-    report.unit = unit;
-    report.unit_id = unit._id;
-    report.unit_name = unit.name;
+    if (unit) {
+      report.unit = unit;
+      report.unit_id = unit._id;
+      report.unit_name = unit.name;
+    }
 
     report.save(function (err) {
       if (err) {
@@ -460,12 +461,12 @@ function createReport(report, user, unit, partnerId) {
   });
 }
 
-function checkUnit(unitId) {
+function checkUnit(report) {
   return new Promise((resolve, reject) => {
-    if (!unitId) {
-      reject({ message: 'サーバーエラーが発生しました。' });
+    if (!report.unit_id) {
+      resolve({});
     }
-    Unit.findById(unitId).exec((err, unit) => {
+    Unit.findById(report.unit_id).exec((err, unit) => {
       if (err) {
         logger.error(err);
         reject({ message: 'サーバーエラーが発生しました。' });
@@ -499,16 +500,22 @@ function findPartner(user) {
 
 function createImage(path, input) {
   return new Promise((resolve, reject) => {
-    var data = input.replace(/^data:image\/\w+;base64,/, '');
-    var fileName = path + moment().valueOf().toString() + '.jpg';
+    if (input) {
+      var data = input.replace(/^data:image\/\w+;base64,/, '');
+      var name = crypto.randomBytes(16).toString('hex');
+      var fileName = path + name + '.jpg';
 
-    fs.writeFile(fileName, data, { encoding: 'base64' }, function (err) {
-      if (err) {
-        logger.error(err);
-        reject({ message: 'ファイルのアップロードに失敗しました。' });
-      } else {
-        resolve(fileName);
-      }
-    });
+      fs.writeFile(fileName, data, { encoding: 'base64' }, function (err) {
+        if (err) {
+          logger.error(err);
+          reject({ message: 'ファイルのアップロードに失敗しました。' });
+        } else {
+          fileName = fileName.substr(1);
+          resolve(fileName);
+        }
+      });
+    } else {
+      resolve('');
+    }
   });
 }
