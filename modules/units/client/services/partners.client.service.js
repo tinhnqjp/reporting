@@ -46,10 +46,17 @@
   PartnerApi.$inject = ['$http'];
   function PartnerApi($http) {
     this.list = function (condition) {
+<<<<<<< HEAD
       return $http.post('/api/partners/list', { condition: condition }, { ignoreLoadingBar: true });
     };
     this.export = function (condition) {
       return $http.post('/api/partners/export', { condition: condition }, { ignoreLoadingBar: true });
+=======
+      return $http.post('/api/partners/list', { condition: condition }, {});
+    };
+    this.export = function (condition) {
+      return $http.post('/api/partners/export', { condition: condition }, {});
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
     };
     return this;
   }

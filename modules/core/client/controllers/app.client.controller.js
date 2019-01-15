@@ -10,8 +10,45 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   $scope.NO_VIDEO_PATH = '/modules/core/client/img/video-default.png';
   $scope.formatDate = 'yyyy/MM/dd';
   $scope.itemsPerPage = 20;
-  $scope.regexKana = /^[\u3040-\u309f]*$/;
-  $scope.regexPass = /^[A-Za-z0-9]*$/;
+  $scope.regexKana = /^[\u3040-\u309f|ー]*$/;
+  $scope.regexAlphaNumeric = /^[A-Za-z0-9]*$/;
+  $scope.dateOptions = {
+    showWeeks: false
+  };
+  $scope.timeOptions = {
+    showMeridian: false
+  };
+  /** roles */
+  $scope.roles = [
+    { id: 'admin', name: 'システム管理', class: 'label-danger' },
+    { id: 'operator', name: 'オペレーター', class: 'label-warning' },
+    { id: 'bsoperator', name: '営業者', class: 'label-info' },
+    { id: 'dispatcher', name: '手配者', class: 'label-success' },
+    { id: 'employee', name: '一般社員', class: 'label-primary' }
+  ];
+  $scope.reportRoles = [
+    { id: 'dispatcher', name: '手配者', class: 'label-success' },
+    { id: 'employee', name: '一般社員', class: 'label-primary' },
+    { id: 'partner', name: '協力業者', class: 'label-danger' },
+    { id: 'user', name: '下請け', class: 'label-warning' }
+  ];
+
+  // 状態 1: 提出 - 2: 確認済 - 3: 承認済 - 4: 確定済
+  /** report status */
+  $scope.reportStatus = [
+    { id: 1, name: '状態', class: 'label-danger' },
+    { id: 2, name: '確認済', class: 'label-warning' },
+    { id: 3, name: '承認済', class: 'label-info' },
+    { id: 4, name: '確定済', class: 'label-success' }
+  ];
+  // 1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ
+  $scope.reportKind = [
+    { id: 1, name: '洗浄', class: 'label-danger' },
+    { id: 2, name: '修理', class: 'label-warning' },
+    { id: 3, name: '設置', class: 'label-info' },
+    { id: 4, name: '写真', class: 'label-success' },
+    { id: 5, name: 'フリ', class: 'label-primary' }
+  ];
 
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
@@ -22,6 +59,22 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     if (error)
       return Notification.error({ message: msg + '', title: '<i class="glyphicon glyphicon-remove"></i> エラー: ' });
     return Notification.success({ message: msg, title: '<i class="glyphicon glyphicon-ok"></i> 完了' });
+  };
+
+  // Hiển thị hình ảnh khi click vào image
+  $scope.handleShowImage = function (url) {
+    $scope.url = url;
+    ngDialog.openConfirm({
+      templateUrl: '/modules/core/client/views/modal-image.client.view.html',
+      scope: $scope,
+      appendClassName: 'ngdialog-custom',
+      showClose: false,
+      width: 900
+    }).then(function (res) {
+      delete $scope.url;
+    }, function (res) {
+      delete $scope.url;
+    });
   };
 
   // Hiển thị confirm xác nhận
@@ -96,6 +149,15 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     if ($scope.dialog) $scope.dialog.close();
   };
 
+  $scope.generateRandomPassphrase = function () {
+    var password = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < 8; i++) {
+      password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return password;
+  };
+
   // page
   $scope.getPageTitle = function () {
     return $state.current.data.pageTitle;
@@ -168,23 +230,51 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   };
 
   $scope.tableIndex = function (condition, index) {
-    return ((condition.page - 1) * condition.limit) + index + 1;
+    if (condition.page && condition.limit) {
+      return ((condition.page - 1) * condition.limit) + index + 1;
+    }
+    return index + 1;
   };
 
   $scope.tableReport = function (condition) {
-    var out = '全 ' + condition.total + ' 件';
-    var min = ((condition.page - 1) * condition.limit) + 1;
-    var max = min + condition.count - 1;
-    out += '中 ' + min + ' 件目 〜 ' + max + ' 件目を表示';
-
+    var out = '';
+    if (condition.total) {
+      out = '全 ' + condition.total + ' 件';
+      var min = ((condition.page - 1) * condition.limit) + 1;
+      var max = min + condition.count - 1;
+      out += '中 ' + min + ' 件目 〜 ' + max + ' 件目を表示';
+    } else {
+      out = '全 0 件';
+    }
     return out;
   };
 
   $scope.picker = {
     created_min: { open: false },
-    created_max: { open: false }
+    created_max: { open: false },
+    start: { open: false },
+    end: { open: false },
+    work_start: { open: false },
+    work_end: { open: false }
   };
-  $scope.openCalendar = function (e, picker) {
+  $scope.openCalendarSearch = function (e, picker) {
     $scope.picker[picker].open = true;
   };
+
+
+  $scope.open = {};
+  $scope.openCalendar = function (e, date) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if ($scope.open[date] === true) {
+      $scope.open = {};
+    } else {
+      $scope.open = {};
+      $scope.open[date] = true;
+    }
+  };
+
+  $scope.tab = {};
+
 }

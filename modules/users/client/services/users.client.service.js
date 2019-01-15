@@ -75,10 +75,10 @@
   UsersApi.$inject = ['$http'];
   function UsersApi($http) {
     this.list = function (condition) {
-      return $http.post('/api/users/list', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/users/list', { condition: condition }, {});
     };
     this.export = function (condition) {
-      return $http.post('/api/users/export', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/users/export', { condition: condition }, {});
     };
     return this;
   }

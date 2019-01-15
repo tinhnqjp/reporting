@@ -7,11 +7,39 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
   path = require('path'),
+  helper = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller'));
 
 /**
+ * Get expire of partner or worker
+ * @param userId partner/worker
+ * @returns { results: object user }
+ * @version 2018/12/24
+ */
+exports.expire = function (req, res) {
+  req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(400).send(helper.getMessage(errors));
+  }
+
+  var userId = req.body.userId;
+  User.findOne({ _id: userId, deleted: false }).select('_id name username expire created').exec((err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
+    }
+    if (!user)
+      return res.status(422).send({ message: 'このデータは無効または削除されています。' });
+
+    return res.jsonp(user);
+  });
+};
+
+
+/**
 * @function ログイン
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @returns { user: object }
 */
@@ -25,13 +53,14 @@ exports.m_signin = function (req, res) {
       return res.jsonp(user);
     })
     .catch(err => {
+      logger.error(err);
       return res.status(err.status).send(err);
     });
 };
 
 /**
 * @function パスワード変更
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @param new_password(新しいパスワード)
 * @param confirm_password(確認パスワード)
@@ -43,7 +72,7 @@ exports.m_password = function (req, res) {
   var newPassword = req.body.new_password;
   var verifyPassword = req.body.confirm_password;
   if (!username)
-    return res.status(400).send({ message: 'ログインIDを入力してください。' });
+    return res.status(400).send({ message: 'ユーザーIDを入力してください。' });
   if (!currentPassword)
     return res.status(400).send({ message: 'パスワードを入力してください。' });
   if (!newPassword)
@@ -74,7 +103,7 @@ exports.m_password = function (req, res) {
 
 /**
 * @function アカウントチェック
-* @param username(ログインID)
+* @param username(ユーザーID)
 * @param password(パスワード)
 * @returns { user }
 */
@@ -83,11 +112,11 @@ exports.m_registry = function (req, res) {
   var password = req.body.password;
 
   if (!username)
-    return res.status(400).send({ message: 'ログインIDを入力してください。' });
+    return res.status(400).send({ message: 'ユーザーIDを入力してください。' });
   if (!password)
     return res.status(400).send({ message: 'パスワードを入力してください。' });
 
-  User.findOne({ username: username }).select('id username roles created').exec((err, _user) => {
+  User.findOne({ username: username, deleted: false }).select('id username roles created').exec((err, _user) => {
     if (err) {
       logger.error(err);
       return res.status(500).send({ message: 'サーバーエラーが発生しました。' });
@@ -100,8 +129,10 @@ exports.m_registry = function (req, res) {
     user.username = username;
     user.password = password;
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを登録できません。' });
+      }
       return res.json(user);
     });
   });
@@ -110,7 +141,7 @@ exports.m_registry = function (req, res) {
 // ----------------------------------------------------------------
 function verifyLogin(username, password) {
   return new Promise(function (resolve, reject) {
-    User.findOne({ username: username }).exec((err, user) => {
+    User.findOne({ username: username, deleted: false }).exec((err, user) => {
       if (err) {
         logger.error(err);
         return reject({ status: 500, message: 'サーバーエラーが発生しました。' });

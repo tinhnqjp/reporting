@@ -14,6 +14,7 @@ var mongoose = require('mongoose'),
   Excel = require('exceljs'),
   __ = require('underscore'),
   _ = require('lodash'),
+  logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   files = require(path.resolve('./modules/core/server/controllers/files.server.controller'));
 
@@ -21,12 +22,19 @@ var SHEET_NAME = 'AccountList';
 
 exports.create = function (req, res) {
   var user = new User(req.body);
-  User.findOne({ username: req.body.username }).exec((err, _user) => {
+
+  User.findOne({ username: req.body.username, deleted: false }).exec((err, _user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'アカウントを登録できません。' });
+    }
     if (_user)
       return res.status(422).send({ message: 'IDが既存しますのでアカウントを登録できません。' });
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを登録できません。' });
+      }
       return res.json(user);
     });
   });
@@ -39,21 +47,25 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var user = req.model;
   if (user.username !== req.body.username) {
-    User.findOne({ username: req.body.username }).exec((err, _user) => {
+    User.findOne({ username: req.body.username, deleted: false }).exec((err, _user) => {
       if (_user)
         return res.status(422).send({ message: 'IDが既存しますのでアカウントを変更できません。' });
       user = _.extend(user, req.body);
       user.save(function (err) {
-        if (err)
+        if (err) {
+          logger.error(err);
           return res.status(422).send({ message: 'アカウントを変更できません。' });
+        }
         res.json(user);
       });
     });
   } else {
     user = _.extend(user, req.body);
     user.save(function (err) {
-      if (err)
+      if (err) {
+        logger.error(err);
         return res.status(422).send({ message: 'アカウントを変更できません。' });
+      }
       res.json(user);
     });
   }
@@ -61,10 +73,12 @@ exports.update = function (req, res) {
 
 exports.delete = function (req, res) {
   var user = req.model;
-
-  user.remove(function (err) {
-    if (err)
+  user.deleted = true;
+  user.save(function (err) {
+    if (err) {
+      logger.error(err);
       return res.status(400).send({ message: 'アカウントを削除できません。' });
+    }
     res.json(user);
   });
 };
@@ -79,10 +93,14 @@ exports.list = function (req, res) {
   User.paginate(query, {
     sort: sort,
     page: page,
-    limit: limit
+    limit: limit,
+    populate: [
+      { path: 'unit', select: 'name' }
+    ]
   }).then(function (result) {
     return res.json(result);
   }, err => {
+    logger.error(err);
     return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
   });
 };
@@ -94,16 +112,19 @@ exports.userByID = function (req, res, next, id) {
     });
   }
 
-  User.findById(id, '-salt -password -providerData').exec(function (err, user) {
-    if (err) {
-      return next(err);
-    } else if (!user) {
-      return next(new Error('Failed to load user ' + id));
-    }
+  User.findById(id, '-salt -password -providerData')
+    .populate('unit', 'name')
+    .exec(function (err, user) {
+      if (err) {
+        logger.error(err);
+        return next(err);
+      } else if (!user) {
+        return next(new Error('Failed to load user ' + id));
+      }
 
-    req.model = user;
-    next();
-  });
+      req.model = user;
+      next();
+    });
 };
 exports.import = function (req, res) {
   var filePath;
@@ -128,13 +149,13 @@ exports.import = function (req, res) {
       res.jsonp({ status: true, result: result });
       fs.unlink(filePath, (err) => {
         if (err) {
-          console.log(err);
+          logger.error(err);
         }
         console.log('Removed: ' + filePath);
       });
     })
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       if (err && err.status) {
         return res.status(422).send({ message: err.message });
       }
@@ -251,6 +272,7 @@ exports.import = function (req, res) {
         var remove = getSum(results, 3);
         return resolve({ add: add, update: update, remove: remove });
       }).catch(err => {
+        logger.error(err);
         return reject({ status: 500, message: 'サーバーエラーが発生しました。' });
       });
     });
@@ -291,7 +313,7 @@ exports.import = function (req, res) {
           });
         });
       } else {
-        User.findOne({ username: username }).exec((err, _user) => {
+        User.findOne({ username: username, deleted: false }).exec((err, _user) => {
           if (err)
             return reject({ status: 500, message: 'サーバーエラーが発生しました。' });
 
@@ -318,7 +340,8 @@ exports.import = function (req, res) {
   }
   function removeUser(user) {
     return new Promise((resolve, reject) => {
-      user.remove(err => {
+      user.deleted = true;
+      user.save(err => {
         if (!err)
           return resolve({ action: 3 });
         return resolve({ action: 0 });
@@ -390,7 +413,10 @@ exports.export = function (req, res) {
       var query = getQuery(condition);
       var sort = help.getSort(condition);
       User.find(query).sort(sort).exec((err, users) => {
-        if (err) return reject({ message: 'サーバーでエラーが発生しました。' });
+        if (err) {
+          logger.error(err);
+          return reject({ message: 'サーバーでエラーが発生しました。' });
+        }
         return resolve(users);
       });
     });
@@ -400,7 +426,7 @@ exports.report = function (req, res) {
   var result = {};
   User.aggregate([
     { $unwind: '$roles' },
-    { $group: { _id: '$roles', count: { $sum: 1 } } }
+    { $group: { _id: '$roles', count: { $sum: 1 } }, deleted: false }
   ]).exec()
     .then(function (user) {
       result.user = user;
@@ -418,7 +444,7 @@ exports.report = function (req, res) {
       }
     })
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.jsonp({});
     });
 };
@@ -426,9 +452,12 @@ exports.report = function (req, res) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
-  var and_arr = [];
+  var and_arr = [{ deleted: false }];
   if (condition.roles) {
-    and_arr.push({ roles: condition.roles });
+    and_arr.push({ roles: { $in: condition.roles } });
+  }
+  if (condition.role) {
+    and_arr.push({ roles: condition.role });
   }
 
   if (condition.keyword && condition.keyword !== '') {
@@ -448,8 +477,7 @@ function getQuery(condition) {
     and_arr.push({ created: { '$gte': condition.created_min } });
   }
   if (condition.created_max) {
-    var max = moment(condition.created_max).endOf('day');
-    and_arr.push({ created: { '$lte': max } });
+    and_arr.push({ created: { '$lte': condition.created_max } });
   }
 
   var sort = (condition.sort_direction === '-') ? condition.sort_direction : '';

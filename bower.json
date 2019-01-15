@@ -20,7 +20,14 @@
     "angular-i18n": "^1.7.3",
     "angular-sanitize": "1.5.11",
     "angular-moment": "^1.3.0",
+<<<<<<< HEAD
     "validator-js": "^10.9.0"
+=======
+    "validator-js": "^10.9.0",
+    "angular-ui-select": "^0.19.8",
+    "bootstrap-ui-datetime-picker": "^2.6.3",
+    "checklist-model": "^1.0.0"
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
   },
   "overrides": {
     "bootstrap": {

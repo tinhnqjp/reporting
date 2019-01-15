@@ -1,0 +1,30 @@
+<form name="vm.modalExternalsForm" ng-submit="confirmForm(vm.modalExternalsForm.$valid)" novalidate>
+  <div class="modal-body">
+    <div class="table-custom" style="border:0px;">
+      <table class="table table-detail">
+        <tbody>
+          <tr>
+            <td class="col-xs-12">
+              <div class="row pdn">
+                <div class="col-xs-6 text-left"><h4>対応内機選択</h4></div>
+                <div class="col-xs-6 text-right">
+                  <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+                  <button class="btn btn-primary btn-sm" type="submit">完了</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-xs-12">
+              <div class="list-group modal-checkbox">
+                <label class="list-group-item" ng-repeat="item in internals">
+                  <input type="checkbox" checklist-model="external.internals" checklist-value="item.number"> {{item.number}}
+                </label>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>

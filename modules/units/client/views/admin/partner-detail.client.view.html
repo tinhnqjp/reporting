@@ -1,9 +1,16 @@
 <div class="container form-detail">
   <div class="row">
+<<<<<<< HEAD
     <div class="col-lg-8 col-lg-offset-2">
       <div class="row mg10b">
         <div class="col-xs-6">
           <h4>協力者詳細</h4>
+=======
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <form-title></form-title>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         </div>
         <div class="col-xs-6 text-right">
           <button-edit back="admin.partners.list" state="admin.partners.edit" params="{partnerId: vm.partner._id}"></button-edit>
@@ -14,23 +21,55 @@
           <tbody>
             <tr>
               <th class="col-xs-2">
+<<<<<<< HEAD
                 名前
+=======
+                社名
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
               </th>
               <td class="col-xs-10" ng-bind="vm.partner.name"></td>
             </tr>
             <tr>
               <th class="col-xs-2">
+<<<<<<< HEAD
                 説明
+=======
+                備考
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
               </th>
               <td class="col-xs-10" ng-bind="vm.partner.description"></td>
             </tr>
             <tr>
               <th class="col-xs-2">
+<<<<<<< HEAD
                 ログインID / パスワード
               </th>
               <td class="col-xs-10">
                 <span>{{vm.partner.account.username}} / {{vm.partner.account.username}}</span>
               </td>
+=======
+                電話番号
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.phone"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                ユーザーID
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.account.username"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                有効期限
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.account.expire | dateTimeFormat"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                登録時間
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.created | dateTimeFormat"></td>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
             </tr>
           </tbody>
         </table>

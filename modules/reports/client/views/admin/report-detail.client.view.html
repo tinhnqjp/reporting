@@ -1,0 +1,410 @@
+<div class="container form-detail">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <form-title></form-title>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.reports.list" state="admin.reports.edit" params="{reportId: vm.report._id}"></button-edit>
+        </div>
+      </div>
+      <!-- 基本情報 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">基本情報</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                納入先
+              </th>
+              <td class="col-xs-10" colspan="3">
+                {{vm.report.supplier}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                住所
+              </th>
+              <td class="col-xs-10" colspan="3">
+                  {{vm.report.address1}}<br/>
+                  {{vm.report.address2}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                開始
+              </th>
+              <td class="col-xs-4">
+                  {{vm.report.start | dateTimeFormat}}
+              </td>
+              <th class="col-xs-2">
+                終了
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.end | dateTimeFormat}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                内機
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.clean.number_of_internal}}台
+              </td>
+              <th class="col-xs-2">
+                  外機
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.clean.number_of_external}}台
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                  ルーム（内）
+              </th>
+              <td class="col-xs-4">
+                <div class="input-group">
+                    {{vm.report.clean.number_of_internal_room}}台
+                </div>
+              </td>
+              <th class="col-xs-2">
+                  ルーム（外）
+              </th>
+              <td class="col-xs-4">
+                <div class="input-group">
+                    {{vm.report.clean.number_of_external_room}}台
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">
+                提出先
+              </th>
+              <td class="col-xs-4">
+                  {{vm.report.unit_name}}
+              </td>
+              <th class="col-xs-2">
+                作業結果
+              </th>
+              <td class="col-xs-4">
+                <span ng-if="vm.report.work_result">完了</span>
+                <span ng-if="!vm.report.work_result">継続</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 作業者 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">作業者</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-3">氏名</th>
+                      <th class="col-xs-3">会社名</th>
+                      <th class="col-xs-3">開始時間</th>
+                      <th class="col-xs-3">終了時間</th>
+                    </tr>
+                    <tr ng-repeat="item in vm.report.workers">
+                      <td>{{item.name}}</td>
+                      <td>{{item.company}}</td>
+                      <td>{{item.work_start | dateTimeFormat}}</td>
+                      <td>{{item.work_end | dateTimeFormat}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                責任者
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.manager}}
+              </td>
+              <th class="col-xs-2">
+                営業担当者
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.saler}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 内機一覧 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">内機一覧</div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" colspan="5">内機情報</th>
+                      <th class="text-center" colspan="6">作業箇所</th>
+                      <th class="text-center">写真</th>
+                      <th class="text-center">内機</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">No</th>
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">タイプ</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+                      
+                      <th class="text-center">ドレンポンプ</th>
+                      <th class="text-center">ホース内</th>
+                      <th class="text-center">熱交換器</th>
+                      <th class="text-center">ドレンパン</th>
+                      <th class="text-center">グリル</th>
+                      <th class="text-center">フィルター</th>
+
+                      <th class="text-center">撮影機器</th>
+
+                      <th class="text-center">組立者</th>
+                    </tr>
+                    <tr ng-repeat="internal in vm.report.clean.internals">
+                      <td class="text-center">{{internal.number}}</td>
+                      <td class="text-center">{{internal.maker}}</td>
+                      <td class="text-center">{{internal.type}}</td>
+                      <td class="text-center">{{internal.model}}</td>
+                      <td class="text-center">{{internal.serial}}</td>
+
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.drain_pump == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.hose == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.heat_exchanger == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.drain_pan == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.grill == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in three_taps" ng-if="internal.filter == item.id">{{item.value}}</span></td>
+                      
+                      <td class="text-center"><span ng-repeat="item in pic_taps" ng-if="internal.has_picture == item.id">{{item.value}}</span></td>
+                      
+                      <td>{{internal.assembler}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center"></th>
+                      <th class="text-center" colspan="2">作業前</th>
+                      <th class="text-center" colspan="4">作業後</th>
+                      <th class="text-center" colspan="3">作業前 （温度℃）</th>
+                      <th class="text-center" colspan="3">作業後 （温度℃）</th>
+                      <th class="text-center" colspan="3">作業前 （温度℃）</th>
+                      <th class="text-center" colspan="3">作業後 （温度℃）</th>
+                      <th class="text-center" rowspan="2">外装パネル型式</th>
+                      <th class="text-center" rowspan="2">指摘事項</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">No</th>
+                      <th class="text-center">動作確認</th>
+                      <th class="text-center">破損確認</th>
+
+                      <th class="text-center">排水確認</th>
+                      <th class="text-center">異音・振動</th>
+                      <th class="text-center">動作確認</th>
+                      <th class="text-center">測定（冷暖）</th>
+
+                      <th class="text-center">吸込</th>
+                      <th class="text-center">吹出</th>
+                      <th class="text-center">差</th>
+                      <th class="text-center">吸込</th>
+                      <th class="text-center">吹出</th>
+                      <th class="text-center">差</th>
+                      <th class="text-center">吸込</th>
+                      <th class="text-center">吹出</th>
+                      <th class="text-center">差</th>
+                      <th class="text-center">吸込</th>
+                      <th class="text-center">吹出</th>
+                      <th class="text-center">差</th>
+                    </tr>
+                    <tr ng-repeat="internal in vm.report.clean.internals">
+                      <td class="text-center">{{internal.number}}</td>
+
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.before_confirmed == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in two_taps" ng-if="internal.damage == item.id">{{item.value}}</span></td>
+
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.drainage == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.noise_and_vibration == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.after_confirmed == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in type_taps" ng-if="internal.measure == item.id">{{item.value}}</span></td>
+                      <td class="text-center">{{internal.temp_before_suction}}</td>
+                      <td class="text-center">{{internal.temp_before_blow}}</td>
+                      <td class="text-center">{{internal.temp_before_diff}}</td>
+                      <td class="text-center">{{internal.temp_after_suction}}</td>
+                      <td class="text-center">{{internal.temp_after_blow}}</td>
+                      <td class="text-center">{{internal.temp_after_diff}}</td>
+                      <td class="text-center">{{internal.wind_before_suction}}</td>
+                      <td class="text-center">{{internal.wind_before_blow}}</td>
+                      <td class="text-center">{{internal.wind_before_diff}}</td>
+                      <td class="text-center">{{internal.wind_after_suction}}</td>
+                      <td class="text-center">{{internal.wind_after_blow}}</td>
+                      <td class="text-center">{{internal.wind_after_diff}}</td>
+
+                      <td>{{internal.exterior_type}}</td>
+                      <td>{{internal.description}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 外機一覧 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">外機一覧</div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" colspan="7">外機情報</th>
+                      <th class="text-center" colspan="4">作業前</th>
+                      <th class="text-center">作業後</th>
+                      <th class="text-center">写真</th>
+                      <th class="text-center" rowspan="2">指摘事項</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">No</th>
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">対応内機</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+                      <th class="text-center">冷媒種類</th>
+                      <th class="text-center">製造年月</th>
+                      
+                      <th class="text-center">動作確認</th>
+                      <th class="text-center">破損・凹み</th>
+                      <th class="text-center">熱交換器</th>
+                      <th class="text-center">外装清掃</th>
+                      <th class="text-center">異音・振動</th>
+                      <th class="text-center">撮影機器</th>
+                    </tr>
+                    <tr ng-repeat="external in vm.report.clean.externals">
+                      <td class="text-center">{{external.number}}</td>
+                      <td class="text-center">{{external.maker}}</td>
+                      <td class="text-center">{{external.internals}}</td>
+                      <td class="text-center">{{external.model}}</td>
+                      <td class="text-center">{{external.serial}}</td>
+                      <td class="text-center">{{external.refrigerant_kind}}</td>
+                      <td class="text-center">{{external.made_date}}</td>
+
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="external.before_noise_and_vibration == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="external.breakage_dent == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="external.heat_exchanger == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="external.exterior_clean == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="external.after_noise_and_vibration == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in pic_taps" ng-if="external.has_picture == item.id">{{item.value}}</span></td>
+                      <td>{{external.description}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 見取り図 -->
+      <div class="panel panel-primary">
+          <div class="panel-heading">見取り図</div>
+          <table class="table table-bordered table-detail">
+            <tbody>
+              <tr>
+                <td class="col-xs-12" colspan="4">
+                  <div class="col-xs-3" ng-repeat="item in vm.report.drawings">
+                    <img class="thumbnail img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <!-- その他作業 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">その他作業</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-3">作業内容</th>
+                      <th class="col-xs-3">作業詳細</th>
+                    </tr>
+                    <tr ng-repeat="item in vm.report.clean.other_works">
+                      <td>{{item.title}}</td>
+                      <td>{{item.detail}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- サイン -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">サイン</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                サイン
+              </th>
+              <td class="col-xs-10" colspan="3">
+                <img class="img-thumbnail img-responsive" src="{{vm.report.signature}}" ng-click="handleShowImage(vm.report.signature)">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                営業所
+              </th>
+              <td class="col-xs-10" colspan="3" ng-bind="vm.report.location">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- CMS -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">CMS</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                備考
+              </th>
+              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.note">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="form-group mgnb text-center">
+        <button-edit back="admin.reports.list" state="admin.reports.edit" params="{reportId: vm.report._id}"></button-edit>
+      </div>
+    </div>
+  </div>
+</div>

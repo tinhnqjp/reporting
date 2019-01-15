@@ -1,0 +1,115 @@
+<div class="container">
+  <form name="vm.userForm" class="form-edit" ng-submit="vm.update(vm.userForm.$valid)" novalidate autocomplete="off" >
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <form-title></form-title>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-save back="admin.users.list"></button-save>
+          </div>
+        </div>
+        <div class="table-custom">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+<<<<<<< HEAD:modules/users/client/views/admin/form-common.client.view.html
+                  ログインID
+=======
+                  ユーザーID
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75:modules/users/client/views/admin/account-form.client.view.html
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="username" class="form-control" ng-model="vm.user.username"
+<<<<<<< HEAD:modules/users/client/views/admin/form-common.client.view.html
+                    placeholder="ログインIDを入力" required maxlength="12" halfsize-alphameric maxlength-validator="12" autocomplete="off">
+=======
+                    placeholder="ユーザーIDを入力" required maxlength="12" halfsize-alphameric maxlength-validator="12" autocomplete="new-username">
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75:modules/users/client/views/admin/account-form.client.view.html
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  パスワード
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="password" name="password" class="form-control" ng-model="vm.user.password"
+                    placeholder="パスワードを入力" ng-required="!vm.user._id" maxlength="32" minlength="8" halfsize-alphameric autocomplete="new-password">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  氏名
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="name" class="form-control" ng-model="vm.user.name" placeholder="氏名を入力"
+                    required maxlength="50" maxlength-validator="50" autocomplete="off">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  部署
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <ui-select name="unit" ng-model="vm.user.unit" theme="bootstrap" required>
+                    <ui-select-match placeholder="部署を選択">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="item in vm.units | filter: $select.search">
+                      <span ng-bind-html="item.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                  </ui-select>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                役割
+                </th>
+                <td class="col-xs-10">
+                  <select class="form-control" 
+                    title="Select period" ng-model="vm.role"
+                    ng-selected="$first" ng-options="role.id as role.name for role in roles">
+                    <option value="" style="display: none"></option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="messages" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.userForm.username.$error" role="alert">
+<<<<<<< HEAD:modules/users/client/views/admin/form-common.client.view.html
+            <li class="text-red" ng-message="required">ログインIDを入力してください。</li>
+            <li class="text-red" ng-show="halfsizeAlphameric">ログインIDは半角英数字を入力してください。</li>
+            <li class="text-red" ng-show="maxLength">ログインIDは12桁以内を入力してください。</li>
+=======
+            <li class="text-red" ng-message="required">ユーザーIDを入力してください。</li>
+            <li class="text-red" ng-show="halfsizeAlphameric">ユーザーIDは半角英数字を入力してください。</li>
+            <li class="text-red" ng-show="maxLength">ユーザーIDは12桁以内を入力してください。</li>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75:modules/users/client/views/admin/account-form.client.view.html
+          </div>
+          <div ng-messages="vm.userForm.password.$error" role="alert">
+            <li class="text-red" ng-message="required">パスワードを入力してください。</li>
+            <li class="text-red" ng-message="halfsizeAlphameric">パスワードは８～３２の半角英数字を入力してください。</li>
+            <li class="text-red" ng-message="maxlength">パスワードは８～３２の半角英数字を入力してください。</li>
+            <li class="text-red" ng-message="minlength">パスワードは８～３２の半角英数字を入力してください。</li>
+          </div>
+          <div ng-messages="vm.userForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">氏名を入力してください。</li>
+            <li class="text-red" ng-message="maxLength">氏名は50桁以内を入力してください。</li>
+          </div>
+          <div ng-messages="vm.userForm.company.$error" role="alert">
+            <li class="text-red" ng-message="maxLength">社名は50桁以内を入力してください。</li>
+          </div>
+        </div>
+        <div class="form-group mgnb text-center">
+          <button-save back="admin.users.list"></button-save>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

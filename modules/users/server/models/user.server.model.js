@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
   path = require('path'),
-  paginate = require('mongoose-paginate'),
+  paginate = require('mongoose-paginate-v2'),
   config = require(path.resolve('./config/config')),
   Schema = mongoose.Schema,
   crypto = require('crypto'),
@@ -17,22 +17,32 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   // 氏名
   name: { type: String, default: '', require: true, maxlength: 50 },
-  // 社名
-  company: { type: String, default: '', require: true },
   // ユーザーID
-  username: { type: String, trim: true, unique: true, require: true, maxlength: 12 },
+  username: { type: String, trim: true, require: true, maxlength: 12 },
   // パスワード
   password: { type: String, default: '' },
   // 役割
-  // user = worker, partner, dispatcher, admin = account
+  // 社員の役割
+  // システム管理 S = admin
+  // オペレーター A = operator
+  // 営業者 A- = bsoperator (Business operator)
+  // 手配者 B = dispatcher
+  // 一般社員 B- = employee
+  // 社外のアカウント
+  // 協力業者 C = partner
+  // 下請け D = user
   roles: {
     type: [{
       type: String,
-      enum: ['user', 'partner', 'dispatcher', 'admin']
+      enum: ['user', 'partner', 'operator', 'bsoperator', 'dispatcher', 'employee', 'admin']
     }],
     default: ['user'],
     required: true
   },
+  unit: { type: Schema.ObjectId, ref: 'Unit' },
+  // 有効期限
+  expire: { type: Date },
+  deleted: { type: Boolean, default: false },
   // System info
   updated: { type: Date },
   created: { type: Date, default: Date.now },
@@ -69,10 +79,15 @@ UserSchema.statics.generateRandomPassphrase = function () {
     return resolve(password);
   });
 };
-UserSchema.statics.uniqueUserName = function (username) {
+UserSchema.statics.uniqueUserName = function (username, id) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
-    User.findOne({ username: username }).exec(function (err, user) {
+    var query = { username: username, deleted: false };
+    if (id) {
+      query._id = { '$ne': id };
+    }
+
+    User.findOne(query).exec(function (err, user) {
       if (err) return reject(err);
       if (!user) return resolve(false);
       if (user) return resolve(true);
@@ -89,9 +104,9 @@ UserSchema.statics.generateAccount = function (roles) {
         username = passphrase;
         return User.uniqueUserName(username);
       })
-      .then((result) => {
-        if (result) {
-          resolve(User.generateAccount(roles));
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを登録できません。' });
         } else {
           var user = new User();
           user.username = username;
@@ -106,6 +121,75 @@ UserSchema.statics.generateAccount = function (roles) {
       .catch((err) => {
         reject(err);
       });
+  });
+};
+
+UserSchema.statics.createAccount = function (roles, username, password, name, expire) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.uniqueUserName(username)
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを登録できません。' });
+        } else {
+          var user = new User();
+          user.username = username;
+          user.password = password;
+          user.roles = roles;
+          user.name = name;
+          user.expire = expire;
+          user.save(function (err) {
+            if (err) reject(err);
+            resolve(user);
+          });
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+UserSchema.statics.updateAccount = function (userId, roles, username, password, name, expire) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.uniqueUserName(username, userId)
+      .then((unique) => {
+        if (unique) {
+          reject({ message: 'IDが既存しますのでアカウントを変更できません。' });
+        } else {
+          User.findById(userId).exec(function (err, user) {
+            user.username = username;
+            if (password) {
+              user.password = password;
+            }
+            if (roles) {
+              user.roles = roles;
+            }
+            user.name = name;
+            user.expire = expire;
+            user.save(function (err) {
+              if (err) reject(err);
+              resolve(user);
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+UserSchema.statics.removeAccount = function (userId) {
+  return new Promise(function (resolve, reject) {
+    var User = mongoose.model('User');
+    User.findById(userId).exec(function (err, user) {
+      user.remove(function (err) {
+        if (err) reject(err);
+        resolve(user);
+      });
+    });
   });
 };
 

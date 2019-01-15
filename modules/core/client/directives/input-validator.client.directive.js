@@ -33,6 +33,11 @@
       const KANA = 'kana';
       const ZIP = 'zip';
       const TEL = 'tel';
+<<<<<<< HEAD
+=======
+      const FLOAT = 'float';
+      const MADE_DATE = 'made_date';
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
 
       element.bind('blur', function (e) {
         var option = {};
@@ -84,8 +89,21 @@
             ngModel.$setValidity(ZIP, validator.matches(value, pattern));
             break;
           case TEL:
+<<<<<<< HEAD
             pattern = /^(([0-9]{9,13}$)|([0-9]{3}-[0-9]{3}-[0-9]{4}$)|([0-9]{2}-[0-9]{4}-[0-9]{4}$)|([0-9]{3}-[0-9]{4}-[0-9]{4}$))/;
             ngModel.$setValidity(ZIP, validator.matches(value, pattern));
+=======
+            pattern = /^([0-9]{9,13}$)/;
+            ngModel.$setValidity(TEL, validator.matches(value, pattern));
+            break;
+          case FLOAT:
+            pattern = /^[\d.]+$/;
+            ngModel.$setValidity(FLOAT, validator.matches(value, pattern));
+            break;
+          case MADE_DATE:
+            pattern = /20\d{2}\/(0[1-9]|1[0-2]|-)/;
+            ngModel.$setValidity(MADE_DATE, validator.matches(value, pattern));
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
             break;
           default:
             break;

@@ -22,7 +22,11 @@
         controllerAs: 'vm',
         data: {
           roles: ['admin'],
+<<<<<<< HEAD
           pageTitle: '協力者一覧'
+=======
+          pageTitle: '協力会社一覧'
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         }
       })
       .state('admin.partners.create', {
@@ -34,7 +38,11 @@
           partnerResolve: newPartner
         },
         data: {
+<<<<<<< HEAD
           pageTitle: '協力者登録'
+=======
+          pageTitle: '協力会社登録'
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         }
       })
       .state('admin.partners.edit', {
@@ -46,7 +54,11 @@
           partnerResolve: getPartner
         },
         data: {
+<<<<<<< HEAD
           pageTitle: '協力者編集'
+=======
+          pageTitle: '協力会社編集'
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         }
       })
       .state('admin.partners.detail', {
@@ -58,7 +70,11 @@
           partnerResolve: getPartner
         },
         data: {
+<<<<<<< HEAD
           pageTitle: '協力者編集'
+=======
+          pageTitle: '協力会社詳細'
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         }
       });
 

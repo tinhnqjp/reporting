@@ -1,15 +1,23 @@
 <div class="container form-edit">
   <form name="vm.partnerForm" ng-submit="vm.update(vm.partnerForm.$valid)" novalidate>
     <div class="row">
+<<<<<<< HEAD
       <div class="col-lg-8 col-lg-offset-2">
         <div class="row mg10b">
           <div class="col-xs-6">
             <h4>協力者編集</h4>
+=======
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <form-title></form-title>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
           </div>
           <div class="col-xs-6 text-right">
             <button-save back="admin.partners.list"></button-save>
           </div>
         </div>
+<<<<<<< HEAD
         <table class="table table-bordered table-detail">
           <tbody>
             <tr>
@@ -63,6 +71,92 @@
           <div ng-messages="vm.partnerForm.description.$error" role="alert">
             <li class="text-red" ng-message="required">説明を入力してください。</li>
             <li class="text-red" ng-message="maxLength">説明は50桁以内を入力してください。</li>
+=======
+        <div class="table-custom">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  社名
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="name" class="form-control" ng-model="vm.partner.name" placeholder="社名を入力"
+                    required autocomplete="off" maxlength="30">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  備考
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="description" class="form-control" ng-model="vm.partner.description"
+                    placeholder="備考を入力" autocomplete="off" maxlength="50">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  電話番号
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" name="phone" class="form-control" ng-model="vm.partner.phone"
+                    placeholder="電話番号を入力" required autocomplete="off" input-validator="tel">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  ユーザーID
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" id="username" name="username" class="form-control" autocomplete="new-username"
+                  ng-model="vm.partner.account.username" placeholder="ユーザーIDを入力" required 
+                  maxlength="12"
+                  unique-validator params="{ type: 'username', username: vm.partner.account.username, id: vm.partner.account._id}" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  パスワード
+                  <span class="text-red" ng-if="!vm.partner._id">*</span>
+                </th>
+                <td class="col-xs-10">
+                  <button type="button" class="btn btn-warning btn-sm" ng-click="vm.randomPass()"><i class="glyphicon glyphicon-refresh"></i> 編集</button>
+                  <label class="alert alert-warning" ng-if="vm.password">{{vm.password}}</label>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  有効期限
+                </th>
+                <td class="col-xs-10">
+                  <input type="text" id="expire" name="expire" datetime-picker="" datepicker-options="dateOptions"
+                    timepicker-options="timeOptions" ng-click="openCalendar($event, 'expire')" placeholder="有効期限を入力"
+                    is-open="open.expire" autocomplete="off" class="form-control" ng-model="vm.partner.account.expire"
+                    ng-pattern="datetimeFormat">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="messages" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.partnerForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">社名を入力してください。</li>
+            <li class="text-red" ng-message="maxLength">社名は30桁以内を入力してください。</li>
+          </div>
+          <div ng-messages="vm.partnerForm.description.$error" role="alert">
+            <li class="text-red" ng-message="maxLength">備考は50桁以内を入力してください。</li>
+          </div>
+          <div ng-messages="vm.partnerForm.phone.$error" role="alert">
+            <li class="text-red" ng-message="required">電話番号を入力してください。</li>
+            <li class="text-red" ng-message="tel">電話番号の入力形式に誤りがあります。</li>
+          </div>
+          <div ng-messages="vm.partnerForm.username.$error" role="alert">
+            <li class="text-red" ng-message="required">ユーザーIDを入力してください。</li>
+            <li class="text-red" ng-message="unique">ユーザーIDは既に存在します。</li>
+            <li class="text-red" ng-message="maxLength">ユーザーIDは12桁以内を入力してください。</li>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
           </div>
         </div>
         <div class="form-group mgnb text-center">

@@ -1,0 +1,40 @@
+<form name="vm.modalWorkerForm" ng-submit="confirmWorker(vm.modalWorkerForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+      <h4 class="modal-title-confirm">その他作業</h4>
+  </div>
+  <div class="modal-body">
+    <div class="table-custom" style="border:0px;">
+      <table class="table table-detail">
+        <tbody>
+          <tr>
+            <th class="col-xs-2">
+                作業内容
+              <span class="text-red">*</span>
+            </th>
+            <td class="col-xs-10">
+              <input type="text" name="title" class="form-control" ng-model="otherWorker.title" placeholder="作業内容を入力"
+                required autocomplete="off" ng-click="modalTitle(otherWorker.title)">
+            </td>
+          </tr>
+          <tr>
+            <th class="col-xs-2">
+                作業詳細
+            </th>
+            <td class="col-xs-10">
+              <input type="text" name="company" class="form-control" ng-model="otherWorker.detail" placeholder="作業詳細を入力" autocomplete="off">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div ng-if="isSaveClick">
+        <div ng-messages="vm.modalWorkerForm.wokername.$error" role="alert">
+          <li class="text-red" ng-message="required">作業内容を入力してください。</li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

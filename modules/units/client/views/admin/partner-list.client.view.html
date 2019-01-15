@@ -8,24 +8,41 @@
     <table-search-content>
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="form-group">
+<<<<<<< HEAD
           <label>キーワード</label>
           <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="キーワードを入力">
+=======
+          <label>検索キー</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="form-group">
           <label>登録時間(From)</label>
+<<<<<<< HEAD
           <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_min"
             is-open="picker.created_min.open" ng-click="openCalendar($event, 'created_min')" placeholder="0000/00/00"
             ng-change="vm.handleConditionChanged(true)">
+=======
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="0000/00/00"
+            is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="form-group">
           <label>登録時間(To)</label>
+<<<<<<< HEAD
           <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_max"
             is-open="picker.created_max.open" ng-click="openCalendar($event, 'created_max')" placeholder="0000/00/00"
             ng-change="vm.handleConditionChanged(true)">
+=======
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="0000/00/00"
+            is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -52,10 +69,19 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
+<<<<<<< HEAD
               <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="名前" tbmodel="name" tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="説明" tbmodel="description"
                 tbcondition="vm.condition"></th>
               <th>ログインID</th>
+=======
+              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="備考" tbmodel="description"
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone"
+                tbcondition="vm.condition"></th>
+              <th>ユーザーID</th>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録時間" tbmodel="created" tbcondition="vm.condition"
                 class="text-center"></th>
               <th class="text-center w150">操作</th>
@@ -63,12 +89,20 @@
           </thead>
           <tbody>
             <tr>
+<<<<<<< HEAD
               <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">顧客が一件も登録されていません。</td>
+=======
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
             </tr>
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.partners.detail({ partnerId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
+<<<<<<< HEAD
+=======
+              <td>{{ item.phone }}</td>
+>>>>>>> ec5acda89d5313e5687648dcfb8f39e6a5993e75
               <td>{{ item.account.username }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w150" ui-sref-ignore>

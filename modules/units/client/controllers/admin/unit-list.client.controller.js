@@ -18,7 +18,6 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('units', clear);
-      vm.condition.roles = 'units';
     }
 
     function handleSearch() {
@@ -27,15 +26,14 @@
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res.docs;
-          console.log('​handleSearch -> vm.docs', vm.docs);
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
-          vm.condition.total = res.total;
+          vm.condition.total = res.totalDocs;
           $scope.conditionFactoryUpdate('units', vm.condition);
         })
         .error(function (err) {
           $scope.handleCloseWaiting();
-          var message = (err) ? err.message || err.data.message : '食べ物の取得が失敗しました！';
+          var message = (err) ? err.message || err.data.message : '部署の取得が失敗しました。';
           $scope.handleShowToast(message, true);
         });
     }
@@ -64,36 +62,14 @@
     };
     /** end handle search, sort & paging */
 
-    vm.handleExportExcel = function () {
-      $scope.handleShowConfirm({
-        message: '現在のデータ（' + vm.total + '件）をエクスポートしてます。よろしいでしょうか？'
-      }, function () {
-        $scope.handleShowWaiting();
-        UnitsApi.export(vm.condition)
-          .success(function (res) {
-            $scope.handleCloseWaiting();
-            var protocol = $location.protocol();
-            var host = $location.host();
-            var port = $location.port();
-            var url = protocol + '://' + host + ((port !== '') ? (':' + port) : '') + '/' + res.url;
-            $window.open(url, '_blank');
-          })
-          .error(function (err) {
-            $scope.handleCloseWaiting();
-            var message = (err) ? err.message || err.data.message : '現在のデータのエクスポートが失敗しました！';
-            $scope.handleShowToast(message, true);
-          });
-      });
-    };
-
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: 'この食べ物を削除します。よろしいですか？'
+        message: 'この部署を削除します。よろしいですか？'
       }, function () {
         var unit = new UnitsService({ _id: _id });
         unit.$remove(function () {
           handleSearch();
-          $scope.handleShowToast('食べ物の削除が完了しました。');
+          $scope.handleShowToast('部署の削除が完了しました。');
         });
       });
     };

@@ -46,10 +46,10 @@
   FoodsApi.$inject = ['$http'];
   function FoodsApi($http) {
     this.list = function (condition) {
-      return $http.post('/api/foods/list', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/foods/list', { condition: condition }, {});
     };
     this.export = function (condition) {
-      return $http.post('/api/foods/export', { condition: condition }, { ignoreLoadingBar: true });
+      return $http.post('/api/foods/export', { condition: condition }, {});
     };
     return this;
   }
