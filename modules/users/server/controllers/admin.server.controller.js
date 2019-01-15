@@ -277,7 +277,7 @@ exports.import = function (req, res) {
           var promises = [];
           users.forEach(user => {
             promises.push(removeUser(user));
-          });
+          });ccc
 
           Promise.all(promises).then(rs => {
             var num = 0;
