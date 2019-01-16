@@ -9,13 +9,13 @@
     'ngMessages',
     'ui.router',
     'ui.bootstrap',
-    // 'ui.bootstrap.datetimepicker',
-    // 'ui.select',
+    'ui.bootstrap.datetimepicker',
+    'ui.select',
     'ngSanitize',
     // 'ngFileUpload',
     'ui-notification',
     'ngDialog',
-    // 'summernote',
+    'checklist-model',
     'angularFileUpload',
     'angularMoment'
   ];

@@ -1,59 +1,145 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12">
-      <div class="widget unique-widget">
-        <div class="row">
-          <a href="#">
-            <div class="widget-caption info">
-              <div class="col-xs-4 no-pad">
-                <i class="icon fa fa-user-secret"></i>
-              </div>
-              <div class="col-xs-8 no-pad">
-                <div class="widget-detail">
-                  <h3 data-ng-bind="vm.total_admin"></h3>
-                  <span>管理者件数</span>
-                </div>
-              </div>
+    <div class="col-lg-12">
+      <!-- 今日 -->
+      <div class="row mg10b">
+        <div class="col-xs-12">
+          <h3>本日</h3>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel clean-card">
+            <div class="panel-body text-center">
+              <h4>洗浄報告書件数</h4>
+              <h3>{{vm.today.cleans}}</h3>
             </div>
-          </a>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel repair-card">
+            <div class="panel-body text-center">
+              <h4>修理報告書件数</h4>
+              <h3>{{vm.today.repairs}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel construct-card">
+            <div class="panel-body text-center">
+              <h4>設置報告書件数</h4>
+              <h3>{{vm.today.constructs}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel picture-card">
+            <div class="panel-body text-center">
+              <h4>写真報告書件数</h4>
+              <h3>{{vm.today.pictures}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel free-card">
+            <div class="panel-body text-center">
+              <h4>フリー報告書件数</h4>
+              <h3>{{vm.today.frees || 0}}</h3>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-12">
-      <div class="widget unique-widget">
-        <div class="row">
-          <a ui-sref="admin.users.list">
-            <div class="widget-caption warning">
-              <div class="col-xs-4 no-pad">
-                <i class="icon fa fa-user"></i>
-              </div>
-              <div class="col-xs-8 no-pad">
-                <div class="widget-detail">
-                  <h3 data-ng-bind="vm.total_user"></h3>
-                  <span>顧客件数</span>
-                </div>
-              </div>
-            </div>
-          </a>
+      <div class="row mg10b">
+        <div class="col-xs-12">
+          <h3>全体</h3>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-12">
-      <div class="widget unique-widget">
-        <div class="row">
-          <a href="#">
-            <div class="widget-caption danger">
-              <div class="col-xs-4 no-pad">
-                <i class="icon icon fa fa-rocket"></i>
-              </div>
-              <div class="col-xs-8 no-pad">
-                <div class="widget-detail">
-                  <h3 data-ng-bind="vm.apiCnt"></h3>
-                  <span>認証回数</span>
-                </div>
-              </div>
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>社員アカウント件数</h4>
+              <h3>{{vm.total.employes}}</h3>
             </div>
-          </a>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>協力会社件数</h4>
+              <h3>{{vm.total.partners}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>下請け件数</h4>
+              <h3>{{vm.total.workers}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>部署件数</h4>
+              <h3>{{vm.total.units}}</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="panel clean-card">
+            <div class="panel-body text-center">
+              <h4>洗浄報告書件数</h4>
+              <h3>{{vm.total.cleans}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel repair-card">
+            <div class="panel-body text-center">
+              <h4>修理報告書件数</h4>
+              <h3>{{vm.total.repairs}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel construct-card">
+            <div class="panel-body text-center">
+              <h4>設置報告書件数</h4>
+              <h3>{{vm.total.constructs}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel picture-card">
+            <div class="panel-body text-center">
+              <h4>写真報告書件数</h4>
+              <h3>{{vm.total.pictures}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel free-card">
+            <div class="panel-body text-center">
+              <h4>フリー報告書件数</h4>
+              <h3>{{vm.total.frees || 0}}</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>登録申請件数</h4>
+              <h3>{{vm.total.petitions_create}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="panel common-card">
+            <div class="panel-body text-center">
+              <h4>削除申請件数</h4>
+              <h3>{{vm.total.petitions_delete}}</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>

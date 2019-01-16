@@ -61,6 +61,9 @@ module.exports = {
     mocha: true,
     jquery: true
   },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
   globals: {
     angular: true,
     by: true,

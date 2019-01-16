@@ -2,7 +2,7 @@
 
 module.exports = {
   app: {
-    title: 'Working report',
+    title: 'DEMO',
     description: 'Working report',
     keywords: '',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
@@ -61,6 +61,36 @@ module.exports = {
         limits: { fileSize: 5 * 1024 * 1024 }
       }
     },
+    reports: {
+      drawings: {
+        dest: './modules/reports/client/img/drawings/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      signature: {
+        dest: './modules/reports/client/img/signature/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      picture: {
+        store_image: './modules/reports/client/img/store_image/',
+        before: './modules/reports/client/img/before/',
+        after: './modules/reports/client/img/after/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      repair: {
+        image1: './modules/reports/client/img/image1/',
+        image2: './modules/reports/client/img/image2/',
+        limits: { fileSize: 50 * 1024 * 1024 }
+      },
+      pdf: {
+        dest: './modules/reports/client/pdf/'
+      },
+      excel: {
+        dest: './modules/reports/client/excels/import',
+        limits: { fileSize: 100 * 1024 * 1024 },
+        export: './modules/reports/client/excels/export/',
+        clean: './modules/reports/client/excels/template/Clean.xlsx'
+      }
+    },
     users: {
       excel: {
         dest: './modules/users/client/excels/import',
@@ -71,6 +101,10 @@ module.exports = {
     }
   },
   shared: {
+  },
+  other: {
+    // First time number
+    number: 1
   }
 
 };

@@ -16,7 +16,6 @@ module.exports = function (app) {
   // Users collection routes
   app.route('/api/users').post(adminPolicy.isAllowed, admin.create);
   app.route('/api/users/list').post(adminPolicy.isAllowed, admin.list);
-  app.route('/api/users/import').post(adminPolicy.isAllowed, admin.import);
 
   // Single user routes
   app.route('/api/users/:userId')

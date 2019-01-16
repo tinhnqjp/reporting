@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row" ng-init="vm.open = false">
     <!-- 検索条件 -->
     <div class="col-xs-12">
@@ -10,7 +10,7 @@
         </h4>
         <div class="title-group__inline-buttons">
           <button class="btn btn-warning btn-sm" ng-click="vm.handleClearCondition()">
-            <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件を解除
+            <i class="fa fa-refresh" aria-hidden="true"></i> 検索条件解除
           </button>
           <i class="fa fa-spinner fa-pulse fa-lg fa-fw mg20l" ng-show="vm.busy"></i>
 
@@ -29,22 +29,24 @@
         <div class="row">
           <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="form-group">
-              <label>キーワード</label>
-              <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="キーワードを入力">
+              <label>検索キー</label>
+              <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
             </div>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="form-group">
-              <label>登録時間(From)</label>
-              <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_min"  is-open="picker.created_min.open" 
-                ng-click="openCalendar($event, 'created_min')" placeholder="0000/00/00" ng-change="vm.handleConditionChanged(true)">
+              <label>登録日時(From)</label>
+              <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
+                timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm"
+                is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
             </div>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="form-group">
-              <label>登録時間(To)</label>
-              <input type="text" class="form-control" uib-datepicker-popup="{{formatDate}}" ng-model="vm.condition.created_max"  is-open="picker.created_max.open" 
-                ng-click="openCalendar($event, 'created_max')" placeholder="0000/00/00" ng-change="vm.handleConditionChanged(true)">
+              <label>登録日時(To)</label>
+              <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
+                timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
+                is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
             </div>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3">
@@ -81,14 +83,14 @@
                 tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="説明" tbmodel="description"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録時間" tbmodel="created"
+              <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created"
                 tbcondition="vm.condition" class="text-center"></th>
               <th class="text-center w150">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">顧客が一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>

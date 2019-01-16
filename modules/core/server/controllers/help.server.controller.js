@@ -8,5 +8,12 @@ module.exports = {
 
   getLimit: function (condition) {
     return parseInt(condition.limit, 10);
+  },
+
+  getMessage: function (errors) {
+    if (errors && errors.length > 0) {
+      return { message: errors[0].msg };
+    }
+    return null;
   }
 };

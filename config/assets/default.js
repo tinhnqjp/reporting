@@ -12,6 +12,7 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
         'public/lib/ng-dialog/css/ngDialog.min.css',
         'public/lib/ng-dialog/css/ngDialog-theme-default.min.css',
+        'public/lib/angular-ui-select/dist/select.min.css'
         // endbower
       ],
       js: [
@@ -30,10 +31,14 @@ module.exports = {
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/ng-dialog/js/ngDialog.min.js',
         'public/lib/angular-file-upload/dist/angular-file-upload.min.js',
+        'public/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js',
+        'public/lib/angular-ui-select/dist/select.min.js',
+        'public/lib/checklist-model/checklist-model.js',
         'public/lib/lodash/lodash.js',
         'public/lib/moment/moment.js',
         'public/lib/moment/locale/ja.js',
         'public/lib/angular-moment/angular-moment.js',
+        'public/lib/validator-js/validator.min.js',
         // end
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

@@ -17,12 +17,20 @@ module.exports = function () {
       $or: [
         { username: usernameOrEmail.toLowerCase() },
         { email: usernameOrEmail.toLowerCase() }
-      ]
+      ],
+      deleted: false
     }, function (err, user) {
       if (err) return done(err);
-      if (!user || !user.authenticate(password))
-        return done(null, false, { message: 'ユーザー名かパスワードが違います。' });
+      if (!user || !user.authenticate(password) || !checkRole(user.roles))
+        return done(null, false, { message: 'ログインIDかパスワードが違います。' });
       return done(null, user);
     });
   }));
+
+  function checkRole(roles) {
+    if (roles && roles[0] && ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'].indexOf(roles[0]) >= 0) {
+      return true;
+    }
+    return false;
+  }
 };

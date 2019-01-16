@@ -5,6 +5,12 @@ var m_users = require('../controllers/mobiles/users-mobile.server.controller');
 
 module.exports = function (app) {
   /**
+  * @function アカウント有効期限チェック
+  * @param userId(ログインID)
+  * @returns { user: object, version: string }
+  */
+  app.route('/api/mobile/auth/expire').post(m_users.expire);
+  /**
   * @function ログイン
   * @param username(ログインID)
   * @param password(パスワード)
@@ -13,20 +19,9 @@ module.exports = function (app) {
   app.route('/api/mobile/auth/signin').post(m_users.m_signin);
 
   /**
-  * @function パスワード変更
-  * @param username(ログインID)
-  * @param password(パスワード)
-  * @param new_password(新しいパスワード)
-  * @param confirm_password(確認パスワード)
-  * @returns
+  * @function Masterdata
+  * @param userId(ログインID)
+  * @returns { config }
   */
-  app.route('/api/mobile/auth/password').post(m_users.m_password);
-
-  /**
-  * @function アカウントチェック
-  * @param username(ログインID)
-  * @param password(パスワード)
-  * @returns { user }
-  */
-  app.route('/api/mobile/auth/registry').post(m_users.m_registry);
+  app.route('/api/mobile/auth/config').post(m_users.config);
 };

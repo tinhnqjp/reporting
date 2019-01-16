@@ -386,6 +386,10 @@ a.text-muted:focus {
   color: #ff9800
 }
 
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -421,25 +425,130 @@ a.text-muted:focus {
   height: auto !important;
 }
 
-/* +++++++++++ FORM EDIt ++++++++++++ */
-.form-edit h3 {
-  margin-top: 5px
+.ui-select-bootstrap .ui-select-toggle>a.btn {
+  margin-top: initial;
 }
 
-.form-edit h3 {
-  margin-top: 5px
+.box-part {
+  border-radius:0;
+  padding:10px 2px;
+  margin:2px;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
-.form-edit .table-detail tbody tr th {
-  background-color: #eee !important;
+.box-part:active  {
+  background:#3367a8;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+}
+.box-part:hover {
+  background:#4183D7;
 }
 
-.form-edit .table-detail tbody tr td {
+.box-part .text {
+  margin:10px 0;
+}
+.box-part .fa {
+   color:#FFF;
+}
+.box-part .taps {
+  margin: 5px;
+  font-size: 30px;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default {
+  border:0
+}
+.dropdown-menu {
+	top: unset;
+}
+
+/* +++++++++++++++ FORM EDIt +++++++++++++++ */
+.form-edit h4, .form-detail h4 {
+	margin-top: 5px;
+	font-weight: 500;
+}
+
+.table-detail tbody tr th {
+  background-color: #fff !important;
+}
+
+.table-detail tbody tr td {
   padding: 2px;
   background-color: #fff !important;
 }
 
-/* +++++++++++ LIST SEARCH ++++++++++++ */
+.table-detail tbody tr td p {
+	padding: 8px;
+}
+
+.form-detail .table-detail tbody tr td, .form-edit .table-detail tbody tr td p {
+	padding: 8px;
+}
+
+.table-custom {
+  padding-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #337ab7;
+  background: #fff;
+}
+.table-custom .table-detail tbody td, .table-custom .table-detail tbody th {
+  border-top: none;
+  padding: 2px 10px;
+}
+
+.table-custom .table-detail tbody th {
+  border-top: none;
+  vertical-align: middle;
+}
+
+.form-report .table-custom, .ngdialog-content .table-custom {
+  border:0;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+.form-report .table-custom .table, .ngdialog-content .table-custom .table {
+  margin-bottom: 0;
+}
+.ngdialog-content .modal-body {
+  padding: 0;
+}
+
+.ngdialog-content .modal-confirm {
+  padding: 25px 0;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  background-color: #eee;
+  border-color: #ddd;
+  color: #000;
+}
+.img-thumbnail {
+  height: 100px;
+}
+
+.modal-checkbox .label {
+  border:1px solid #ccc;
+  padding:10px;
+  margin:0 0 10px;
+  display:block; 
+}
+
+.modal-checkbox label:hover {
+  background:#eee;
+  cursor:pointer;
+}
+.modal-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  float: right;
+}
+/* +++++++++++++++ LIST SEARCH +++++++++++++++ */
 .table-list {
   background-color: #fff;
 }
@@ -448,7 +557,7 @@ a.text-muted:focus {
   color: #fff !important;
 }
 .table-list .table {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 .table-list .table tbody td{
   padding: 4px;
@@ -459,4 +568,78 @@ a.text-muted:focus {
 }
 .table-list .sort:hover {
   color: #999;
+}
+.table-list .cursor-p {
+	cursor:pointer!important;
+}
+
+/* +++++++++++++++ DIALOG +++++++++++++++ */
+.ngdialog .ngdialog-content .container {
+  width: 100%;
+}
+
+.ngdialog.ngdialog-theme-default {
+  padding-top: 100px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+  background: #fff;
+}
+
+.ngdialog.ngdialog-theme-default .ngdialog-content .modal-header-confirm {
+  text-align: center;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* +++++++++++++++ TAG +++++++++++++++ */
+.tag {
+  font-size: 12px;
+  padding: 4px;
+  margin: 4px;
+}
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.tag a:hover {
+  opacity: 1.0
+}
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 .3em;
+}
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
+}
+.common-card {
+  border-color: #337ab7;
+  color: #337ab7;
+}
+.clean-card {
+  border-color: #2E3192;
+  color: #2E3192;
+}
+.repair-card {
+  border-color: #DB7B1B;
+  color: #DB7B1B;
+}
+.construct-card {
+  border-color: #ED1C24;
+  color: #ED1C24;
+}
+.picture-card {
+  border-color: #0071BC;
+  color: #0071BC;
+}
+.free-card {
+  border-color: #009245;
+  color: #009245;
+}
+
+.col-index {
+  text-align: center;
 }

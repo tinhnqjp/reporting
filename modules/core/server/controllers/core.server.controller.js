@@ -2,8 +2,10 @@
 
 var validator = require('validator'),
   path = require('path'),
+  moment = require('moment'),
   config = require(path.resolve('./config/config'));
 
+moment.locale('ja');
 /**
  * Render the main application page
  */

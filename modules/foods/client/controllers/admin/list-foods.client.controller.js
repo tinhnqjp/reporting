@@ -30,7 +30,7 @@
           console.log('​handleSearch -> vm.docs', vm.docs);
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
-          vm.condition.total = res.total;
+          vm.condition.total = res.totalDocs;
           $scope.conditionFactoryUpdate('foods', vm.condition);
         })
         .error(function (err) {

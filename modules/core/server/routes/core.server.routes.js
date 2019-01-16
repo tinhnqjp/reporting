@@ -3,6 +3,9 @@
 module.exports = function (app) {
   // Root routing
   var core = require('../controllers/core.server.controller');
+  var unique = require('../controllers/unique.server.controller');
+
+  app.route('/api/validation/unique').post(unique.unique);
 
   // Define error pages
   app.route('/server-error').get(core.renderServerError);
