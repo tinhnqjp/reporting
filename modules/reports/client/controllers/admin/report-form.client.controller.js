@@ -5,9 +5,9 @@
     .module('reports.admin')
     .controller('ReportFormController', ReportFormController);
 
-  ReportFormController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'UnitsApi', 'ngDialog'];
+  ReportFormController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'UnitsApi', 'ngDialog', 'uploadService'];
 
-  function ReportFormController($scope, $state, report, ReportsApi, UnitsApi, ngDialog) {
+  function ReportFormController($scope, $state, report, ReportsApi, UnitsApi, ngDialog, uploadService) {
     var vm = this;
     vm.report = report;
     vm.update = update;
@@ -44,7 +44,8 @@
         vm.report.manager = _.find(vm.report.workers, { 'name': vm.report.manager });
       }
 
-      vm.report.signature = $scope.getImageDefault(vm.report.signature);
+      vm.imageUrl = $scope.getImageDefault(vm.report.signature);
+      prepareUploader();
     }
 
     function update(isValid) {
@@ -63,20 +64,10 @@
         message: 'この報告書を保存します。よろしいですか？'
       }, function () {
         $scope.handleShowWaiting();
-        vm.report.createOrUpdate()
-          .then(successCallback)
-          .catch(errorCallback);
-
-        function successCallback(res) {
-          $scope.handleCloseWaiting();
-          $state.go('admin.reports.detail', { reportId: vm.report._id });
-          $scope.handleShowToast('この報告書の保存が完了しました。');
-        }
-
-        function errorCallback(res) {
-          $scope.handleCloseWaiting();
-          var message = (res) ? res.message || res.data.message : '報告書の保存が失敗しました。';
-          $scope.handleShowToast(message, true);
+        if (vm.isGetImageFromFile) {
+          vm.uploader.uploadAll();
+        } else {
+          handlerSave();
         }
       });
     }
@@ -804,5 +795,61 @@
         }
       });
     }
+
+    function prepareUploader() {
+      vm.uploader = uploadService.prepareUploader('/api/report/signature', 'signature');
+      uploadService.setCallBack(function (fileItem) {
+        // onAfterAddingFile
+        vm.isGetImageFromFile = true;
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#signature').attr('src', e.target.result);
+          vm.imageUrl = e.target.result;
+        };
+        reader.readAsDataURL(fileItem._file);
+
+      }, function (response) {
+        // onSuccessItem
+        vm.report.signature = response.image;
+        handlerSave();
+        vm.uploader.clearQueue();
+      }, function () {
+        // onWhenAddingFileFailed
+        vm.isGetImageFromFile = false;
+      }, function (response) {
+        // onErrorItem
+        vm.imageUrl = $scope.getImageDefault(vm.report.signature);
+        vm.isGetImageFromFile = false;
+        $scope.handleCloseWaiting();
+        $scope.handleShowToast(response.message, 'エラー');
+      });
+    }
+
+    function handlerSave() {
+      vm.report.createOrUpdate()
+        .then(successCallback)
+        .catch(errorCallback);
+
+      function successCallback(res) {
+        $scope.handleCloseWaiting();
+        $state.go('admin.reports.detail', { reportId: vm.report._id });
+        $scope.handleShowToast('この報告書の保存が完了しました。');
+      }
+
+      function errorCallback(res) {
+        $scope.handleCloseWaiting();
+        var message = (res) ? res.message || res.data.message : '報告書の保存が失敗しました。';
+        $scope.handleShowToast(message, true);
+      }
+    }
+
+    vm.removeImage = function () {
+      vm.uploader.clearQueue();
+      vm.report.signature = '';
+      vm.isGetImageFromFile = false;
+      vm.imageUrl = $scope.getImageDefault(vm.report.signature);
+      $('#signature').attr('src', vm.imageUrl);
+    };
   }
 }());

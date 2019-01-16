@@ -313,21 +313,44 @@
             </div>
           </div>
         </div>
-        <!-- サイン -->
+        <!-- お客様サイン -->
         <div class="panel panel-primary">
-          <div class="panel-heading">サイン</div>
+          <div class="panel-heading">お客様サイン</div>
           <div class="panel-body">
             <div class="table-custom" >
               <table class="table table-detail">
                 <tbody>
                   <tr>
                     <th class="col-xs-2">
-                      サイン
+                      お客様サイン
                     </th>
                     <td class="col-xs-10" colspan="3">
-                      <img class="img-thumbnail img-responsive" src="{{vm.report.signature}}" ng-click="handleShowImage(vm.report.signature)">
+                      <div class="divImageClose">
+                        <img class="img-thumbnail img-responsive" id="signature" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
+                        <button type="button" class="btn btn-danger btn-sm button-close" ng-if="vm.isGetImageFromFile || vm.report.signature" ng-click="vm.removeImage()">
+                          <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                      
+                      <div class="form-group mgnb mg5t">
+                        <span class="btn btn-default btn-xs btn-upload-file">
+                          <input type="file" nv-file-select uploader="vm.uploader" accept="image/*">
+                        </span>
+                      </div>
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- 営業所 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">営業所</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
                   <tr>
                     <th class="col-xs-2">
                       営業所

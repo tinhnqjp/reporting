@@ -12,23 +12,23 @@
               <span class="text-red">*</span>
             </th>
             <td class="col-xs-10">
-              <input type="text" name="title" class="form-control" ng-model="otherWorker.title" placeholder="作業内容を入力"
+              <input type="text" name="title" class="form-control" ng-model="otherWorker.title" placeholder="作業内容を選択"
                 required autocomplete="off" ng-click="modalTitle(otherWorker.title)">
             </td>
           </tr>
           <tr>
             <th class="col-xs-2">
-                作業詳細
+              作業詳細
             </th>
             <td class="col-xs-10">
-              <input type="text" name="company" class="form-control" ng-model="otherWorker.detail" placeholder="作業詳細を入力" autocomplete="off">
+              <textarea name="detail" class="form-control" ng-model="otherWorker.detail" placeholder="作業詳細を入力" autocomplete="off"></textarea>
             </td>
           </tr>
         </tbody>
       </table>
       <div ng-if="isSaveClick">
         <div ng-messages="vm.modalWorkerForm.wokername.$error" role="alert">
-          <li class="text-red" ng-message="required">作業内容を入力してください。</li>
+          <li class="text-red" ng-message="required">作業内容を選択してください。</li>
         </div>
       </div>
     </div>

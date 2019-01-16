@@ -9,11 +9,11 @@ var mongoose = require('mongoose'),
   config = require(path.resolve('./config/config')),
   moment = require('moment'),
   _ = require('lodash'),
-  Excel = require('exceljs'),
+  multer = require('multer'),
+  fs = require('fs'),
   master_data = require(path.resolve('./config/lib/master-data')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
-  reports_mobile = require(path.resolve('./modules/reports/server/controllers/mobiles/reports-mobile.server.controller')),
   files = require(path.resolve('./modules/core/server/controllers/files.server.controller'));
 
 exports.create = function (req, res) {
@@ -188,6 +188,36 @@ exports.export = function (req, res) {
       return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
     });
 
+};
+
+exports.imageSignature = function (req, res) {
+  var upload = multer(config.uploads.reports.signature).single('signature');
+  var imageFileFilter = require(path.resolve('./config/lib/multer')).imageFileFilter;
+  upload.fileFilter = imageFileFilter;
+
+  upload(req, res, function (err) {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
+    }
+    var imgConfig = config.uploads.reports.signature;
+    var file = req.file;
+    var imageUrl = imgConfig.dest + file.originalname;
+    fs.rename(file.path, imageUrl, (err) => {
+      if (err) {
+        logger.error(err);
+        return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
+      }
+      res.jsonp({ image: imageUrl.substr(1) });
+    });
+    // image.thumb(config.uploads.reports.image, req.file)
+    //   .then((result) => {
+    //     res.jsonp(result);
+    //   }).catch((err) => {
+    //     logger.error(err);
+    //     return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
+    //   });
+  });
 };
 
 /** ====== PRIVATE ========= */

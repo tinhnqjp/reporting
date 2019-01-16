@@ -686,7 +686,7 @@ function exportClean(reportId) {
               });
               wsExport.addImage(draw1, 'B' + row + ':AD' + (row + 12));
             }
-            
+
             row++;
           }
         });
