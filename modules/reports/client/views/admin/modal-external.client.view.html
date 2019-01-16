@@ -1,0 +1,179 @@
+<form name="vm.modalExternalForm" ng-submit="confirmExternal(vm.modalExternalForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+    <div class="row pdn">
+      <div class="col-xs-6 text-left"><h4>外機</h4></div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+        <button class="btn btn-primary btn-sm" type="submit">完了</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading">外機情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  写真撮影機器
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <div class="col-xs-3">
+                    <div class="box-part text-center label-success" ng-repeat="item in pic_taps" ng-if="external.has_picture == item.id" ng-click="tapTwo(item.id, 'has_picture')">
+                      <div class="title">
+                        <span></span>
+                      </div>
+                      <span class="taps">{{item.value}}</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  管理No<span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="external.number" placeholder="管理Noを入力" autocomplete="off" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.maker" placeholder="メーカーを入力" ng-click="modalMaker(external.maker)">
+                </td>
+                <th class="col-xs-2">
+                  対応内機
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.internals" placeholder="対応内機を入力" ng-click="modalInternals(external.internals)">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.model" placeholder="機器型式を入力" maxlength="13">
+                </td>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.serial" placeholder="製造番号を入力" maxlength="12">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  冷媒種類
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.refrigerant_kind" placeholder="冷媒種類を入力" ng-click="modalRefrigerantKind(external.refrigerant_kind)">
+                </td>
+                <th class="col-xs-2">
+                  製造年月
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" name="made_date" input-validator="made_date" ng-model="external.made_date" placeholder="製造年月を入力">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">作業前</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.before_noise_and_vibration == item.id" ng-click="tapFour(item.id, 'before_noise_and_vibration')">
+              <div class="title">
+                <span>動作確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.breakage_dent == item.id" ng-click="tapFour(item.id, 'breakage_dent')">
+              <div class="title">
+                <span>破損・凹み</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.heat_exchanger == item.id" ng-click="tapFour(item.id, 'heat_exchanger')">
+              <div class="title">
+                <span>熱交換器</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.exterior_clean == item.id" ng-click="tapFour(item.id, 'exterior_clean')">
+              <div class="title">
+                <span>外装清掃</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">作業後</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-3">
+            <div class="box-part text-center label-info" ng-repeat="item in four_taps" ng-if="external.after_noise_and_vibration == item.id" ng-click="tapFour(item.id, 'after_noise_and_vibration')">
+              <div class="title">
+                <span>異音・振動</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">指摘事項</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  指摘事項
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <textarea class="form-control" ng-model="external.description" ng-click="modalDescription(external.description)" placeholder="指摘事項を入力"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalExternalForm.number.$error" role="alert">
+        <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalExternalForm.made_date.$error" role="alert">
+        <li class="text-red" ng-message="made_date">製造年月の[YYYY/MM]入力形式に誤りがあります。</li>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

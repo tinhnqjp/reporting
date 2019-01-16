@@ -1,0 +1,75 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-8 col-sm-offset-2 col-md-offset-3 col-lg-offset-3">
+      <div class="log-off-wrap">
+        <h3 class="mgn mg10b"><i class="fa fa-upload" aria-hidden="true"></i> アカウント一括登録（削除）</h3>
+        <div class="form-group">
+          <span class="btn btn-default btn-block btn-upload-file">
+            <input class="btn btn-primary btn-block" type="file" nv-file-select uploader="vm.uploader" accept=".xlsx"
+              id="file-selection">
+          </span>
+        </div>
+        <div class="form-group text-center">
+          <button class="btn btn-default" ng-click="handleBackScreen('home')">戻る</button>
+          <button class="btn btn-success" ng-click="vm.handleUpload()" ng-disabled="!vm.isSelected">アップロード</button>
+        </div>
+        <div class="form-group mgnb" ng-show="vm.result">
+          <span>登録件数：{{ vm.result.add || 0 }} - </span>
+          <span>更新件数：{{ vm.result.update || 0 }} - </span>
+          <span>削除件数：{{ vm.result.remove || 0 }}</span>
+        </div>
+        <div class="form-group mgnb" ng-show="vm.errors">
+          <p class="text-danger" ng-repeat="error in vm.errors track by $index">エラー：{{ error }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 pdn">
+      <div class="add-job_container">
+        <div class="job-box pdn">
+          <div class="job-box-filter">
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <h4>
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>インポート</h4>
+              </div>
+            </div>
+          </div>
+          <div class="row no-ext-mrg sm-plix">
+            <div class="col-md-12 col-sm-12">
+              <uib-accordion close-others="true">
+                <div uib-accordion-group class="panel-primary" heading="CSVファイルアップロード" is-open="true">
+                  <div class="form-group mgnb mg5t">
+                    <span class="btn btn-default btn-upload-file">
+                      <input type="file" nv-file-select uploader="vm.uploader" accept=".xlsx" id="file-selection">
+                    </span>
+                  </div>
+                  <button class="btn btn-success mg5t" ng-click="vm.handleUpload()" ng-disabled="!vm.isSelected">
+                    アップロード <i class="fa fa-upload"></i>
+                  </button>
+                  <div class="form-group mgnb mg5t" ng-show="vm.result">
+                    <span>登録件数：{{ vm.result.add || 0 }} - </span>
+                    <span>更新件数：{{ vm.result.update || 0 }} - </span>
+                    <span>削除件数：{{ vm.result.remove || 0 }}</span>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- /. PAGE INNER  -->
+
+<script type="text/ng-template" id="waitingDialog.html">
+  <div class="modal-body">
+    <div class="form-group text-center mg20t mg20b">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+    </div>
+  </div>
+</script>
