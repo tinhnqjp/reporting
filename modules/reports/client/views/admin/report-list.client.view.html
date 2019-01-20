@@ -6,123 +6,149 @@
       </a> -->
     </table-search-button>
     <table-search-content>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>検索キー</label>
-          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="form-group">
+            <label>検索キー</label>
+            <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
+          </div>
         </div>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-group">
+            <label>責任者検索</label>
+            <input type="text" name="manager" class="form-control" ng-model="vm.condition.manager" placeholder="責任者の名前を入力">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-group">
+            <label>提出者検索</label>
+            <input type="text" name="author_name" class="form-control" ng-model="vm.condition.author_name" placeholder="提出者の名前を入力">
+          </div>
+        </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>部署</label>
-          <select name="role" class="form-control" ng-model="vm.condition.unit">
-            <option value>全て</option>
-            <option ng-repeat="item in vm.units" value="{{item._id}}">{{item.name}}</option>
-          </select>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>開始日時(From)</label>
+            <input type="text" name="start_min" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+              ng-click="openCalendar($event, 'start_min')" placeholder="YYYY/MM/DD HH:mm" is-open="open.start_min"
+              class="form-control" ng-model="vm.condition.start_min">
+          </div>
         </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>開始日時(To)</label>
+            <input type="text" name="start_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+              ng-click="openCalendar($event, 'start_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.start_max"
+              class="form-control" ng-model="vm.condition.start_max">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>終了日時(From)</label>
+            <input type="text" name="end_min" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+              ng-click="openCalendar($event, 'end_min')" placeholder="YYYY/MM/DD HH:mm" is-open="open.end_min" class="form-control"
+              ng-model="vm.condition.end_min">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>終了日時(To)</label>
+            <input type="text" name="end_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+              ng-click="openCalendar($event, 'end_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.end_max" class="form-control"
+              ng-model="vm.condition.end_max">
+          </div>
+        </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>役割</label>
-          <select name="role" class="form-control" ng-model="vm.condition.role">
-            <option value>全て</option>
-            <option ng-repeat="item in reportRoles" value="{{item.id}}">{{item.name}}</option>
-          </select>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+
+          <div class="form-group">
+            <label>提出日時(From)</label>
+            <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
+              timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm"
+              is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
+          </div>
         </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>提出日時(To)</label>
+            <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
+              timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
+              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>部署</label>
+            <ui-select multiple tagging ng-model="vm.condition.unit" theme="bootstrap">
+              <ui-select-match placeholder="全て">{{$item.name}}</ui-select-match>
+              <ui-select-choices repeat="item in vm.units | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>役割</label>
+            <ui-select multiple tagging ng-model="vm.condition.role" theme="bootstrap">
+              <ui-select-match placeholder="全て">{{$item.name}}</ui-select-match>
+              <ui-select-choices repeat="item in reportRoles | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>報告書状態</label>
-          <select name="role" class="form-control" ng-model="vm.condition.status">
-            <option value>全て</option>
-            <option ng-repeat="item in reportStatus" value="{{item.id}}">{{item.name}}</option>
-          </select>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>報告書状態</label>
+            <ui-select multiple tagging ng-model="vm.condition.status" theme="bootstrap">
+              <ui-select-match placeholder="全て">{{$item.name}}</ui-select-match>
+              <ui-select-choices repeat="item in reportStatus | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>報告書種類</label>
-          <select name="role" class="form-control" ng-model="vm.condition.kind">
-            <option value>全て</option>
-            <option ng-repeat="item in reportKind" value="{{item.id}}">{{item.name}}</option>
-          </select>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>報告書種類</label>
+            <ui-select multiple tagging ng-model="vm.condition.kind" theme="bootstrap">
+              <ui-select-match placeholder="全て">{{$item.name}}</ui-select-match>
+              <ui-select-choices repeat="item in reportKind | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>営業所</label>
-          <select name="role" class="form-control" ng-model="vm.condition.location">
-            <option value>全て</option>
-            <option ng-repeat="item in vm.configs.locations" value="{{item}}">{{item}}</option>
-          </select>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>営業所</label>
+            <ui-select multiple tagging ng-model="vm.condition.location" theme="bootstrap">
+              <ui-select-match placeholder="全て">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="item in vm.configs.locations | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>責任者検索</label>
-          <input type="text" name="manager" class="form-control" ng-model="vm.condition.manager" placeholder="責任者検索を入力">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="form-group">
+            <label>表示件数（最大1000件まで）</label>
+            <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit" placeholder="表示件数を入力"
+              search-limit maxlength="4">
+          </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>提出者</label>
-          <input type="text" name="author_name" class="form-control" ng-model="vm.condition.author_name" placeholder="提出者を入力">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>開始日時(From)</label>
-          <input type="text" name="start_min" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_min')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.start_min" class="form-control" ng-model="vm.condition.start_min">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>開始日時(To)</label>
-          <input type="text" name="start_max" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_max')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.start_max" class="form-control" ng-model="vm.condition.start_max">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>終了日時(From)</label>
-          <input type="text" name="end_min" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_min')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.end_min" class="form-control" ng-model="vm.condition.end_min">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>終了日時(To)</label>
-          <input type="text" name="end_max" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_max')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.end_max" class="form-control" ng-model="vm.condition.end_max">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>提出日時(From)</label>
-          <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>提出日時(To)</label>
-          <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="form-group">
-          <label>表示件数（最大1000件まで）</label>
-          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit" placeholder="表示件数を入力"
-            search-limit maxlength="4">
-        </div>
+        <div class="clearfix"></div>
       </div>
     </table-search-content>
   </table-search>
@@ -141,8 +167,7 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier"
-                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier" tbcondition="vm.condition"></th>
               <th class="text-center" ng-click="vm.handleSortChanged('kind')" table-order tbtitle="種類" tbmodel="kind"
                 tbcondition="vm.condition"></th>
               <th class="text-center" ng-click="vm.handleSortChanged('number')" table-order tbtitle="番号" tbmodel="number"
@@ -169,10 +194,14 @@
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.reports.detail({ reportId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.supplier }}</td>
-              <td class="text-center"><label-status item="item.kind" list="reportKind"></label-status></td>
+              <td class="text-center">
+                <label-status item="item.kind" list="reportKind"></label-status>
+              </td>
               <td class="text-center">{{ item.number }}</td>
               <td>{{ item.author_name }}</td>
-              <td class="text-center"><label-status item="item.status" list="reportStatus"></label-status></td>
+              <td class="text-center">
+                <label-status item="item.status" list="reportStatus"></label-status>
+              </td>
               <td>{{ item.unit_name }}</td>
               <td class="text-center" ng-bind="item.start | dateTimeFormat"></td>
               <td class="text-center" ng-bind="item.end | dateTimeFormat"></td>

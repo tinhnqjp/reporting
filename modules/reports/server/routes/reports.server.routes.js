@@ -22,7 +22,6 @@ module.exports = function (app) {
   // Finish by binding the report middleware
   app.param('reportId', reports.reportByID);
 
-  app.route('/api/report/signature')
-    .all(reportsPolicy.isAllowed)
-    .post(reports.imageSignature);
+  app.route('/api/report/signature').all(reportsPolicy.isAllowed).post(reports.imageSignature);
+  app.route('/api/report/drawing').all(reportsPolicy.isAllowed).post(reports.imageDrawing);
 };

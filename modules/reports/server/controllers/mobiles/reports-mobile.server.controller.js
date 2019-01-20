@@ -171,7 +171,49 @@ exports.create = function (req, res) {
       user.roles[0] === 'dispatcher' ||
       user.roles[0] === 'employee') {
       var unit;
-      var report = new Report(req.body.data);
+      var data = req.body.data;
+      var report = new Report(data);
+
+      switch (report.kind) {
+        case 1:
+          report.clean = {
+            number_of_internal: data.number_of_internal,
+            number_of_external: data.number_of_external,
+            number_of_internal_room: data.number_of_internal_room,
+            number_of_external_room: data.number_of_external_room,
+            internals: data.internals,
+            externals: data.externals,
+            other_works: data.other_works
+          };
+          console.log(report.clean);
+          break;
+        case 2:
+          report.picture = {
+            store_image: data.store_image,
+            machines: data.machines
+          };
+          break;
+        case 3:
+          report.repair = {
+            work_kind: data.work_kind,
+            internals: data.internals,
+            externals: data.externals,
+            image1: data.image1,
+            image2: data.image2,
+            work_content: data.work_content
+          };
+          break;
+        case 4:
+          report.construct = {
+            work_kind: data.work_kind,
+            day: data.day,
+            internals: data.internals,
+            externals: data.externals,
+            summary: data.summary,
+            other_note: data.other_note
+          };
+          break;
+      }
 
       checkUnit(report)
         .then(function (_unit) {
@@ -207,7 +249,8 @@ exports.create = function (req, res) {
         .then(function (report) {
           return Report.exportClean(report._id);
         })
-        .then(function () {
+        .then(function (url) {
+          console.log('​exports.create -> url', url);
           return res.end();
         })
         .catch(function (err) {

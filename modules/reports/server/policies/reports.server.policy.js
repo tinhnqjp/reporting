@@ -38,6 +38,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/report/signature',
       permissions: '*'
+    }, {
+      resources: '/api/report/drawing',
+      permissions: '*'
     }]
   }]);
 };

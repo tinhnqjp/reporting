@@ -449,6 +449,12 @@ a.text-muted:focus {
 .box-part .text {
   margin:10px 0;
 }
+.box-part .icon {
+  width: 40px;
+}
+.box-part .title {
+  margin-top: 5px;
+}
 .box-part .fa {
    color:#FFF;
 }
@@ -532,7 +538,7 @@ a.text-muted:focus {
   border:1px solid #ccc;
   padding:10px;
   margin:0 0 10px;
-  display:block; 
+  display:block;
 }
 
 .modal-checkbox label:hover {
@@ -642,4 +648,9 @@ a.text-muted:focus {
 
 .col-index {
   text-align: center;
+}
+
+.icon {
+	width: 50px;
+	height: 50px;
 }

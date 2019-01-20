@@ -9,6 +9,9 @@
 
   function AuthenticationController($scope, UsersService, $location, Authentication, Notification) {
     var vm = this;
+    if (Authentication.user) {
+      $scope.handleBackScreen('home');
+    }
 
     vm.signin = function (isValid) {
       if (!isValid) {

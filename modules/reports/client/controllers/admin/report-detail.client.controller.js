@@ -65,11 +65,13 @@
 
     vm.export = function () {
       $scope.handleShowConfirm({
-        message: 'PDFをダウンロードします。よろしいですか？'
+        message: 'PDFとExcelをダウンロードします。よろしいですか？'
       }, function () {
         $scope.handleShowDownload({
           href: vm.report.pdf,
-          text: 'PDF'
+          text: 'PDF',
+          href2: vm.report.excel,
+          text2: 'Excel'
         });
       });
     };

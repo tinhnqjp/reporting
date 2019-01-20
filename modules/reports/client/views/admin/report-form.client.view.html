@@ -157,18 +157,18 @@
                     <td class="col-xs-12" colspan="4">
                       <div class="col-xs-2" ng-repeat="item in vm.report.workers" ng-click="vm.modalWorker(item)">
                         <div class="box-part text-center label-success">
-                            <i class="fa fa-user-o fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                              <span>{{item.name}}</span>
-                            </div>
+                          <img class="icon" src="/modules/reports/client/img/icons/ic_person.svg">
+                          <div class="title">
+                            <span>{{item.name}}</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-xs-2">
                         <div class="box-part text-center label-success" ng-click="vm.modalWorker()">
-                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                                <span>追加</span>
-                            </div>
+                          <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                          <div class="title">
+                              <span>追加</span>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -209,7 +209,7 @@
                     <td class="col-xs-12" colspan="4">
                       <div class="col-xs-2" ng-repeat="item in vm.report.clean.internals" ng-click="vm.modalInternal(item)">
                         <div class="box-part text-center label-info">
-                            <i class="fa fa-credit-card-alt fa-3x" aria-hidden="true"></i>
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_internal.svg">
                             <div class="title">
                               <span>{{item.number}}</span>
                             </div>
@@ -241,7 +241,7 @@
                     <td class="col-xs-12" colspan="4">
                       <div class="col-xs-2" ng-repeat="item in vm.report.clean.externals" ng-click="vm.modalExternal(item)">
                         <div class="box-part text-center label-success">
-                            <i class="fa fa-credit-card-alt fa-3x" aria-hidden="true"></i>
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_external.svg">
                             <div class="title">
                               <span>{{item.number}}</span>
                             </div>
@@ -271,8 +271,24 @@
                 <tbody>
                   <tr>
                     <td class="col-xs-12" colspan="4">
-                      <div class="col-xs-3" ng-repeat="item in vm.report.drawings" ng-click="vm.modalDrawings(item)">
-                        <img class="thumbnail img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
+                      <div class="col-xs-3" ng-repeat="item in vm.report.drawings" >
+                        <div class="panel panel-default">
+                          <img class="img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
+                          <div class="panel-footer text-center">
+                            <button class="btn btn-danger btn-sm" type="button" ng-click="vm.removeDrawing(item)">
+                              <i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button class="btn btn-warning btn-sm" type="button" ng-click="vm.modalDrawing(item)">
+                              <i class="fa fa-edit" aria-hidden="true"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-2">
+                        <div class="box-part text-center label-success" ng-click="vm.modalDrawing()">
+                          <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                          <div class="title">
+                              <span>追加</span>
+                          </div>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -292,7 +308,7 @@
                     <td class="col-xs-12" colspan="4">
                       <div class="col-xs-2" ng-repeat="item in vm.report.clean.other_works" ng-click="vm.modalOtherWork(item)">
                         <div class="box-part text-center label-default">
-                            <i class="fa fa-wrench fa-3x" aria-hidden="true"></i>
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_repair.svg">
                             <div class="title">
                               <span>{{item.title}}</span>
                             </div>
@@ -325,14 +341,16 @@
                       お客様サイン
                     </th>
                     <td class="col-xs-10" colspan="3">
-                      <div class="divImageClose">
-                        <img class="img-thumbnail img-responsive" id="signature" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
-                        <button type="button" class="btn btn-danger btn-sm button-close" ng-if="vm.isGetImageFromFile || vm.report.signature" ng-click="vm.removeImage()">
-                          <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
+                      <div class="col-xs-3">
+                        <div class="panel panel-default">
+                          <img class="img-responsive" id="signature" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
+                          <div class="panel-footer text-center">
+                            <button class="btn btn-danger btn-sm" type="button" ng-if="vm.isGetImageFromFile || vm.report.signature" ng-click="vm.removeImage()">
+                              <i class="fa fa-times" aria-hidden="true"></i></button>
+                          </div>
+                        </div>
                       </div>
-                      
-                      <div class="form-group mgnb mg5t">
+                      <div class="col-xs-12">
                         <span class="btn btn-default btn-xs btn-upload-file">
                           <input type="file" nv-file-select uploader="vm.uploader" accept="image/*">
                         </span>
@@ -358,6 +376,26 @@
                     <td class="col-xs-10" colspan="3">
                       <input type="text" name="location" class="form-control" ng-model="vm.report.location" placeholder="営業所を選択" autocomplete="off"
                       ng-click="vm.modalLocation(vm.report.location)">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- 連絡事項 -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">連絡事項</div>
+          <div class="panel-body">
+            <div class="table-custom" >
+              <table class="table table-detail">
+                <tbody>
+                  <tr>
+                    <th class="col-xs-2">
+                      連絡事項
+                    </th>
+                    <td class="col-xs-10" colspan="3">
+                      <textarea class="form-control" ng-model="vm.report.notice" placeholder="連絡事項を入力"></textarea>
                     </td>
                   </tr>
                 </tbody>

@@ -39,7 +39,11 @@ exports.update = function (req, res) {
       logger.error(err);
       return res.status(422).send({ message: '報告書を変更できません。' });
     }
-    Report.updateLogs(report, req.user, 2)
+
+    Report.exportClean(report._id)
+      .then(function () {
+        return Report.updateLogs(report, req.user, 2);
+      })
       .then(function (result) {
         return res.json(result);
       }, err => {
@@ -210,13 +214,29 @@ exports.imageSignature = function (req, res) {
       }
       res.jsonp({ image: imageUrl.substr(1) });
     });
-    // image.thumb(config.uploads.reports.image, req.file)
-    //   .then((result) => {
-    //     res.jsonp(result);
-    //   }).catch((err) => {
-    //     logger.error(err);
-    //     return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
-    //   });
+  });
+};
+
+exports.imageDrawing = function (req, res) {
+  var upload = multer(config.uploads.reports.drawings).single('drawings');
+  var imageFileFilter = require(path.resolve('./config/lib/multer')).imageFileFilter;
+  upload.fileFilter = imageFileFilter;
+
+  upload(req, res, function (err) {
+    if (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
+    }
+    var imgConfig = config.uploads.reports.drawings;
+    var file = req.file;
+    var imageUrl = imgConfig.dest + file.originalname;
+    fs.rename(file.path, imageUrl, (err) => {
+      if (err) {
+        logger.error(err);
+        return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
+      }
+      res.jsonp({ image: imageUrl.substr(1) });
+    });
   });
 };
 
@@ -239,19 +259,32 @@ function getQuery(condition) {
     and_arr.push({ $or: or_arr });
   }
   if (condition.unit) {
-    and_arr.push({ unit: condition.unit });
+    var units = _.map(condition.unit, '_id');
+    var index = units.indexOf('null');
+    if (index !== -1) {
+      units.splice(index, 1);
+      and_arr.push({ $or: [
+        { unit: { $exists: false } },
+        { unit: { $in: units } }
+      ] });
+    } else {
+      and_arr.push({ unit: { $in: units } });
+    }
   }
   if (condition.role) {
-    and_arr.push({ role: condition.role });
+    var roles = _.map(condition.role, 'id');
+    and_arr.push({ role: { $in: roles } });
   }
   if (condition.status) {
-    and_arr.push({ status: condition.status });
+    var status = _.map(condition.status, 'id');
+    and_arr.push({ status: { $in: status } });
   }
   if (condition.kind) {
-    and_arr.push({ kind: condition.kind });
+    var kinds = _.map(condition.kind, 'id');
+    and_arr.push({ kind: { $in: kinds } });
   }
   if (condition.location) {
-    and_arr.push({ location: condition.location });
+    and_arr.push({ location: { $in: condition.location } });
   }
   if (condition.manager && condition.manager !== '') {
     key_lower = condition.manager.toLowerCase();

@@ -15,6 +15,10 @@
       UnitsApi.units()
         .success(function (res) {
           vm.units = res;
+          vm.units.unshift({
+            _id: 'null',
+            name: '未入力'
+          });
         })
         .error(function (err) {
           var message = (err) ? err.message || err.data.message : '報告書の取得が失敗しました。';

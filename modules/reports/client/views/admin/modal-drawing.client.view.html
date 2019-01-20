@@ -1,31 +1,30 @@
-<form name="vm.modalWorkerForm" ng-submit="confirmWorker(vm.modalWorkerForm.$valid)" novalidate>
+<form name="vm.modalImageForm" ng-submit="confirmImage(vm.modalImageForm.$valid)" novalidate>
   <div class="modal-body">
     <div class="table-custom" style="border:0px;">
       <table class="table table-detail">
         <tbody>
           <tr>
-            <td class="col-xs-12" colspan="2">
-              <div class="row pdn">
-                <div class="col-xs-6 text-left"><h4>作業者</h4></div>
-                <div class="col-xs-6 text-right">
-                  <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
-                  <button class="btn btn-primary btn-sm" type="submit">完了</button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="col-xs-12" colspan="2">
+            <td class="col-xs-12 text-center" colspan="2">
               <div class="divImageClose">
-                <img class="img-thumbnail img-responsive" id="signature" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
-                <button type="button" class="btn btn-danger btn-sm button-close" ng-if="vm.isGetImageFromFile || vm.report.signature" ng-click="vm.removeImage()">
+                <img class="img-thumbnail img-responsive" style="height: 200px;" id="image" src="{{imageUrl}}" ng-click="handleShowImage(imageUrl)">
+                <button type="button" class="btn btn-danger btn-sm button-close" ng-if="selected || image" ng-click="vm.removeImage()">
                   <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="form-group mgnb mg5t">
                 <span class="btn btn-default btn-xs btn-upload-file">
-                  <input type="file" nv-file-select uploader="vm.uploader" accept="image/*">
+                  <input type="file" nv-file-select uploader="uploader" accept="image/*">
                 </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-xs-12" colspan="2">
+              <div class="row pdn">
+                <div class="col-xs-12 text-center">
+                  <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+                  <button class="btn btn-primary btn-sm" type="submit">完了</button>
+                </div>
               </div>
             </td>
           </tr>

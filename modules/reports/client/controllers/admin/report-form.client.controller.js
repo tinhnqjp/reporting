@@ -40,10 +40,6 @@
           $scope.handleShowToast(message, true);
         });
 
-      if (vm.report.manager) {
-        vm.report.manager = _.find(vm.report.workers, { 'name': vm.report.manager });
-      }
-
       vm.imageUrl = $scope.getImageDefault(vm.report.signature);
       prepareUploader();
     }
@@ -759,6 +755,91 @@
         }, function (res) {
           delete $scope.selected;
         });
+    };
+
+    vm.modalDrawing = function (image) {
+      $scope.imageUrl = $scope.getImageDefault(image);
+
+      ngDialog.openConfirm({
+        templateUrl: '/modules/reports/client/views/admin/modal-drawing.client.view.html',
+        scope: $scope,
+        showClose: false,
+        closeByDocument: false,
+        width: 600,
+        controller: ['$scope', function ($scope) {
+          prepareUploader();
+
+          $scope.confirmImage = function (isValid) {
+            $scope.isSaveClick = true;
+            if (!isValid) {
+              $scope.$broadcast('show-errors-check-validity', 'vm.modalImageForm');
+              return false;
+            }
+            if ($scope.selected) {
+              $scope.uploader.uploadAll();
+            }
+            $scope.confirm();
+          };
+
+          function prepareUploader() {
+            $scope.uploader = uploadService.prepareUploader('/api/report/drawing', 'drawings');
+            uploadService.setCallBack(function (fileItem) {
+              // onAfterAddingFile
+              $scope.selected = true;
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+                $scope.imageUrl = e.target.result;
+              };
+              reader.readAsDataURL(fileItem._file);
+            }, function (response) {
+              // onSuccessItem
+              if (!image) {
+                vm.report.drawings.push(response.image);
+              } else {
+                var index = vm.report.drawings.indexOf(image);
+                if (index !== -1) {
+                  vm.report.drawings[index] = response.image;
+                }
+              }
+              $scope.uploader.clearQueue();
+            }, function () {
+              // onWhenAddingFileFailed
+              $scope.selected = false;
+            }, function (response) {
+              // onErrorItem
+              $scope.imageUrl = $scope.getImageDefault(image);
+              $scope.selected = false;
+              $scope.handleCloseWaiting();
+              $scope.handleShowToast(response.message, 'エラー');
+            });
+          }
+
+          vm.removeImage = function () {
+            $scope.uploader.clearQueue();
+            $scope.image = '';
+            $scope.selected = false;
+            $scope.imageUrl = $scope.getImageDefault($scope.image);
+            $('#image').attr('src', $scope.imageUrl);
+          };
+        }]
+      })
+        .then(function (res) {
+          delete $scope.image;
+        }, function (res) {
+          delete $scope.image;
+        });
+    };
+
+    vm.removeDrawing = function (image) {
+      $scope.handleShowConfirm({
+        message: 'この見取り図を削除します。よろしいですか？'
+      }, function () {
+        var index = vm.report.drawings.indexOf(image);
+        if (index !== -1) {
+          vm.report.drawings.splice(index, 1);
+        }
+      });
     };
 
     vm.handlerStartEndBlur = function () {
