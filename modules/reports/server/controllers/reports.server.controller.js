@@ -126,54 +126,73 @@ exports.updateStatus = function (req, res) {
     });
   }
 
-  Report.findById(reportId).select('_id status logs').exec(function (err, report) {
-    if (err) {
-      logger.error(err);
-      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
-    } else if (!report) {
-      return res.status(422).send({ message: '報告書が見つかりません。' });
-    }
-    var status_before = report.status;
-    report.status = status;
-    report.save(function (err) {
-      if (err) {
-        logger.error(err);
-        return res.status(422).send({ message: '報告書を変更できません。' });
-      }
-
-      var action = 3;
-      if (status_before > status) {
-        switch (status) {
-          case 1:
-            action = 6; break;
-          case 2:
-            action = 7; break;
-          case 3:
-            action = 8; break;
-        }
+  var session = null;
+  mongoose.startSession()
+    .then(_session => {
+      session = _session;
+      session.startTransaction();
+      return Report.findById(reportId).session(session);
+    })
+    .then(report => {
+      if (!report) {
+        session.abortTransaction()
+          .then(() => {
+            session.endSession();
+            return res.status(422).send({ message: '報告書が見つかりません。' });
+          });
       } else {
-        switch (status) {
-          case 2:
-            action = 3; break;
-          case 3:
-            action = 4; break;
-          case 4:
-            action = 5; break;
-        }
-      }
-
-      Report.updateLogs(report, req.user, action)
-        .then(function () {
-          return res.end();
-        }, err => {
-          logger.error(err);
-          return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
+        return updateReport(report).then(() => {
+          session.commitTransaction().then(() => {
+            session.endSession();
+            return res.end();
+          });
         });
-      res.end();
+      }
+    })
+    .catch(err => {
+      session.abortTransaction().then(() => {
+        session.endSession();
+        logger.error(err);
+        return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
+      });
     });
 
-
-  });
+  function updateReport(report) {
+    return new Promise((resolve, reject) => {
+      var status_before = report.status;
+      report.status = status;
+      report.save()
+        .then(_user => {
+          var action = 3;
+          if (status_before > status) {
+            switch (status) {
+              case 1:
+                action = 6; break;
+              case 2:
+                action = 7; break;
+              case 3:
+                action = 8; break;
+            }
+          } else {
+            switch (status) {
+              case 2:
+                action = 3; break;
+              case 3:
+                action = 4; break;
+              case 4:
+                action = 5; break;
+            }
+          }
+          return Report.updateLogs(report, req.user, action);
+        })
+        .then(function () {
+          return resolve();
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
 };
 
 exports.export = function (req, res) {

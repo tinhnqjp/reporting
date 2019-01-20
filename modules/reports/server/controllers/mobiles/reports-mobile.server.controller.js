@@ -36,17 +36,7 @@ exports.histories = function (req, res) {
 
   getUserById(userId)
     .then(user => {
-      if (user.roles[0] === 'partner') {
-        Partner.findOne({ account: userId })
-          .select('workers')
-          .exec((err, partner) => {
-            if (err) return new Promise((resolve, reject) => { return reject({ status: 422, message: 'サーバーエラーが発生しました。' }); });
-            var userIds = [userId].concat(partner.workers);
-            return new Promise((resolve, reject) => { return resolve(userIds); });
-          });
-      } else {
-        return new Promise((resolve, reject) => { return resolve([userId]); });
-      }
+      return getUserIds(user);
     })
     .then(userIds => {
       return getListReports(userIds, keyword, kind, page);
@@ -60,6 +50,21 @@ exports.histories = function (req, res) {
       return res.status(422).send({ message: 'サーバーエラーが発生しました。' });
     });
 
+  function getUserIds(user) {
+    return new Promise((resolve, reject) => {
+      if (user.roles[0] === 'partner') {
+        Partner.findOne({ account: userId })
+          .select('workers')
+          .exec((err, partner) => {
+            if (err) return reject({ status: 422, message: 'サーバーエラーが発生しました。' });
+            var userIds = [userId].concat(partner.workers);
+            return resolve(userIds);
+          });
+      } else {
+        return resolve([userId]);
+      }
+    });
+  }
   function getUserById(userId) {
     return new Promise((resolve, reject) => {
       User.findById(userId).exec((err, user) => {
@@ -269,6 +274,7 @@ exports.create = function (req, res) {
       report.author_name = user.name;
       report.role = user.roles[0];
       report.status = 1;
+      report.created = Date.now();
 
       report.logs = [{
         author: user._id,

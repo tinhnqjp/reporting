@@ -36,7 +36,7 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   // 状態 1: 提出 - 2: 確認済 - 3: 承認済 - 4: 確定済
   /** report status */
   $scope.reportStatus = [
-    { id: 1, name: '状態', class: 'label-default' },
+    { id: 1, name: '提出済', class: 'label-default' },
     { id: 2, name: '確認済', class: 'label-primary' },
     { id: 3, name: '承認済', class: 'label-success' },
     { id: 4, name: '確定済', class: 'label-danger' }
