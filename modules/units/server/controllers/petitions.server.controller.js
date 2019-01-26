@@ -52,7 +52,7 @@ exports.paging = function (req, res) {
     limit: limit,
     populate: [
       { path: 'partner', select: 'name' },
-      { path: 'workerId', select: 'name phone manager' }
+      { path: 'workerId', select: 'name phone manager _id' }
     ]
   }).then(function (result) {
     return res.json(result);

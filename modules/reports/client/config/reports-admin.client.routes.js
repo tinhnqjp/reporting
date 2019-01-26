@@ -25,22 +25,10 @@
           pageTitle: '報告書一覧'
         }
       })
-      .state('admin.reports.create', {
-        url: '/create',
-        templateUrl: '/modules/reports/client/views/admin/report-form.client.view.html',
-        controller: 'ReportFormController',
-        controllerAs: 'vm',
-        resolve: {
-          reportResolve: newReport
-        },
-        data: {
-          pageTitle: '報告書登録'
-        }
-      })
-      .state('admin.reports.edit', {
-        url: '/:reportId/edit',
-        templateUrl: '/modules/reports/client/views/admin/report-form.client.view.html',
-        controller: 'ReportFormController',
+      .state('admin.reports.clean_edit', {
+        url: '/:reportId/cleanEdit',
+        templateUrl: '/modules/reports/client/views/admin/report-clean-form.client.view.html',
+        controller: 'ReportCleanFormController',
         controllerAs: 'vm',
         resolve: {
           reportResolve: getReport
@@ -49,10 +37,34 @@
           pageTitle: '報告書編集'
         }
       })
-      .state('admin.reports.detail', {
-        url: '/:reportId/detail',
-        templateUrl: '/modules/reports/client/views/admin/report-detail.client.view.html',
-        controller: 'ReportDetailController',
+      .state('admin.reports.clean_detail', {
+        url: '/:reportId/cleanDetail',
+        templateUrl: '/modules/reports/client/views/admin/report-clean-detail.client.view.html',
+        controller: 'ReportCleanDetailController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書詳細'
+        }
+      })
+      .state('admin.reports.picture_edit', {
+        url: '/:reportId/pictureEdit',
+        templateUrl: '/modules/reports/client/views/admin/report-picture-form.client.view.html',
+        controller: 'ReportPictureFormController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書編集'
+        }
+      })
+      .state('admin.reports.picture_detail', {
+        url: '/:reportId/pictureDetail',
+        templateUrl: '/modules/reports/client/views/admin/report-picture-detail.client.view.html',
+        controller: 'ReportPictureDetailController',
         controllerAs: 'vm',
         resolve: {
           reportResolve: getReport

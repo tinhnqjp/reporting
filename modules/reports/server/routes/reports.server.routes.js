@@ -24,4 +24,7 @@ module.exports = function (app) {
 
   app.route('/api/report/signature').all(reportsPolicy.isAllowed).post(reports.imageSignature);
   app.route('/api/report/drawing').all(reportsPolicy.isAllowed).post(reports.imageDrawing);
+  app.route('/api/report/storeimage').all(reportsPolicy.isAllowed).post(reports.pictureStoreImage);
+  app.route('/api/report/before').all(reportsPolicy.isAllowed).post(reports.pictureBefore);
+  app.route('/api/report/after').all(reportsPolicy.isAllowed).post(reports.pictureAfter);
 };

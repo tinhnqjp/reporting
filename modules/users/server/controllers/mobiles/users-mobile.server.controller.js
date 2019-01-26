@@ -21,9 +21,8 @@ var _ = require('lodash'),
 exports.expire = function (req, res) {
   req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
   var errors = req.validationErrors();
-  if (errors) {
+  if (errors)
     return res.status(400).send(helper.getMessage(errors));
-  }
 
   var userId = req.body.userId;
   User.findOne({ _id: userId, deleted: false }).select('_id name username expire created').exec((err, user) => {

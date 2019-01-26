@@ -48,11 +48,8 @@
       }, function () {
         if (vm.password) {
           vm.worker.account.password = vm.password;
+          vm.worker.password = vm.password;
         }
-        console.log(vm.worker.account.expire);
-        // if (vm.worker.account.expire) {
-        //   vm.worker.account.expire = $scope.parseDate(vm.worker.account.expire);
-        // }
         vm.worker.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);

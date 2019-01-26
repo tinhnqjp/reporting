@@ -1,4 +1,4 @@
-<div class="container-fluid form-detail">
+<div class="container form-detail">
   <div class="row">
     <div class="col-lg-12">
       <div class="row mg10b">
@@ -38,6 +38,12 @@
             </tr>
             <tr>
               <th class="col-xs-2">
+                パスワード
+              </th>
+              <td class="col-xs-10" ng-bind="vm.partner.password"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
                 有効期限
               </th>
               <td class="col-xs-10" ng-bind="vm.partner.account.expire | dateTimeFormat"></td>
@@ -47,7 +53,8 @@
                 前回ログイン日時
               </th>
               <td class="col-xs-10">
-                <span ng-class="classLastLogin(vm.partner.account.last_login)">{{ vm.partner.account.last_login | dateTimeFormat }}</span>
+                <span ng-class="classLastLogin(vm.partner.account.last_login)">{{ vm.partner.account.last_login |
+                  dateTimeFormat }}</span>
               </td>
             </tr>
             <tr>

@@ -1,9 +1,6 @@
-<div class="container-fluid" ng-init="vm.open = false">
+<div class="container" ng-init="vm.open = false">
   <table-search>
     <table-search-button>
-      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.units.create">
-        <span class="glyphicon glyphicon-plus"></span> 登録
-      </a>
     </table-search-button>
     <table-search-content>
         <div class="col-xs-12 col-sm-6 col-md-3">
@@ -52,7 +49,7 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action" tbcondition="vm.condition"></th>
+              <th class="text-center" ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action" tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone"
                 tbcondition="vm.condition"></th>
@@ -86,18 +83,17 @@
                 <span ng-if="item.action == 1">{{ item.manager }}</span>
                 <span ng-if="item.action != 1">{{ item.workerId.manager }}</span>
               </td>
-              <td>
-                <span ng-if="item.action == 1">{{ item.manager }}</span>
-                <span ng-if="item.action != 1">{{ item.workerId.manager }}</span>
-              </td>
+              <td>{{ item.partner.name }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
-              <td class="text-center w150" ui-sref-ignore>
+              <td class="text-center w350" ui-sref-ignore>
                 <a ng-if="item.action == 1" class="btn btn-xs btn-primary" ui-sref="admin.workers.petition_create({petitionId: item._id})"><i class="fa fa-star"
-                    aria-hidden="true"></i> 登録申請</a>
+                    aria-hidden="true"></i> アカウント登録</a>
                 <a ng-if="item.action != 1" class="btn btn-xs btn-warning" ng-click="vm.petitionDelete(item.workerId._id, item._id)"><i class="fa fa-star"
-                    aria-hidden="true"></i> 削除申請</a>
+                    aria-hidden="true"></i> アカウント削除</a>
+                <a ng-if="item.action != 1" class="btn btn-xs btn-warning" ui-sref="admin.workers.detail({ workerId: item.workerId._id })"><i class="fa fa-star"
+                    aria-hidden="true"></i> アカウント詳細</a>
                 <a class="btn btn-xs btn-danger" ng-click="vm.remove(item._id)"><i class="fa fa-trash" aria-hidden="true"></i>
-                  削除</a>
+                  申請削除</a>
               </td>
             </tr>
           </tbody>

@@ -1,0 +1,109 @@
+<form name="vm.modalMachineForm" ng-submit="confirmMachine(vm.modalMachineForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+    <div class="row pdn">
+      <div class="col-xs-6 text-left">
+        <h4>機器詳細</h4>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+        <button class="btn btn-primary btn-sm" type="submit">完了</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading">内機情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  管理No<span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="machine.number" placeholder="管理Noを入力"
+                    autocomplete="off" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  備考
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <textarea name="note" class="form-control" ng-model="machine.note" placeholder="備考を入力"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">写真データ</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-12" ng-repeat="item in machine.sets">
+            <div class="row">
+              <div class="col-xs-2">
+                <button type="button" class="btn btn-danger btn-sm button-close" ng-click="removeSet(item)">削除</button>
+              </div>
+              <div class="col-xs-5">
+                <b>Before</b>
+                <div class="panel panel-default">
+                  <img class="img-responsive" src="{{item.before}}" ng-click="handleShowImage(item.before)">
+                  <div class="panel-footer text-center">
+                    <button class="btn btn-danger btn-sm" type="button" ng-click="removeImage(item, true)">
+                      <i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button class="btn btn-warning btn-sm" type="button" ng-click="modalPicUpload(item, true)">
+                      <i class="fa fa-edit" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-5">
+                <b>After</b>
+                <div class="panel panel-default">
+                  <img class="img-responsive" src="{{item.after}}" ng-click="handleShowImage(item.after)">
+                  <div class="panel-footer text-center">
+                    <button class="btn btn-danger btn-sm" type="button" ng-click="removeImage(item, false)">
+                      <i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button class="btn btn-warning btn-sm" type="button" ng-click="modalPicUpload(item, false)">
+                      <i class="fa fa-edit" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mg10t">
+              <div class="col-xs-2">
+                <b>コメント</b>
+              </div>
+              <div class="col-xs-10">
+                <textarea name="note" class="form-control" ng-model="item.comment" placeholder="コメントを入力"></textarea>
+              </div>
+            </div>
+            <hr>
+          </div>
+          <div class="col-xs-3 col-xs-offset-4 mg10t">
+            <div class="box-part text-center label-success" ng-click="addSet()">
+              <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+              <div class="title">
+                <span>追加</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalMachineForm.number.$error" role="alert">
+        <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

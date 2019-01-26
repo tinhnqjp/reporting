@@ -3,11 +3,11 @@
 
   angular
     .module('reports.admin')
-    .controller('ReportFormController', ReportFormController);
+    .controller('ReportCleanFormController', ReportCleanFormController);
 
-  ReportFormController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'UnitsApi', 'ngDialog', 'uploadService'];
+  ReportCleanFormController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'UnitsApi', 'ngDialog', 'uploadService'];
 
-  function ReportFormController($scope, $state, report, ReportsApi, UnitsApi, ngDialog, uploadService) {
+  function ReportCleanFormController($scope, $state, report, ReportsApi, UnitsApi, ngDialog, uploadService) {
     var vm = this;
     vm.report = report;
     vm.update = update;
@@ -46,7 +46,7 @@
 
     function update(isValid) {
       vm.isSaveClick = true;
-      if (!isValid || !handlerStartEnd()) {
+      if (vm.report.status !== 4 && (!isValid || !handlerStartEnd())) {
         $scope.$broadcast('show-errors-check-validity', 'vm.reportForm');
         return false;
       }
@@ -914,7 +914,7 @@
 
       function successCallback(res) {
         $scope.handleCloseWaiting();
-        $state.go('admin.reports.detail', { reportId: vm.report._id });
+        $state.go('admin.reports.clean_detail', { reportId: vm.report._id });
         $scope.handleShowToast('この報告書の保存が完了しました。');
       }
 

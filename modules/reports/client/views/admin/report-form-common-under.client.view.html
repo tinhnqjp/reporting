@@ -1,0 +1,63 @@
+<div ng-if="vm.report.status != 4">
+  <!-- 営業所 -->
+  <div class="panel panel-primary">
+    <div class="panel-heading">営業所</div>
+    <div class="panel-body">
+      <div class="table-custom">
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                営業所
+              </th>
+              <td class="col-xs-10" colspan="3">
+                <input type="text" name="location" class="form-control" ng-model="vm.report.location" placeholder="営業所を選択"
+                  autocomplete="off" ng-click="vm.modalLocation(vm.report.location)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- 連絡事項 -->
+  <div class="panel panel-primary">
+    <div class="panel-heading">連絡事項</div>
+    <div class="panel-body">
+      <div class="table-custom">
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                連絡事項
+              </th>
+              <td class="col-xs-10" colspan="3">
+                <textarea class="form-control" rows="5" ng-model="vm.report.notice" placeholder="連絡事項を入力"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- CMS -->
+<div class="panel panel-primary">
+  <div class="panel-heading">CMS</div>
+  <div class="panel-body">
+    <div class="table-custom">
+      <table class="table table-detail">
+        <tbody>
+          <tr>
+            <th class="col-xs-2">
+              備考
+            </th>
+            <td class="col-xs-10" colspan="3">
+              <textarea class="form-control" rows="5" ng-model="vm.report.note" placeholder="備考を入力"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

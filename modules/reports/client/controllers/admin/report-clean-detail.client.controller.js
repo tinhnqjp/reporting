@@ -3,11 +3,11 @@
 
   angular
     .module('reports.admin')
-    .controller('ReportDetailController', ReportDetailController);
+    .controller('ReportCleanDetailController', ReportCleanDetailController);
 
-  ReportDetailController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi'];
+  ReportCleanDetailController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi'];
 
-  function ReportDetailController($scope, $state, report, ReportsApi) {
+  function ReportCleanDetailController($scope, $state, report, ReportsApi) {
     var vm = this;
     vm.report = report;
     vm.configs = {};
@@ -32,8 +32,6 @@
         });
 
       vm.report.signature = $scope.getImageDefault(vm.report.signature);
-
-
     }
 
     vm.uploadStatus = function (update, text) {
@@ -61,19 +59,6 @@
           var message = (err) ? err.message || err.data.message : '報告書のエクスポートが失敗しました。';
           $scope.handleShowToast(message, true);
         });
-    };
-
-    vm.export = function () {
-      $scope.handleShowConfirm({
-        message: 'PDFとExcelをダウンロードします。よろしいですか？'
-      }, function () {
-        $scope.handleShowDownload({
-          href: vm.report.pdf,
-          text: 'PDF',
-          href2: vm.report.excel,
-          text2: 'Excel'
-        });
-      });
     };
   }
 }());

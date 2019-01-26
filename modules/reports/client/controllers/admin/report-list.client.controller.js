@@ -5,9 +5,9 @@
     .module('reports.admin')
     .controller('ReportListController', ReportListController);
 
-  ReportListController.$inject = ['$scope', 'ReportsService', 'ReportsApi', 'UnitsApi', '$location'];
+  ReportListController.$inject = ['$scope', 'ReportsService', 'ReportsApi', 'UnitsApi', '$state'];
 
-  function ReportListController($scope, ReportsService, ReportsApi, UnitsApi, $location) {
+  function ReportListController($scope, ReportsService, ReportsApi, UnitsApi, $state) {
     var vm = this;
     onCreate();
 
@@ -95,6 +95,28 @@
           $scope.handleShowToast('報告書の削除が完了しました。');
         });
       });
+    };
+
+    vm.goReportEdit = function (kind, id) {
+      switch (kind) {
+        case 1:
+          $state.go('admin.reports.clean_edit', { reportId: id });
+          break;
+        case 4:
+          $state.go('admin.reports.picture_edit', { reportId: id });
+          break;
+      }
+    };
+
+    vm.goReportDetail = function (kind, id) {
+      switch (kind) {
+        case 1:
+          $state.go('admin.reports.clean_detail', { reportId: id });
+          break;
+        case 4:
+          $state.go('admin.reports.picture_detail', { reportId: id });
+          break;
+      }
     };
   }
 }());

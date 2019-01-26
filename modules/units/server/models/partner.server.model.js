@@ -18,6 +18,7 @@ var PartnerSchema = new Schema({
   // 電話番号
   phone: { type: String, trim: true },
   account: { type: Schema.ObjectId, ref: 'User' },
+  password: { type: String, trim: true },
   workers: [{ type: Schema.ObjectId, ref: 'Worker' }],
   deleted: { type: Boolean, default: false },
   created: { type: Date, default: Date.now }

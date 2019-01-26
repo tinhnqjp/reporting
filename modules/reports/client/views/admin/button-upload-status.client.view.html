@@ -1,0 +1,25 @@
+<button type="button" class="btn btn-default btn-sm" ng-if="vm.report.status == 2" ng-click="vm.uploadStatus(1, '提出済に戻')">
+  <i class="fa fa-cloud-upload"></i> 提出済に戻す
+</button>
+<button type="button" class="btn btn-primary btn-sm" ng-if="vm.report.status == 1" ng-click="vm.uploadStatus(2, '確認')">
+  <i class="fa fa-check"></i> 確認
+</button>
+<button type="button" class="btn btn-primary btn-sm" ng-if="vm.report.status == 3" ng-click="vm.uploadStatus(2, '確認済に戻')">
+  <i class="fa fa-check"></i> 確認済に戻す
+</button>
+<button type="button" class="btn btn-success btn-sm" ng-if="vm.report.status == 2" ng-click="vm.uploadStatus(3, '承認')">
+  <i class="fa fa-check-square-o"></i> 承認
+</button>
+<button type="button" class="btn btn-success btn-sm" ng-if="vm.report.status == 4" ng-click="vm.uploadStatus(3, '承認済に戻')">
+  <i class="fa fa-check-square-o"></i> 承認済に戻す
+</button>
+<button type="button" class="btn btn-danger btn-sm" ng-if="vm.report.status == 3" ng-click="vm.uploadStatus(4, '確定')">
+  <i class="fa fa-check-square"></i> 確定
+</button>
+
+<a class="btn btn-success btn-sm" target="_blank" href="{{vm.report.excel}}">
+  <i class="fa fa-file-excel-o"></i> Excelダウンロード
+</a>
+<a class="btn btn-danger btn-sm" target="_blank" href="{{vm.report.pdf}}">
+  <i class="fa fa-file-pdf-o"></i> PDFダウンロード
+</a>

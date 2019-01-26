@@ -35,6 +35,7 @@
       }, function () {
         if (vm.password) {
           vm.partner.account.password = vm.password;
+          vm.partner.password = vm.password;
         }
         vm.partner.createOrUpdate()
           .then(successCallback)

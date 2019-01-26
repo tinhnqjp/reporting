@@ -41,6 +41,15 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/report/drawing',
       permissions: '*'
+    }, {
+      resources: '/api/report/storeimage',
+      permissions: '*'
+    }, {
+      resources: '/api/report/before',
+      permissions: '*'
+    }, {
+      resources: '/api/report/after',
+      permissions: '*'
     }]
   }]);
 };

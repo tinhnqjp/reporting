@@ -11,10 +11,9 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   multer = require('multer'),
   fs = require('fs'),
-  master_data = require(path.resolve('./config/lib/master-data')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
-  files = require(path.resolve('./modules/core/server/controllers/files.server.controller'));
+  exportUtil = require(path.resolve('./modules/reports/server/utils/exports.server.util'));
 
 exports.create = function (req, res) {
   var report = new Report(req.body);
@@ -34,22 +33,30 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var report = req.model;
   report = _.extend(report, req.body);
+  // update file excel
+  var excel = config.uploads.reports.excel.export + report._id + '.xlsx';
+  report.excel = excel.substr(1);
   report.save(function (err) {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: '報告書を変更できません。' });
     }
 
-    Report.exportClean(report._id)
+    Report.updateLogs(report, req.user, 2)
       .then(function () {
-        return Report.updateLogs(report, req.user, 2);
+        if (report.status === 4) {
+          return Promise.resolve();
+        } else {
+          return exportUtil.exportFile(report._id);
+        }
       })
-      .then(function (result) {
-        return res.json(result);
+      .then(function () {
+        return res.json(report);
       }, err => {
         logger.error(err);
         return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
       });
+
   });
 };
 
@@ -202,7 +209,7 @@ exports.export = function (req, res) {
       message: '報告書が見つかりません。'
     });
   }
-  Report.exportClean(reportId)
+  exportUtil.exportFile(reportId)
     .then(function (urlOutput) {
       res.json(urlOutput);
     })
@@ -210,53 +217,65 @@ exports.export = function (req, res) {
       logger.error(err);
       return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
     });
-
 };
 
-exports.imageSignature = function (req, res) {
-  var upload = multer(config.uploads.reports.signature).single('signature');
-  var imageFileFilter = require(path.resolve('./config/lib/multer')).imageFileFilter;
-  upload.fileFilter = imageFileFilter;
 
-  upload(req, res, function (err) {
-    if (err) {
+exports.imageSignature = function (req, res) {
+  var imgConfig = config.uploads.reports.signature;
+  uploadImage(imgConfig, 'signature', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
       logger.error(err);
-      return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
-    }
-    var imgConfig = config.uploads.reports.signature;
-    var file = req.file;
-    var imageUrl = imgConfig.dest + file.originalname;
-    fs.rename(file.path, imageUrl, (err) => {
-      if (err) {
-        logger.error(err);
-        return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
-      }
-      res.jsonp({ image: imageUrl.substr(1) });
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
     });
-  });
 };
 
 exports.imageDrawing = function (req, res) {
-  var upload = multer(config.uploads.reports.drawings).single('drawings');
-  var imageFileFilter = require(path.resolve('./config/lib/multer')).imageFileFilter;
-  upload.fileFilter = imageFileFilter;
-
-  upload(req, res, function (err) {
-    if (err) {
+  var imgConfig = config.uploads.reports.drawings;
+  uploadImage(imgConfig, 'drawings', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
       logger.error(err);
-      return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
-    }
-    var imgConfig = config.uploads.reports.drawings;
-    var file = req.file;
-    var imageUrl = imgConfig.dest + file.originalname;
-    fs.rename(file.path, imageUrl, (err) => {
-      if (err) {
-        logger.error(err);
-        return res.status(422).send({ message: 'ファイルのアップロードに失敗しました。' });
-      }
-      res.jsonp({ image: imageUrl.substr(1) });
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
     });
-  });
+};
+
+exports.pictureStoreImage = function (req, res) {
+  var imgConfig = config.uploads.reports.picture.store_image;
+  uploadImage(imgConfig, 'store_image', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
+    });
+};
+exports.pictureBefore = function (req, res) {
+  var imgConfig = config.uploads.reports.picture.before;
+  uploadImage(imgConfig, 'before', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
+    });
+};
+exports.pictureAfter = function (req, res) {
+  var imgConfig = config.uploads.reports.picture.after;
+  uploadImage(imgConfig, 'after', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
+    });
 };
 
 /** ====== PRIVATE ========= */
@@ -353,3 +372,24 @@ function getQuery(condition) {
   return query;
 }
 
+function uploadImage(config, name, req, res) {
+  return new Promise(function (resolve, reject) {
+    var upload = multer(config).single(name);
+    var imageFileFilter = require(path.resolve('./config/lib/multer')).imageFileFilter;
+    upload.fileFilter = imageFileFilter;
+
+    upload(req, res, function (err) {
+      if (err) {
+        reject(err);
+      }
+
+      var imageUrl = config.dest + req.file.originalname;
+      fs.rename(req.file.path, imageUrl, (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve({ image: imageUrl.substr(1) });
+      });
+    });
+  });
+}

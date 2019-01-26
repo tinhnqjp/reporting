@@ -1,0 +1,63 @@
+<div class="modal-header-confirm">
+  <div class="row pdn">
+    <div class="col-xs-6 text-left">
+      <h4>機器詳細</h4>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    </div>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="panel panel-primary">
+    <div class="panel-heading">内機情報</div>
+    <div class="panel-body">
+      <div class="table-custom" style="border:0px;">
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">管理No</th>
+              <td class="col-xs-10" colspan="3">{{machine.number}}</td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">備考</th>
+              <td class="col-xs-10 pre-wrap" colspan="3">{{machine.note}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">写真データ</div>
+    <div class="panel-body">
+      <div class="table-custom" style="border:0px;">
+        <div class="col-xs-12" ng-repeat="item in machine.sets">
+          <div class="row">
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-5">
+              <b>Before</b>
+              <div class="panel panel-default">
+                <img class="img-responsive" src="{{item.before}}" ng-click="handleShowImage(item.before)">
+              </div>
+            </div>
+            <div class="col-xs-5">
+              <b>After</b>
+              <div class="panel panel-default">
+                <img class="img-responsive" src="{{item.after}}" ng-click="handleShowImage(item.after)">
+              </div>
+            </div>
+          </div>
+          <div class="row mg10t">
+            <div class="col-xs-2">
+              <b>コメント</b>
+            </div>
+            <div class="col-xs-10 pre-wrap">{{item.comment}}</div>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

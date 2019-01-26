@@ -71,15 +71,28 @@ module.exports = {
         limits: { fileSize: 50 * 1024 * 1024 }
       },
       picture: {
-        store_image: './modules/reports/client/img/store_image/',
-        before: './modules/reports/client/img/before/',
-        after: './modules/reports/client/img/after/',
-        limits: { fileSize: 50 * 1024 * 1024 }
+        store_image: {
+          dest: './modules/reports/client/img/store_image/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        before: {
+          dest: './modules/reports/client/img/before/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        after: {
+          dest: './modules/reports/client/img/after/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        }
       },
       repair: {
-        image1: './modules/reports/client/img/image1/',
-        image2: './modules/reports/client/img/image2/',
-        limits: { fileSize: 50 * 1024 * 1024 }
+        before: {
+          dest: './modules/reports/client/img/image1/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        after: {
+          dest: './modules/reports/client/img/image2/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        }
       },
       pdf: {
         dest: './modules/reports/client/pdf/'
@@ -88,7 +101,8 @@ module.exports = {
         dest: './modules/reports/client/excels/import',
         limits: { fileSize: 100 * 1024 * 1024 },
         export: './modules/reports/client/excels/export/',
-        clean: './modules/reports/client/excels/template/Clean.xlsx'
+        clean: './modules/reports/client/excels/template/clean.xlsx',
+        picture: './modules/reports/client/excels/template/picture.xlsx'
       }
     },
     users: {

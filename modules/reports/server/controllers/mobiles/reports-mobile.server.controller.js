@@ -20,7 +20,8 @@ var _ = require('lodash'),
   )),
   logger = require(path.resolve(
     './modules/core/server/controllers/logger.server.controller'
-  ));
+  )),
+  exportUtil = require(path.resolve('./modules/reports/server/utils/exports.server.util'));
 
 exports.histories = function (req, res) {
   req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
@@ -252,10 +253,9 @@ exports.create = function (req, res) {
           return createReport(report, user, unit, partner);
         })
         .then(function (report) {
-          return Report.exportClean(report._id);
+          return exportUtil.exportFile(report._id);
         })
         .then(function (url) {
-          console.log('​exports.create -> url', url);
           return res.end();
         })
         .catch(function (err) {

@@ -22,6 +22,7 @@ var WorkerSchema = new Schema({
   manager: { type: String, trim: true },
   // アカウント
   account: { type: Schema.ObjectId, ref: 'User' },
+  password: { type: String, trim: true },
   petition: { type: Schema.ObjectId, ref: 'Petition' },
   partner: { type: Schema.ObjectId, ref: 'Partner', childPath: 'workers' },
   deleted: { type: Boolean, default: false },

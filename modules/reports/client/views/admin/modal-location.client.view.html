@@ -6,15 +6,17 @@
           <tr>
             <td class="col-xs-12">
               <div class="row pdn">
-                <div class="col-xs-6 text-left"><h4>作業内容選択</h4></div>
+                <div class="col-xs-6 text-left">
+                  <h4>作業内容選択</h4>
+                </div>
                 <div class="col-xs-6 text-right">
                   <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
                   <button class="btn btn-primary btn-sm" type="submit">完了</button>
                 </div>
               </div>
               <div class="list-group">
-                <button type="button" class="list-group-item" ng-repeat="item in vm.configs.locations" 
-                ng-class="{'active': item == selected }" ng-click="selectValue(item)">{{item}}</button>
+                <button type="button" class="list-group-item" ng-repeat="item in vm.configs.locations" ng-class="{'active': item == selected }"
+                  ng-click="selectValue(item.value)">{{item.id}}</button>
               </div>
             </td>
           </tr>
@@ -22,5 +24,5 @@
       </table>
     </div>
   </div>
-  
+
 </form>
