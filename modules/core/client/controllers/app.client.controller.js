@@ -2,9 +2,9 @@
 
 angular.module('core').controller('AppController', AppController);
 
-AppController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'ngDialog', 'Notification', 'ConditionFactory'];
+AppController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'ngDialog', 'Notification', 'ConditionFactory', 'ReportsApi'];
 
-function AppController($scope, $state, $stateParams, Authentication, ngDialog, Notification, ConditionFactory) {
+function AppController($scope, $state, $stateParams, Authentication, ngDialog, Notification, ConditionFactory, ReportsApi) {
   $scope.Authentication = Authentication;
   $scope.NO_IMAGE_PATH = '/modules/core/client/img/no-image.jpg';
   $scope.NO_VIDEO_PATH = '/modules/core/client/img/video-default.png';
@@ -65,6 +65,52 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     }
   };
 
+  $scope.updateEnable = function (report, update, text) {
+    $scope.handleShowConfirm({
+      message: 'この報告書を' + text + 'にします。よろしいですか？'
+    }, function () {
+      ReportsApi.updateEnable(report._id, update)
+        .success(function (res) {
+          $scope.handleShowToast('報告書の' + text + '化が完了しました。');
+          report.enable = update;
+        })
+        .error(function (err) {
+          var message = (err) ? err.message || err.data.message : '報告書の' + text + '化が失敗しました。';
+          $scope.handleShowToast(message, true);
+        });
+    });
+  };
+
+  $scope.updateStatus = function (report, update, text) {
+    $scope.handleShowConfirm({
+      message: 'この報告書を' + text + 'します。よろしいですか？'
+    }, function () {
+      report.status = update;
+      ReportsApi.updateStatus(report._id, update)
+        .success(function (res) {
+          $scope.handleShowToast('報告書の' + text + 'が完了しました。');
+          report.status = update;
+        })
+        .error(function (err) {
+          var message = (err) ? err.message || err.data.message : '報告書の' + text + 'が失敗しました。';
+          $scope.handleShowToast(message, true);
+        });
+    });
+  };
+
+  $scope.cndStatus = function (report, role) {
+    if (report.status === 1 && _.includes(['admin', 'operator', 'dispatcher', 'employee'], role)) {
+      return 1;
+    } else if (report.status === 2 && _.includes(['admin', 'dispatcher'], role)) {
+      return 2;
+    } else if (report.status === 3 && _.includes(['admin', 'operator'], role)) {
+      return 3;
+    } else if (report.status === 4 && _.includes(['admin'], role)) {
+      return 4;
+    } else {
+      return 0;
+    }
+  };
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
   };
