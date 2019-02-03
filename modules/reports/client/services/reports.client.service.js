@@ -57,6 +57,9 @@
     this.updateStatus = function (reportId, status) {
       return $http.post('/api/reports/status', { reportId: reportId, status: status }, {});
     };
+    this.updateEnable = function (reportId, enable) {
+      return $http.post('/api/reports/enable', { reportId: reportId, enable: enable }, {});
+    };
     return this;
   }
 

@@ -1,20 +1,32 @@
-<button type="button" class="btn btn-default btn-sm" ng-if="vm.report.status == 2" ng-click="vm.uploadStatus(1, '提出済に戻')">
-  <i class="fa fa-cloud-upload"></i> 提出済に戻す
+<button type="button" ng-if="vm.report.enable == false && vm.user_role ==='dispatcher'" class="btn btn-success btn-sm"
+  ng-click="updateEnable(vm.report, 1, '有効')">
+  <i class="fa fa-toggle-on"></i> 有効
 </button>
-<button type="button" class="btn btn-primary btn-sm" ng-if="vm.report.status == 1" ng-click="vm.uploadStatus(2, '確認')">
+
+<button type="button" class="btn btn-danger btn-sm" ng-click="updateEnable(vm.report, 0, '無効')" ng-if="vm.report.enable == true && vm.report.status == 1 && (vm.user_role === 'employee' || vm.user_role ==='dispatcher')">
+  <i class="fa fa-toggle-off"></i> 無効
+</button>
+
+<button type="button" class="btn btn-primary btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 1" ng-click="updateStatus(vm.report, 2, '確認')">
   <i class="fa fa-check"></i> 確認
 </button>
-<button type="button" class="btn btn-primary btn-sm" ng-if="vm.report.status == 3" ng-click="vm.uploadStatus(2, '確認済に戻')">
-  <i class="fa fa-check"></i> 確認済に戻す
+
+<button type="button" class="btn btn-default btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 2" ng-click="updateStatus(vm.report, 1, '提出済に戻')">
+  <i class="fa fa-cloud-update"></i> 提出済に戻す
 </button>
-<button type="button" class="btn btn-success btn-sm" ng-if="vm.report.status == 2" ng-click="vm.uploadStatus(3, '承認')">
+<button type="button" class="btn btn-success btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 2" ng-click="updateStatus(vm.report, 3, '承認')">
   <i class="fa fa-check-square-o"></i> 承認
 </button>
-<button type="button" class="btn btn-success btn-sm" ng-if="vm.report.status == 4" ng-click="vm.uploadStatus(3, '承認済に戻')">
-  <i class="fa fa-check-square-o"></i> 承認済に戻す
+
+<button type="button" class="btn btn-primary btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 3" ng-click="updateStatus(vm.report, 2, '確認済に戻')">
+  <i class="fa fa-check"></i> 確認済に戻す
 </button>
-<button type="button" class="btn btn-danger btn-sm" ng-if="vm.report.status == 3" ng-click="vm.uploadStatus(4, '確定')">
+<button type="button" class="btn btn-danger btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 3" ng-click="updateStatus(vm.report, 4, '確定')">
   <i class="fa fa-check-square"></i> 確定
+</button>
+
+<button type="button" class="btn btn-success btn-sm" ng-if="cndStatus(vm.report, vm.user_role) == 4" ng-click="updateStatus(vm.report, 3, '承認済に戻')">
+  <i class="fa fa-check-square-o"></i> 承認済に戻す
 </button>
 
 <a class="btn btn-success btn-sm" target="_blank" href="{{vm.report.excel}}">

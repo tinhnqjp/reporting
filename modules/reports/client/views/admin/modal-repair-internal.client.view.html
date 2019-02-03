@@ -1,0 +1,227 @@
+<form name="vm.modalInternalForm" ng-submit="confirmInternal(vm.modalInternalForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+    <div class="row pdn">
+      <div class="col-xs-6 text-left">
+        <h4>内機</h4>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+        <button class="btn btn-primary btn-sm" type="submit">完了</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading">内機情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  管理No<span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="internal.number" placeholder="管理Noを入力"
+                    autocomplete="off" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  設置場所
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="text" class="form-control" ng-model="internal.posision" placeholder="設置場所を入力">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.maker" placeholder="メーカーを入力" ng-click="modalMaker(internal.maker)">
+                </td>
+                <th class="col-xs-2">
+                  タイプ
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.type" placeholder="タイプを入力" ng-click="modalType(internal.type)">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.model" placeholder="機器型式を入力" maxlength="13">
+                </td>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.serial" placeholder="製造番号を入力" maxlength="12">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  外装パネル型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.exterior_type" placeholder="外装パネル型式を入力"
+                    maxlength="14">
+                </td>
+                <th class="col-xs-2">
+                  製造年月
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" name="made_date" ng-model="internal.made_date" placeholder="製造年月を入力"
+                    input-validator="made_date">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">運転データ</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  室内吸込
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="indoor_suction"
+                      ng-model="internal.indoor_suction" placeholder="室内吸込を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  室内吹出
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="outdoor_suction"
+                      ng-model="internal.outdoor_suction" placeholder="室内吹出を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  高圧
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="high_pressure"
+                      ng-model="internal.high_pressure" placeholder="高圧を入力">
+                    <span class="input-group-addon">Mpa</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  低圧
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="low_pressure"
+                      ng-model="internal.low_pressure" placeholder="低圧を入力">
+                    <span class="input-group-addon">Mpa</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  吐出管
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="discharge_pipe"
+                      ng-model="internal.discharge_pipe" placeholder="吐出管を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  吸入管
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="suction_pipe"
+                      ng-model="internal.suction_pipe" placeholder="吸入管を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th colspan="4" class="text-center">圧縮機運転電流</th>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  U
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="u" ng-model="internal.u"
+                      placeholder="Uを入力">
+                    <span class="input-group-addon">A</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  V
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="v" ng-model="internal.v"
+                      placeholder="Vを入力">
+                    <span class="input-group-addon">A</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  W
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="number" class="form-control" input-validator="float_decimal" name="w" ng-model="internal.w"
+                      placeholder="Wを入力">
+                    <span class="input-group-addon">A</span>
+                  </div>
+                </td>
+                <th class="col-xs-2"></th>
+                <td class="col-xs-4"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalInternalForm.number.$error" role="alert">
+        <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
+        <li class="text-red" ng-message="required">氏名を入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_start.$error" role="alert">
+        <li class="text-red" ng-message="datetime">開始時間の入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_end.$error" role="alert">
+        <li class="text-red" ng-message="datetime">終了時間の入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.made_date.$error" role="alert">
+        <li class="text-red" ng-message="made_date">製造年月の[YYYY/MM]入力形式に誤りがあります。</li>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

@@ -13,7 +13,7 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
-    roles: ['admin'],
+    roles: ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'],
     allows: [{
       resources: '/api/reports',
       permissions: '*'
@@ -28,6 +28,9 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }, {
       resources: '/api/reports/export',
+      permissions: '*'
+    }, {
+      resources: '/api/reports/enable',
       permissions: '*'
     }, {
       resources: '/api/reports/status',
@@ -49,6 +52,12 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }, {
       resources: '/api/report/after',
+      permissions: '*'
+    }, {
+      resources: '/api/report/image1',
+      permissions: '*'
+    }, {
+      resources: '/api/report/image2',
       permissions: '*'
     }]
   }]);

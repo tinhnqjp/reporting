@@ -1,5 +1,5 @@
 'use strict';
-exports.version = '20190123';
+exports.version = '20190130';
 exports.config = {
   // メーカー
   makers: [
@@ -64,14 +64,14 @@ exports.config = {
   // 作業箇所
   three_taps: [
     { id: 1, value: '－' },
-    { id: 2, value: '▲' },
-    { id: 3, value: '●' }
+    { id: 2, value: '●' },
+    { id: 3, value: '▲' }
   ],
   // 作業前（後）
   four_taps: [
     { id: 1, value: '－' },
-    { id: 2, value: '△' },
-    { id: 3, value: '○' },
+    { id: 2, value: '○' },
+    { id: 3, value: '△' },
     { id: 4, value: '×' }
   ],
   // 作業結果

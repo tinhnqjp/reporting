@@ -56,6 +56,42 @@
               <textarea class="form-control" rows="5" ng-model="vm.report.note" placeholder="備考を入力"></textarea>
             </td>
           </tr>
+          <tr ng-if="vm.report.kind == 1">
+            <th class="col-xs-2">
+              写真報告書有無
+            </th>
+            <td class="col-xs-10" colspan="3">
+              <button-status model="vm.report.has_picture_report"></button-status>
+            </td>
+          </tr>
+          <tr ng-if="vm.report.kind == 1">
+            <th class="col-xs-2">
+              情報収集シート有無
+            </th>
+            <td class="col-xs-10" colspan="3">
+              <button-status model="vm.report.has_info_collection">
+              </button-status>
+            </td>
+          </tr>
+          <tr ng-if="vm.report.kind == 2  || vm.report.kind == 3">
+            <th class="col-xs-2">
+              充填回収業者名
+            </th>
+            <td class="col-xs-10" colspan="3">
+              <input type="text" name="filler_name" class="form-control" ng-model="vm.report.filler_name" placeholder="充填回収業者名を入力">
+            </td>
+          </tr>
+          <tr ng-if="vm.report.kind == 2  || vm.report.kind == 3">
+            <th class="col-xs-2">
+              回収ボンベ
+            </th>
+            <td class="col-xs-10" colspan="3">
+              <div class="btn-group">
+                <label class="btn btn-default" ng-model="vm.report.collection_bonbe" uib-btn-radio="true">自社</label>
+                <label class="btn btn-default" ng-model="vm.report.collection_bonbe" uib-btn-radio="false">他社</label>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

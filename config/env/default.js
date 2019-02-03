@@ -85,11 +85,11 @@ module.exports = {
         }
       },
       repair: {
-        before: {
+        image1: {
           dest: './modules/reports/client/img/image1/',
           limits: { fileSize: 50 * 1024 * 1024 }
         },
-        after: {
+        image2: {
           dest: './modules/reports/client/img/image2/',
           limits: { fileSize: 50 * 1024 * 1024 }
         }

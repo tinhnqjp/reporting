@@ -20,8 +20,14 @@
               <th class="col-xs-2">
                 状態
               </th>
-              <td class="col-xs-10" colspan="3">
+              <td class="col-xs-4">
                 <label-status item="vm.report.status" list="reportStatus"></label-status>
+              </td>
+              <th class="col-xs-2">
+                有効・無効
+              </th>
+              <td class="col-xs-4">
+                <label-enable model="vm.report.enable"></label-enable>
               </td>
             </tr>
             <tr>
@@ -48,24 +54,23 @@
       <!-- 機器一覧 -->
       <div class="panel panel-primary">
         <div class="panel-heading">機器一覧</div>
-        <div class="table-custom">
-          <table class="table table-detail">
-            <tbody>
-              <tr>
-                <td class="col-xs-12" colspan="4">
-                  <div class="col-xs-2" ng-repeat="item in vm.report.picture.machines" ng-click="vm.modalMachine(item)">
-                    <div class="box-part text-center label-success">
-                      <img class="icon" src="/modules/reports/client/img/icons/ic_external.svg" />
-                      <div class="title">
-                        <span>{{ item.number }}</span>
-                      </div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <div ng-show="!vm.report.picture.machines || vm.report.picture.machines.length === 0">該当データが0件でした。</div>
+                <div class="col-xs-2" ng-repeat="item in vm.report.picture.machines" ng-click="vm.modalMachine(item)">
+                  <div class="box-part text-center label-success">
+                    <img class="icon" src="/modules/reports/client/img/icons/ic_external.svg" />
+                    <div class="title">
+                      <span>{{ item.number }}</span>
                     </div>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <!-- 店舗外観写真 -->
       <div class="panel panel-primary">
@@ -83,59 +88,15 @@
           </tbody>
         </table>
       </div>
-      <!-- 営業所 -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">営業所</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                営業所
-              </th>
-              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.location">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- 連絡事項 -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">連絡事項</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                連絡事項
-              </th>
-              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.notice">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- CMS -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">CMS</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                備考
-              </th>
-              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.note">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div ng-include="'/modules/reports/client/views/admin/report-detail-common-under.client.view.html'"></div>
 
       <div class="row mg50b">
-        <div class="col-xs-4">
+        <div class="col-xs-2">
         </div>
-        <div class="col-xs-4 text-center">
+        <div class="col-xs-8 text-center">
           <div ng-include="'/modules/reports/client/views/admin/button-upload-status.client.view.html'"></div>
         </div>
-        <div class="col-xs-4 text-right">
+        <div class="col-xs-2 text-right">
           <button-edit back="admin.reports.list" state="admin.reports.clean_edit" params="{reportId: vm.report._id}"></button-edit>
         </div>
       </div>

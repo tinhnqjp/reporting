@@ -9,9 +9,13 @@
 
   function ReportListController($scope, ReportsService, ReportsApi, UnitsApi, $state) {
     var vm = this;
+    vm.showUnit = true;
     onCreate();
 
     function onCreate() {
+      if ($scope.Authentication.user.roles[0] === 'employee') {
+        vm.showUnit = false;
+      }
       UnitsApi.units()
         .success(function (res) {
           vm.units = res;
@@ -102,6 +106,9 @@
         case 1:
           $state.go('admin.reports.clean_edit', { reportId: id });
           break;
+        case 2:
+          $state.go('admin.reports.repair_edit', { reportId: id });
+          break;
         case 4:
           $state.go('admin.reports.picture_edit', { reportId: id });
           break;
@@ -112,6 +119,9 @@
       switch (kind) {
         case 1:
           $state.go('admin.reports.clean_detail', { reportId: id });
+          break;
+        case 2:
+          $state.go('admin.reports.repair_detail', { reportId: id });
           break;
         case 4:
           $state.go('admin.reports.picture_detail', { reportId: id });

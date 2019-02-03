@@ -86,11 +86,11 @@ exports.list = function (req, res) {
 
 exports.paging = function (req, res) {
   var condition = req.body.condition || {};
+  var user = req.user || {};
   var page = condition.page || 1;
-  var query = getQuery(condition);
+  var query = getQuery(condition, user);
   var sort = help.getSort(condition);
   var limit = help.getLimit(condition);
-
   Report.paginate(query, {
     select: 'created number supplier pdf author_name status kind unit_name start end',
     sort: sort,
@@ -201,6 +201,32 @@ exports.updateStatus = function (req, res) {
     });
   }
 };
+exports.updateEnable = function (req, res) {
+  var reportId = req.body.reportId;
+  var enable = req.body.enable;
+  if (!mongoose.Types.ObjectId.isValid(reportId)) {
+    return res.status(400).send({
+      message: '報告書が見つかりません。'
+    });
+  }
+
+  Report.findById(reportId)
+    .then(report => {
+      if (!report) {
+        return res.status(422).send({ message: '報告書が見つかりません。' });
+      } else {
+        report.enable = enable;
+        report.save()
+          .then(_user => {
+            return res.end();
+          });
+      }
+    })
+    .catch(err => {
+      logger.error(err);
+      return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
+    });
+};
 
 exports.export = function (req, res) {
   var reportId = req.body.reportId;
@@ -278,14 +304,41 @@ exports.pictureAfter = function (req, res) {
     });
 };
 
+exports.repairImage1 = function (req, res) {
+  var imgConfig = config.uploads.reports.repair.image1;
+  uploadImage(imgConfig, 'image1', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
+    });
+};
+exports.repairImage2 = function (req, res) {
+  var imgConfig = config.uploads.reports.repair.image2;
+  uploadImage(imgConfig, 'image2', req, res)
+    .then(function (imageUrl) {
+      res.json(imageUrl);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
+    });
+};
+
 /** ====== PRIVATE ========= */
-function getQuery(condition) {
+function getQuery(condition, user) {
   var key_lower = '';
   var key_upper = '';
   var or_arr = [];
 
   var query = {};
   var and_arr = [];
+
+  if (user && user.roles[0] === 'employee') {
+    condition.unit = { _id: user.unit };
+  }
   if (condition.keyword && condition.keyword !== '') {
     key_lower = condition.keyword.toLowerCase();
     key_upper = condition.keyword.toUpperCase();

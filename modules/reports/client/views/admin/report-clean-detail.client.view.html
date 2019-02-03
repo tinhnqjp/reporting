@@ -20,8 +20,14 @@
               <th class="col-xs-2">
                 状態
               </th>
-              <td class="col-xs-10" colspan="3">
+              <td class="col-xs-4">
                 <label-status item="vm.report.status" list="reportStatus"></label-status>
+              </td>
+              <th class="col-xs-2">
+                有効・無効
+              </th>
+              <td class="col-xs-4">
+                <label-enable model="vm.report.enable"></label-enable>
               </td>
             </tr>
             <tr>
@@ -120,6 +126,9 @@
                       <th class="col-xs-3">会社名</th>
                       <th class="col-xs-3">開始時間</th>
                       <th class="col-xs-3">終了時間</th>
+                    </tr>
+                    <tr>
+                      <td colspan="4" ng-show="!vm.report.workers || vm.report.workers.length === 0">該当データが0件でした。</td>
                     </tr>
                     <tr ng-repeat="item in vm.report.workers">
                       <td>{{item.name}}</td>
@@ -341,7 +350,9 @@
         <table class="table table-bordered table-detail">
           <tbody>
             <tr>
+
               <td class="col-xs-12" colspan="4">
+                <div ng-show="!vm.report.drawings || vm.report.drawings.length === 0">該当データが0件でした。</div>
                 <div class="col-xs-3" ng-repeat="item in vm.report.drawings">
                   <img class="thumbnail img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
                 </div>
@@ -362,6 +373,9 @@
                     <tr>
                       <th class="col-xs-3">作業内容</th>
                       <th class="col-xs-3">作業詳細</th>
+                    </tr>
+                    <tr>
+                      <td colspan="2" ng-show="!vm.report.clean.other_works || vm.report.clean.other_works.length === 0">該当データが0件でした。</td>
                     </tr>
                     <tr ng-repeat="item in vm.report.clean.other_works">
                       <td>{{item.title}}</td>
@@ -390,59 +404,15 @@
           </tbody>
         </table>
       </div>
-      <!-- 営業所 -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">営業所</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                営業所
-              </th>
-              <td class="col-xs-10" colspan="3" ng-bind="vm.report.location">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- 連絡事項 -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">連絡事項</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                連絡事項
-              </th>
-              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.notice">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- CMS -->
-      <div class="panel panel-primary">
-        <div class="panel-heading">CMS</div>
-        <table class="table table-bordered table-detail">
-          <tbody>
-            <tr>
-              <th class="col-xs-2">
-                備考
-              </th>
-              <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.note">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div ng-include="'/modules/reports/client/views/admin/report-detail-common-under.client.view.html'"></div>
 
       <div class="row mg50b">
-        <div class="col-xs-4">
+        <div class="col-xs-2">
         </div>
-        <div class="col-xs-4 text-center">
+        <div class="col-xs-8 text-center">
           <div ng-include="'/modules/reports/client/views/admin/button-upload-status.client.view.html'"></div>
         </div>
-        <div class="col-xs-4 text-right">
+        <div class="col-xs-2 text-right">
           <button-edit back="admin.reports.list" state="admin.reports.clean_edit" params="{reportId: vm.report._id}"></button-edit>
         </div>
       </div>

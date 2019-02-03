@@ -1,0 +1,77 @@
+<!-- 営業所 -->
+<div class="panel panel-primary">
+  <div class="panel-heading">営業所</div>
+  <table class="table table-bordered table-detail">
+    <tbody>
+      <tr>
+        <th class="col-xs-2">
+          営業所
+        </th>
+        <td class="col-xs-10" colspan="3" ng-bind="vm.report.location">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- 連絡事項 -->
+<div class="panel panel-primary">
+  <div class="panel-heading">連絡事項</div>
+  <table class="table table-bordered table-detail">
+    <tbody>
+      <tr>
+        <th class="col-xs-2">
+          連絡事項
+        </th>
+        <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.notice">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- CMS -->
+<div class="panel panel-primary">
+  <div class="panel-heading">CMS</div>
+  <table class="table table-bordered table-detail">
+    <tbody>
+      <tr>
+        <th class="col-xs-2">
+          備考
+        </th>
+        <td class="col-xs-10 pre-wrap" colspan="3" ng-bind="vm.report.note">
+        </td>
+      </tr>
+      <tr ng-if="vm.report.kind == 1">
+        <th class="col-xs-2">
+          写真報告書有無
+        </th>
+        <td class="col-xs-10" colspan="3">
+          <label-enable model="vm.report.has_picture_report"></label-enable>
+        </td>
+      </tr>
+      <tr ng-if="vm.report.kind == 1">
+        <th class="col-xs-2">
+          情報収集シート有無
+        </th>
+        <td class="col-xs-10" colspan="3">
+          <label-enable model="vm.report.has_info_collection"></label-enable>
+        </td>
+      </tr>
+      <tr ng-if="vm.report.kind == 2  || vm.report.kind == 3">
+        <th class="col-xs-2">
+          充填回収業者名
+        </th>
+        <td class="col-xs-10" colspan="3" ng-bind="vm.report.filler_name">
+        </td>
+      </tr>
+      <tr ng-if="vm.report.kind == 2  || vm.report.kind == 3">
+        <th class="col-xs-2">
+          充填回収業者名
+        </th>
+        <td class="col-xs-10" colspan="3">
+          <span ng-if="vm.report.collection_bonbe == true">自社</span>
+          <span ng-if="vm.report.collection_bonbe == false">他社</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

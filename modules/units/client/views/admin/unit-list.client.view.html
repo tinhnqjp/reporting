@@ -15,17 +15,17 @@
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="form-group">
           <label>登録日時(From)</label>
-          <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+            ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min"
+            class="form-control" ng-model="vm.condition.created_min">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="form-group">
           <label>登録日時(To)</label>
-          <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
-            is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+            ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max"
+            class="form-control" ng-model="vm.condition.created_max">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -62,7 +62,7 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">該当データが0件でした。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ui-sref="admin.units.detail({ unitId: item._id })">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
@@ -79,8 +79,7 @@
           </tbody>
         </table>
       </div>
-      <uib-pagination class="mg10t" total-items="vm.condition.total" ng-model="vm.condition.page" items-per-page="vm.condition.limit"
-        ng-change="vm.handlePageChanged()"></uib-pagination>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
     </div>
   </div>
 </div>

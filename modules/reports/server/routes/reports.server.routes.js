@@ -11,6 +11,7 @@ module.exports = function (app) {
   app.route('/api/reports').post(reportsPolicy.isAllowed, reports.create);
   app.route('/api/reports/list').post(reportsPolicy.isAllowed, reports.paging);
   app.route('/api/reports/status').post(reportsPolicy.isAllowed, reports.updateStatus);
+  app.route('/api/reports/enable').post(reportsPolicy.isAllowed, reports.updateEnable);
   app.route('/api/reports/export').post(reportsPolicy.isAllowed, reports.export);
 
   // Single report routes
@@ -27,4 +28,6 @@ module.exports = function (app) {
   app.route('/api/report/storeimage').all(reportsPolicy.isAllowed).post(reports.pictureStoreImage);
   app.route('/api/report/before').all(reportsPolicy.isAllowed).post(reports.pictureBefore);
   app.route('/api/report/after').all(reportsPolicy.isAllowed).post(reports.pictureAfter);
+  app.route('/api/report/image1').all(reportsPolicy.isAllowed).post(reports.repairImage1);
+  app.route('/api/report/image2').all(reportsPolicy.isAllowed).post(reports.repairImage2);
 };

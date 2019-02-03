@@ -147,27 +147,27 @@ var ReportSchema = new Schema({
       // 製造番号
       serial: { type: String, default: '', maxlength: 12 }, // Free input
       // ドレンポンプ
-      drain_pump: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      drain_pump: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // ホース内
-      hose: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      hose: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // 熱交換器
-      heat_exchanger: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      heat_exchanger: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // ドレンパン
-      drain_pan: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      drain_pan: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // グリル
-      grill: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      grill: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // フィルター
-      filter: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle)
+      filter: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // 動作確認
-      before_confirmed: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      before_confirmed: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 破損確認
       damage: { type: Boolean, default: false }, // Button tap to change (false: 無, true: 有)
       // 排水確認
-      drainage: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      drainage: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 異音・振動
-      noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 動作確認
-      after_confirmed: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      after_confirmed: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 測定（冷暖）
       measure: { type: Boolean, default: false }, // Button tap to change (false: 冷, true: 暖)
 
@@ -184,18 +184,19 @@ var ReportSchema = new Schema({
       // 温度 => 作業後 => 差
       temp_after_diff: { type: Number }, // Float (0-9 and .)
 
-      // 風速 => 作業前 => 吸込
-      wind_before_suction: { type: Number }, // Float (0-9 and .)
-      // 風速 => 作業前 => 吹出
-      wind_before_blow: { type: Number }, // Float (0-9 and .)
-      // 風速 => 作業前 => 差
-      wind_before_diff: { type: Number }, // Float (0-9 and .)
-      // 風速 => 作業後 => 吸込
-      wind_after_suction: { type: Number }, // Float (0-9 and .)
-      // 風速 => 作業後 => 吹出
-      wind_after_blow: { type: Number }, // Float (0-9 and .)
-      // 風速 => 作業後 => 差
-      wind_after_diff: { type: Number }, // Float (0-9 and .)
+      // 風速 => 吸込 => 前
+      wind_suction_before: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 風速 => 吸込 => 後
+      wind_suction_after: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 風速 => 吸込 => 差 (Trị tuyệt đối của 前 - 後)
+      wind_suction_diff: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 風速 => 吹出 => 前
+      wind_blow_before: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 風速 => 吹出 => 後
+      wind_blow_after: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+      // 風速 => 吹出 => 差 (Trị tuyệt đối của 前 - 後)
+      wind_blow_diff: { type: Number }, // Select and Free input (Chọn từ list text cố định hoặc free input)
+
       // 組立者
       assembler: { type: String }, // Select from wokers
       // 外装パネル型式
@@ -222,15 +223,15 @@ var ReportSchema = new Schema({
       // 対応内機
       internals: { type: String }, // Chuỗi các number của Máy trong nhà, ngăn cách nhau bởi dấu [,]
       // 作業前 -> 異音・振動
-      before_noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      before_noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 破損・凹み
-      breakage_dent: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      breakage_dent: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 熱交換器
-      heat_exchanger: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      heat_exchanger: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 外装清掃
-      exterior_clean: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      exterior_clean: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 作業後 -> 異音・振動
-      after_noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      after_noise_and_vibration: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 指摘事項
       description: { type: String } // Multiple lines
     }],
@@ -330,7 +331,7 @@ var ReportSchema = new Schema({
       // 備考
       remarks: { type: String, maxlength: 15 },
       // 対象機
-      target: { type: Number }, // Chọn giữa 内機 và 外機
+      target: { type: String }, // Chọn giữa 内機 và 外機
       // 室内吸込
       indoor_suction: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 室内吹出
@@ -381,11 +382,11 @@ var ReportSchema = new Schema({
       // 新規機器 -> 製造番号
       new_serial: { type: String, default: '', maxlength: 12 }, // Free input
       // 耐圧試験
-      pressure_test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      pressure_test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 通水確認
-      Water_flow: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      Water_flow: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 試運転
-      test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: triangle, 3: circle, 4: X)
+      test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 吸込温度
       suction_temperature: { type: Number }, // ℃ Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 吹出温度

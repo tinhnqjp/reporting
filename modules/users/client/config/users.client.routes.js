@@ -16,7 +16,7 @@
         templateUrl: '/modules/users/client/views/users/change-password.client.view.html',
         controller: 'ChangePasswordController',
         controllerAs: 'vm',
-        data: { pageTitle: 'パスワード変更', roles: ['admin'] }
+        data: { pageTitle: 'パスワード変更', roles: ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'] }
       })
       .state('authentication', {
         abstract: true,

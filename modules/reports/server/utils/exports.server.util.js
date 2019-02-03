@@ -57,7 +57,7 @@ function exportClean(report) {
 
         urlOutput = OUT_FILE_PATH + report._id + FILE_EXT;
         var wsExport = workbook.getWorksheet('報告書');
-        wsExport.pageSetup.printArea = 'A1:AX85';
+        wsExport.pageSetup.printArea = 'A1:AX87';
         wsTemplate = _.cloneDeep(wsExport);
 
         // export
@@ -163,42 +163,42 @@ function exportClean(report) {
   }
 
   function write_basic(workbook, sheet, report) {
-    sheet.getCell('D1').value = report.number;
-    sheet.getCell('D3').value = report.supplier;
-    sheet.getCell('D4').value = report.address1;
-    sheet.getCell('D5').value = report.address2;
+    sheet.getCell('C3').value = report.number;
+    sheet.getCell('D5').value = report.supplier;
+    sheet.getCell('D6').value = report.address1;
+    sheet.getCell('D7').value = report.address2;
 
     var startStr = moment(report.start).format('YYYY/MM/DD/ddd/HH/mm');
     var starts = startStr.split('/');
-    sheet.getCell('AB3').value = starts[0];
-    sheet.getCell('AF3').value = starts[1];
-    sheet.getCell('AI3').value = starts[2];
-    sheet.getCell('AM3').value = starts[3];
-    sheet.getCell('AQ3').value = starts[4];
-    sheet.getCell('AU3').value = starts[5];
+    sheet.getCell('AB5').value = starts[0];
+    sheet.getCell('AF5').value = starts[1];
+    sheet.getCell('AI5').value = starts[2];
+    sheet.getCell('AM5').value = starts[3];
+    sheet.getCell('AQ5').value = starts[4];
+    sheet.getCell('AU5').value = starts[5];
 
     var endStr = moment(report.end).format('YYYY/MM/DD/ddd/HH/mm');
     var ends = endStr.split('/');
-    sheet.getCell('AB4').value = ends[0];
-    sheet.getCell('AF4').value = ends[1];
-    sheet.getCell('AI4').value = ends[2];
-    sheet.getCell('AM4').value = ends[3];
-    sheet.getCell('AQ4').value = ends[4];
-    sheet.getCell('AU4').value = ends[5];
+    sheet.getCell('AB6').value = ends[0];
+    sheet.getCell('AF6').value = ends[1];
+    sheet.getCell('AI6').value = ends[2];
+    sheet.getCell('AM6').value = ends[3];
+    sheet.getCell('AQ6').value = ends[4];
+    sheet.getCell('AU6').value = ends[5];
 
-    sheet.getCell('AD5').value = report.clean.number_of_internal;
-    sheet.getCell('AI5').value = report.clean.number_of_external;
-    sheet.getCell('AO5').value = report.clean.number_of_internal_room;
-    sheet.getCell('AU5').value = report.clean.number_of_external_room;
+    sheet.getCell('AD7').value = report.clean.number_of_internal;
+    sheet.getCell('AI7').value = report.clean.number_of_external;
+    sheet.getCell('AO7').value = report.clean.number_of_internal_room;
+    sheet.getCell('AU7').value = report.clean.number_of_external_room;
 
-    sheet.getCell('F7').value = report.manager;
-    sheet.getCell('F8').value = report.saler;
+    sheet.getCell('F9').value = report.manager;
+    sheet.getCell('F10').value = report.saler;
 
-    sheet.getCell('AQ7').value = report.clean.other_works.length > 0 ? 'あり' : 'なし';
-    sheet.getCell('AQ8').value = report.clean.work_result ? '完了' : '継続';
+    sheet.getCell('AQ9').value = report.clean.other_works.length > 0 ? 'あり' : 'なし';
+    sheet.getCell('AQ10').value = report.clean.work_result ? '完了' : '継続';
 
     if (report.location) {
-      sheet.getCell('F83').value = report.location.replace('　', '\r\n');
+      sheet.getCell('F85').value = report.location.replace('　', '\r\n');
     }
 
     if (report.signature && fs.existsSync('.' + report.signature)) {
@@ -207,14 +207,14 @@ function exportClean(report) {
         extension: 'jpg'
       });
       sheet.addImage(draw1, {
-        tl: { col: 41.5, row: 81.5 },
-        br: { col: 47.5, row: 83.5 }
+        tl: { col: 40.5, row: 84.5 },
+        br: { col: 46.5, row: 85.5 }
       });
     }
   }
   function write_works(sheet, report, sheetNo) {
     var limit = 12;
-    var arrWorker = ['R7', 'U7', 'X7', 'AA7', 'AD7', 'AG7', 'R8', 'U8', 'X8', 'AA8', 'AD8', 'AG8'];
+    var arrWorker = ['R9', 'U9', 'X9', 'AA9', 'AD9', 'AG9', 'R10', 'U10', 'X10', 'AA10', 'AD10', 'AG10'];
     var col = 0;
     report.workers.forEach((worker, index) => {
       if (col === limit) {
@@ -227,7 +227,7 @@ function exportClean(report) {
     });
   }
   function write_drawing(workbook, sheet, report, sheetNo) {
-    var row = 63;
+    var row = 65;
     if (report.drawings && report.drawings[sheetNo - 1]) {
       var draw = report.drawings[sheetNo - 1];
       if (draw && fs.existsSync('.' + draw)) {
@@ -243,9 +243,9 @@ function exportClean(report) {
     var limit = 10;
     // 指摘事項
     var index = 0;
-    var rowDesc = 50;
+    var rowDesc = 52;
     report.clean.internals.forEach(inter => {
-      if (rowDesc <= 59 && inter.description) {
+      if (rowDesc <= 61 && inter.description) {
         if (checkSheet(sheetNo, limit, index)) {
           sheet.getCell('A' + rowDesc).value = '内機';
           sheet.getCell('C' + rowDesc).value = inter.number;
@@ -256,7 +256,7 @@ function exportClean(report) {
       }
     });
     report.clean.externals.forEach(exter => {
-      if (rowDesc <= 59 && exter.description) {
+      if (rowDesc <= 61 && exter.description) {
         if (checkSheet(sheetNo, limit, index)) {
           sheet.getCell('A' + rowDesc).value = '外機';
           sheet.getCell('C' + rowDesc).value = exter.number;
@@ -268,10 +268,10 @@ function exportClean(report) {
     });
   }
   function write_clean_externals(sheet, report, sheetNo) {
-    var row = 38;
+    var row = 40;
     var limit = 10;
     report.clean.externals.forEach((exter, index) => {
-      if (row <= 47 && checkSheet(sheetNo, limit, index)) {
+      if (row <= 49 && checkSheet(sheetNo, limit, index)) {
         sheet.getCell('A' + row).value = exter.number;
         sheet.getCell('C' + row).value = exter.maker;
         sheet.getCell('H' + row).value = exter.internals;
@@ -292,9 +292,9 @@ function exportClean(report) {
   }
   function write_clean_internals(sheet, report, sheetNo) {
     var limit = 10;
-    var row = 12;
+    var row = 14;
     report.clean.internals.forEach((inter, index) => {
-      if (row <= 21 && checkSheet(sheetNo, limit, index)) {
+      if (row <= 23 && checkSheet(sheetNo, limit, index)) {
         sheet.getCell('A' + row).value = inter.number;
         sheet.getCell('C' + row).value = inter.maker;
         sheet.getCell('H' + row).value = inter.type;
@@ -313,9 +313,9 @@ function exportClean(report) {
       }
     });
 
-    row = 25;
+    row = 27;
     report.clean.internals.forEach((inter, index) => {
-      if (row <= 34 && checkSheet(sheetNo, limit, index)) {
+      if (row <= 36 && checkSheet(sheetNo, limit, index)) {
         sheet.getCell('A' + row).value = inter.number;
         sheet.getCell('C' + row).value = four_taps(inter.before_confirmed);
         sheet.getCell('F' + row).value = two_taps(inter.damage);
@@ -350,10 +350,10 @@ function exportClean(report) {
     });
   }
   function write_other_works(sheet, report, sheetNo) {
-    var row = 50;
+    var row = 52;
     var limit = 10;
     report.clean.other_works.forEach((other, index) => {
-      if (row <= 59 && checkSheet(sheetNo, limit, index)) {
+      if (row <= 61 && checkSheet(sheetNo, limit, index)) {
         sheet.getCell('AH' + row).value = other.title;
         row++;
         sheet.getCell('AI' + row).value = other.detail;
@@ -374,6 +374,7 @@ function exportPicture(report) {
 
         urlOutput = OUT_FILE_PATH + report._id + FILE_EXT;
         var wsExport = workbook.getWorksheet('基本情報');
+        wsExport.pageSetup.printArea = 'A1:H40';
         wsExport.state = 'visible';
         // basics
         write_basic(workbook, wsExport, report);
@@ -385,6 +386,7 @@ function exportPicture(report) {
         var total = report.picture.machines.length;
         for (var index = 1; index <= total; index++) {
           var copySheet = workbook.addWorksheet('管理No' + index, { state: 'visible' });
+          // copySheet.pageSetup.printArea = 'A1:H59';
           var ws = _.cloneDeep(wsTemplate);
           copySheet.model = Object.assign(ws.model, {
             mergeCells: ws.model.merges
@@ -395,6 +397,7 @@ function exportPicture(report) {
         }
 
         wsMachine.state = 'hidden';
+        wsTemplate.state = 'hidden';
 
         return workbook.xlsx.writeFile(urlOutput);
       })
@@ -437,7 +440,7 @@ function exportPicture(report) {
       });
       sheet.addImage(store_image, {
         tl: { col: 1.1, row: 21.1 },
-        br: { col: 6.99, row: 30.99 }
+        br: { col: 6.90, row: 30.90 }
       });
     }
   }

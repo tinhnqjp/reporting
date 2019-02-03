@@ -696,3 +696,33 @@ a.text-muted:focus {
 	width: 50px;
 	height: 50px;
 }
+
+.clean-card-today {
+	color: #fff;
+	border-color: #2E3192;
+	background-color: #2E3192;
+}
+
+.repair-card-today {
+	color: #fff;
+	border-color: #DB7B1B;
+	background-color: #DB7B1B;
+}
+
+.construct-card-today {
+	color: #fff;
+	border-color: #ED1C24;
+	background-color: #ED1C24;
+}
+
+.picture-card-today {
+	color: #fff;
+	border-color: #0071BC;
+	background-color: #0071BC;
+}
+
+.free-card-today {
+	color: #fff;
+	border-color: #009245;
+	background-color: #009245;
+}

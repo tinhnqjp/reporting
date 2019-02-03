@@ -21,7 +21,7 @@
         controller: 'ReportListController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin'],
+          roles: ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'],
           pageTitle: '報告書一覧'
         }
       })
@@ -65,6 +65,30 @@
         url: '/:reportId/pictureDetail',
         templateUrl: '/modules/reports/client/views/admin/report-picture-detail.client.view.html',
         controller: 'ReportPictureDetailController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書詳細'
+        }
+      })
+      .state('admin.reports.repair_edit', {
+        url: '/:reportId/repairEdit',
+        templateUrl: '/modules/reports/client/views/admin/report-repair-form.client.view.html',
+        controller: 'ReportRepairFormController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書編集'
+        }
+      })
+      .state('admin.reports.repair_detail', {
+        url: '/:reportId/repairDetail',
+        templateUrl: '/modules/reports/client/views/admin/report-repair-detail.client.view.html',
+        controller: 'ReportRepairDetailController',
         controllerAs: 'vm',
         resolve: {
           reportResolve: getReport

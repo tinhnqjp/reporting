@@ -1,0 +1,352 @@
+<div class="container-fluid form-edit form-report">
+  <form name="vm.reportForm" ng-submit="vm.update(vm.reportForm.$valid)" novalidate>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <form-title></form-title>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-save back="admin.reports.list"></button-save>
+          </div>
+        </div>
+        <div ng-if="vm.report.status != 4">
+          <!-- 基本情報 -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">基本情報</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-2">
+                        納入先
+                        <span class="text-red">*</span>
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <input type="text" name="supplier" class="form-control" ng-model="vm.report.supplier"
+                          placeholder="納入先を入力" required autocomplete="off">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        住所
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <input type="text" name="address1" class="form-control" ng-model="vm.report.address1"
+                          placeholder="住所を入力" autocomplete="off">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <input type="text" name="address2" class="form-control" ng-model="vm.report.address2"
+                          placeholder="" autocomplete="off">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        開始
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <input type="text" id="start" name="start" datetime-picker="" datepicker-options="dateOptions"
+                          timepicker-options="timeOptions" ng-click="openCalendar($event, 'start')" placeholder="開始を入力"
+                          is-open="open.start" autocomplete="off" class="form-control" ng-model="vm.report.start"
+                          ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        終了
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <input type="text" id="end" name="end" datetime-picker="" datepicker-options="dateOptions"
+                          timepicker-options="timeOptions" ng-click="openCalendar($event, 'end')" placeholder="終了を入力"
+                          is-open="open.end" autocomplete="off" class="form-control" ng-model="vm.report.end"
+                          ng-pattern="datetimeFormat" ng-change="vm.handlerStartEndBlur()">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        提出先
+                      </th>
+                      <td class="col-xs-4">
+                        <ui-select name="unit" ng-model="vm.report.unit" theme="bootstrap">
+                          <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
+                          <ui-select-choices repeat="item in vm.units | filter: $select.search">
+                            <span ng-bind-html="item.name | highlight: $select.search"></span>
+                          </ui-select-choices>
+                        </ui-select>
+                      </td>
+                      <th class="col-xs-2">
+                        作業結果
+                      </th>
+                      <td class="col-xs-4">
+                        <select class="form-control" ng-model="vm.report.work_result" ng-options="item.id as item.value for item in vm.configs.work_status">
+                          <option value="">作業結果を選択</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        作業内容
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <select class="form-control" ng-model="vm.report.repair.work_kind" ng-options="item.title as item.title for item in vm.configs.repair_work_kind"
+                          ng-change="vm.handlerWorkKindChanged()">
+                          <option value="">作業内容を選択</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 作業者 -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">作業者</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <td class="col-xs-12" colspan="4">
+                        <div class="col-xs-2" ng-repeat="item in vm.report.workers" ng-click="vm.modalWorker(item)">
+                          <div class="box-part text-center label-success">
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_person.svg">
+                            <div class="title">
+                              <span>{{item.name}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-2">
+                          <div class="box-part text-center label-success" ng-click="vm.modalWorker()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>追加</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-xs-2">
+                        責任者
+                      </th>
+                      <td class="col-xs-4">
+                        <ui-select name="manager" ng-model="vm.report.manager" theme="bootstrap">
+                          <ui-select-match placeholder="提出先を選択">{{$select.selected.name}}</ui-select-match>
+                          <ui-select-choices repeat="item.name as item in vm.report.workers | filter: $select.search">
+                            <span ng-bind-html="item.name | highlight: $select.search"></span>
+                          </ui-select-choices>
+                        </ui-select>
+                      </td>
+                      <th class="col-xs-2">
+                        営業担当者
+                      </th>
+                      <td class="col-xs-4">
+                        <input type="text" name="saler" class="form-control" ng-model="vm.report.saler" placeholder="営業担当者を入力"
+                          autocomplete="off">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 内機一覧 -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">内機一覧</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <td class="col-xs-12" colspan="4">
+                        <div class="col-xs-2" ng-repeat="item in vm.report.repair.internals" ng-click="vm.modalInternal(item)">
+                          <div class="box-part text-center label-info">
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_internal.svg">
+                            <div class="title">
+                              <span>{{item.number}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-2">
+                          <div class="box-part text-center label-info" ng-click="vm.modalInternal()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>追加</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 外機一覧 -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">外機一覧</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <td class="col-xs-12" colspan="4">
+                        <div class="col-xs-2" ng-repeat="item in vm.report.repair.externals" ng-click="vm.modalExternal(item)">
+                          <div class="box-part text-center label-success">
+                            <img class="icon" src="/modules/reports/client/img/icons/ic_external.svg">
+                            <div class="title">
+                              <span>{{item.number}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-2">
+                          <div class="box-part text-center label-success" ng-click="vm.modalExternal()">
+                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            <div class="title">
+                              <span>追加</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 写真データ -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">写真データ</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <td class="col-xs-12" colspan="4">
+                        <div class="col-xs-3">
+                          <div class="panel panel-default">
+                            <img class="img-responsive" src="{{vm.image1Url}}" ng-click="handleShowImage(vm.image1Url)">
+                            <div class="panel-footer text-center">
+                              <button class="btn btn-danger btn-sm" type="button" ng-click="vm.removeRepairImage(1)">
+                                <i class="fa fa-times" aria-hidden="true"></i></button>
+                              <button class="btn btn-warning btn-sm" type="button" ng-click="vm.modalRepairImage(1)">
+                                <i class="fa fa-edit" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-3">
+                          <div class="panel panel-default">
+                            <img class="img-responsive" src="{{vm.image2Url}}" ng-click="handleShowImage(vm.image2Url)">
+                            <div class="panel-footer text-center">
+                              <button class="btn btn-danger btn-sm" type="button" ng-click="vm.removeRepairImage(2)">
+                                <i class="fa fa-times" aria-hidden="true"></i></button>
+                              <button class="btn btn-warning btn-sm" type="button" ng-click="vm.modalRepairImage(2)">
+                                <i class="fa fa-edit" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 報告内容 -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">報告内容</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-2">
+                        報告内容
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <textarea class="form-control" rows="10" ng-model="vm.report.repair.work_content" placeholder="報告内容を入力"></textarea>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- お客様サイン -->
+          <div class="panel panel-primary">
+            <div class="panel-heading">お客様サイン</div>
+            <div class="panel-body">
+              <div class="table-custom">
+                <table class="table table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-2">
+                        お客様サイン
+                      </th>
+                      <td class="col-xs-10" colspan="3">
+                        <div class="col-xs-3">
+                          <div class="panel panel-default">
+                            <img class="img-responsive" id="signature" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
+                            <div class="panel-footer text-center">
+                              <button class="btn btn-danger btn-sm" type="button" ng-if="vm.isGetImageFromFile || vm.report.signature"
+                                ng-click="vm.removeImage()">
+                                <i class="fa fa-times" aria-hidden="true"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <span class="btn btn-default btn-xs btn-upload-file">
+                            <input type="file" nv-file-select uploader="vm.uploader" accept="image/*">
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-include="'/modules/reports/client/views/admin/report-form-common-under.client.view.html'"></div>
+
+        <div class="messages" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.reportForm.supplier.$error" role="alert">
+            <li class="text-red" ng-message="required">納入先を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.start.$error" role="alert">
+            <li class="text-red" ng-message="datetime">開始の入力形式に誤りがあります。</li>
+            <li class="text-red" ng-message="end">開始と終了の入力内容を確認してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.end.$error" role="alert">
+            <li class="text-red" ng-message="datetime">終了の入力形式に誤りがあります。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_internal.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_external.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_internal_room.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+          <div ng-messages="vm.reportForm.number_of_external_room.$error" role="alert">
+            <li class="text-red" ng-message="min">内機は数字の0～999を入力してください。</li>
+            <li class="text-red" ng-message="max">内機は数字の0～999を入力してください。</li>
+          </div>
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button-save back="admin.reports.list"></button-save>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

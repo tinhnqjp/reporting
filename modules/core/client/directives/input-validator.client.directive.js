@@ -34,6 +34,7 @@
       const ZIP = 'zip';
       const TEL = 'tel';
       const FLOAT = 'float';
+      const FLOAT_DECIMAL = 'float_decimal';
       const MADE_DATE = 'made_date';
 
       element.bind('blur', function (e) {
@@ -92,6 +93,10 @@
           case FLOAT:
             pattern = /^[\d.]+$/;
             ngModel.$setValidity(FLOAT, validator.matches(value, pattern));
+            break;
+          case FLOAT_DECIMAL:
+            pattern = /^\d{0,3}(\.\d{1,2})?$/;
+            ngModel.$setValidity(FLOAT_DECIMAL, validator.matches(value, pattern));
             break;
           case MADE_DATE:
             pattern = /20\d{2}\/(0[1-9]|1[0-2]|-)/;

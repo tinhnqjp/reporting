@@ -11,6 +11,7 @@
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
       position: 3,
+      roles: ['admin'],
       class: 'fa fa-food-circle-o',
       title: '協力会社管理',
       state: 'admin.partners.list',
@@ -19,6 +20,7 @@
 
     menuService.addMenuItem('topbar', {
       position: 4,
+      roles: ['admin'],
       class: 'fa fa-food-circle-o',
       title: '下請け管理',
       state: 'admin.workers.list',
@@ -27,6 +29,7 @@
 
     menuService.addMenuItem('topbar', {
       position: 5,
+      roles: ['admin'],
       class: 'fa fa-food-circle-o',
       title: '下請け申請管理',
       state: 'admin.petitions.list',
@@ -35,6 +38,7 @@
 
     menuService.addMenuItem('topbar', {
       position: 6,
+      roles: ['admin'],
       class: 'fa fa-food-circle-o',
       title: '部署管理',
       state: 'admin.units.list',

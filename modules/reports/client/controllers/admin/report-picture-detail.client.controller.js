@@ -5,9 +5,9 @@
     .module('reports.admin')
     .controller('ReportPictureDetailController', ReportPictureDetailController);
 
-  ReportPictureDetailController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'ngDialog'];
+  ReportPictureDetailController.$inject = ['$scope', '$state', 'reportResolve', 'ReportsApi', 'ngDialog', 'Authentication'];
 
-  function ReportPictureDetailController($scope, $state, report, ReportsApi, ngDialog) {
+  function ReportPictureDetailController($scope, $state, report, ReportsApi, ngDialog, Authentication) {
     var vm = this;
     vm.report = report;
     vm.configs = {};
@@ -15,6 +15,9 @@
     onCreate();
 
     function onCreate() {
+      if (Authentication.user.roles[0]) {
+        vm.user_role = Authentication.user.roles[0];
+      }
       ReportsApi.config()
         .success(function (res) {
           if (res.config) {
@@ -32,22 +35,6 @@
         });
       vm.report.picture.store_image = $scope.getImageDefault(vm.report.picture.store_image);
     }
-
-    vm.uploadStatus = function (update, text) {
-      $scope.handleShowConfirm({
-        message: 'この報告書を' + text + 'します。よろしいですか？'
-      }, function () {
-        vm.report.status = update;
-        ReportsApi.updateStatus(vm.report._id, update)
-          .success(function (res) {
-            $scope.handleShowToast('報告書の' + text + 'が完了しました。');
-          })
-          .error(function (err) {
-            var message = (err) ? err.message || err.data.message : '報告書の' + text + 'が失敗しました。';
-            $scope.handleShowToast(message, true);
-          });
-      });
-    };
 
     vm.excel = function () {
       ReportsApi.export(vm.report._id)

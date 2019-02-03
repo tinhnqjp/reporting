@@ -15,13 +15,16 @@ var _ = require('lodash'),
   crypto = require('crypto'),
   fs = require('fs'),
   config = require(path.resolve('./config/config')),
+  master_data = require(path.resolve('./config/lib/master-data')),
   help = require(path.resolve(
     './modules/core/server/controllers/help.server.controller'
   )),
   logger = require(path.resolve(
     './modules/core/server/controllers/logger.server.controller'
   )),
-  exportUtil = require(path.resolve('./modules/reports/server/utils/exports.server.util'));
+  exportUtil = require(path.resolve('./modules/reports/server/utils/exports.server.util')),
+  imageUtil = require(path.resolve('./modules/reports/server/utils/images.server.util'));
+var CONFIG = master_data.config;
 
 exports.histories = function (req, res) {
   req.checkBody('userId', 'サーバーエラーが発生しました。').notEmpty();
@@ -155,6 +158,7 @@ exports.create = function (req, res) {
   req.checkBody('data', 'データーを入力してください。').notEmpty();
   req.checkBody('data.kind', '報告書種類を入力してください。').notEmpty();
   var errors = req.validationErrors();
+  console.log('TCL: exports.create -> errors', errors);
   if (errors) {
     return res.status(400).send(help.getMessage(errors));
   }
@@ -179,6 +183,7 @@ exports.create = function (req, res) {
       var unit;
       var data = req.body.data;
       var report = new Report(data);
+      // console.log('TCL: exports.create -> report', report.picture);
 
       switch (report.kind) {
         case 1:
@@ -191,15 +196,11 @@ exports.create = function (req, res) {
             externals: data.externals,
             other_works: data.other_works
           };
-          console.log(report.clean);
+          // console.log(report.clean);
           break;
         case 2:
-          report.picture = {
-            store_image: data.store_image,
-            machines: data.machines
-          };
-          break;
-        case 3:
+          // var work_kind = _.find(CONFIG.repair_work_kind, { title: data.work_kind });
+          // var work_content = work_kind ? work_kind.content : '';
           report.repair = {
             work_kind: data.work_kind,
             internals: data.internals,
@@ -209,7 +210,7 @@ exports.create = function (req, res) {
             work_content: data.work_content
           };
           break;
-        case 4:
+        case 3:
           report.construct = {
             work_kind: data.work_kind,
             day: data.day,
@@ -219,34 +220,38 @@ exports.create = function (req, res) {
             other_note: data.other_note
           };
           break;
+        case 4:
+          report.picture = {
+            store_image: data.store_image,
+            machines: data.machines
+          };
+          break;
       }
 
       checkUnit(report)
         .then(function (_unit) {
           unit = _unit;
-          if (report.signature) {
-            var signature_path = config.uploads.reports.signature.dest;
-            return createImage(signature_path, report.signature);
-          } else {
-            return Promise.resolve('');
-          }
+
+          return imageUtil.signature(report.signature);
         })
         .then(function (signature) {
           report.signature = signature;
-
-          if (report.drawings && report.drawings.length > 0) {
-            var drawings_path = config.uploads.reports.drawings.dest;
-            var promises = [];
-            report.drawings.forEach(draw => {
-              promises.push(createImage(drawings_path, draw));
-            });
-            return Promise.all(promises);
-          } else {
-            return Promise.resolve([]);
-          }
+          return imageUtil.drawings(report.drawings);
         })
         .then(function (drawings) {
           report.drawings = drawings;
+          return imageUtil.picture_image(report.picture);
+        })
+        .then(function (picture) {
+          if (report.picture) {
+            report.picture = picture;
+          }
+          return imageUtil.repair_image(report.repair);
+        })
+        .then(function (repair) {
+          if (report.repair) {
+            report.repair = repair;
+          }
           return findPartner(user);
         })
         .then(function (partner) {
@@ -333,27 +338,6 @@ exports.create = function (req, res) {
           });
       } else {
         resolve(null);
-      }
-    });
-  }
-  function createImage(path, input) {
-    return new Promise((resolve, reject) => {
-      if (input) {
-        var data = input.replace(/^data:image\/\w+;base64,/, '');
-        var name = crypto.randomBytes(16).toString('hex');
-        var fileName = path + name + '.jpg';
-
-        fs.writeFile(fileName, data, { encoding: 'base64' }, function (err) {
-          if (err) {
-            logger.error(err);
-            reject({ message: 'ファイルのアップロードに失敗しました。' });
-          } else {
-            fileName = fileName.substr(1);
-            resolve(fileName);
-          }
-        });
-      } else {
-        resolve('');
       }
     });
   }

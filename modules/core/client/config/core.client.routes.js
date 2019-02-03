@@ -33,7 +33,7 @@
         controller: 'HomeController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin'],
+          roles: ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'],
           pageTitle: 'ホーム'
         }
       })

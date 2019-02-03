@@ -19,6 +19,7 @@
 
     menuService.addMenuItem('topbar', {
       position: 9,
+      roles: ['operator', 'bsoperator', 'dispatcher', 'employee', 'admin'],
       class: 'fa fa-lock',
       title: 'パスワード変更',
       state: 'settings',

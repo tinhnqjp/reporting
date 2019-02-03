@@ -52,8 +52,8 @@
           <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="form-group">
               <label>表示件数（最大1000件まで）</label>
-              <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit" placeholder="表示件数を入力"
-              search-limit maxlength="4" >
+              <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+                placeholder="表示件数を入力" search-limit maxlength="4">
             </div>
           </div>
         </div>
@@ -79,18 +79,17 @@
           <thead>
             <tr class="clickable">
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('foodname')" table-order tbtitle="名前" tbmodel="foodname"
-                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('foodname')" table-order tbtitle="名前" tbmodel="foodname" tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="説明" tbmodel="description"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created"
-                tbcondition="vm.condition" class="text-center"></th>
+              <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
+                class="text-center"></th>
               <th class="text-center w150">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">該当データが0件でした。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
@@ -107,8 +106,7 @@
           </tbody>
         </table>
       </div>
-      <uib-pagination class="mg10t" total-items="vm.condition.total" ng-model="vm.condition.page" items-per-page="vm.condition.limit"
-      ng-change="vm.handlePageChanged()"></uib-pagination>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
     </div>
   </div>
 </div>

@@ -8,8 +8,7 @@
     <span class="icon-bar"></span>
   </a>
   <ul class="nav navbar-nav d-sm-down-none" ng-if="Authentication.user">
-    <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-switch="item.type"
-      ng-class="{ 'active': $state.includes(item.parrent_state) }"
+    <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-switch="item.type" ng-class="{ 'active': $state.includes(item.parrent_state) }"
       dropdown="item.type === 'dropdown'">
       <a ng-switch-when="dropdown" class="dropdown-toggle" dropdown-toggle role="button">{{::item.title}}&nbsp;
         <span class="caret"></span>
@@ -19,7 +18,7 @@
           <a ui-sref="{{subitem.state}}" ng-bind="subitem.title"></a>
         </li>
       </ul>
-      <a ng-switch-default ui-sref="{{item.state}}" ng-bind="item.title"></a>
+      <a ng-switch-default ng-if="item.roles.includes(Authentication.user.roles[0])" ui-sref="{{item.state}}">{{::item.title}}</a>
     </li>
   </ul>
 

@@ -3,35 +3,35 @@
     <table-search-button>
     </table-search-button>
     <table-search-content>
-        <div class="col-xs-12 col-sm-6 col-md-3">
-          <div class="form-group">
-            <label>検索キー</label>
-            <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
-          </div>
+      <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="form-group">
+          <label>検索キー</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-3">
-          <div class="form-group">
-            <label>登録日時(From)</label>
-            <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
-              timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm"
-              is-open="open.created_min" class="form-control" ng-model="vm.condition.created_min">
-          </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="form-group">
+          <label>登録日時(From)</label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+            ng-click="openCalendar($event, 'created_min')" placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min"
+            class="form-control" ng-model="vm.condition.created_min">
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-3">
-          <div class="form-group">
-            <label>登録日時(To)</label>
-            <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
-              timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
-              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
-          </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="form-group">
+          <label>登録日時(To)</label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
+            ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max"
+            class="form-control" ng-model="vm.condition.created_max">
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-3">
-          <div class="form-group">
-            <label>表示件数（最大1000件まで）</label>
-            <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit" placeholder="表示件数を入力"
-              search-limit maxlength="4">
-          </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="form-group">
+          <label>表示件数（最大1000件まで）</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit" placeholder="表示件数を入力"
+            search-limit maxlength="4">
         </div>
+      </div>
     </table-search-content>
   </table-search>
 
@@ -49,12 +49,11 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th class="text-center" ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action" tbcondition="vm.condition"></th>
+              <th class="text-center" ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action"
+                tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone"
-                tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('manager')" table-order tbtitle="担当者" tbmodel="manager"
-                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone" tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('manager')" table-order tbtitle="担当者" tbmodel="manager" tbcondition="vm.condition"></th>
               <th>協力会社</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
                 class="text-center"></th>
@@ -63,7 +62,7 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">データが一件も登録されていません。</td>
+              <td colspan="7" ng-show="!vm.docs || vm.docs.length === 0">該当データが0件でした。</td>
             </tr>
             <tr ng-repeat="item in vm.docs track by $index">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
@@ -85,13 +84,15 @@
               </td>
               <td>{{ item.partner.name }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
-              <td class="text-center w350" ui-sref-ignore>
-                <a ng-if="item.action == 1" class="btn btn-xs btn-primary" ui-sref="admin.workers.petition_create({petitionId: item._id})"><i class="fa fa-star"
-                    aria-hidden="true"></i> アカウント登録</a>
-                <a ng-if="item.action != 1" class="btn btn-xs btn-warning" ng-click="vm.petitionDelete(item.workerId._id, item._id)"><i class="fa fa-star"
-                    aria-hidden="true"></i> アカウント削除</a>
-                <a ng-if="item.action != 1" class="btn btn-xs btn-warning" ui-sref="admin.workers.detail({ workerId: item.workerId._id })"><i class="fa fa-star"
-                    aria-hidden="true"></i> アカウント詳細</a>
+              <td class="text-right w350" ui-sref-ignore>
+                <a ng-if="item.action == 1" class="btn btn-xs btn-primary" ui-sref="admin.workers.petition_create({petitionId: item._id})"><i
+                    class="fa fa-plus-circle" aria-hidden="true"></i> アカウント登録</a>
+
+                <a ng-if="item.action != 1" class="btn btn-xs btn-warning" ng-click="vm.petitionDelete(item.workerId._id, item._id)"><i
+                    class="fa fa-ban" aria-hidden="true"></i> アカウント削除</a>
+                <a ng-if="item.action != 1" class="btn btn-xs btn-info" ui-sref="admin.workers.detail({ workerId: item.workerId._id })"><i
+                    class="fa fa-info-circle" aria-hidden="true"></i> アカウント詳細</a>
+
                 <a class="btn btn-xs btn-danger" ng-click="vm.remove(item._id)"><i class="fa fa-trash" aria-hidden="true"></i>
                   申請削除</a>
               </td>
@@ -99,8 +100,7 @@
           </tbody>
         </table>
       </div>
-      <uib-pagination class="mg10t" total-items="vm.condition.total" ng-model="vm.condition.page" items-per-page="vm.condition.limit"
-        ng-change="vm.handlePageChanged()"></uib-pagination>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
     </div>
   </div>
 </div>
