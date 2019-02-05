@@ -59,14 +59,18 @@
             <th class="col-xs-2">
               有効期限
             </th>
-            <td class="col-xs-10" ng-bind="vm.worker.account.expire | dateTimeFormat"></td>
+            <td class="col-xs-10">
+              <span ng-if="vm.worker.account.expire">{{vm.worker.account.expire | dateTimeFormat}}</span>
+              <span ng-if="!vm.worker.account.expire">未設定</span>
+            </td>
           </tr>
           <tr>
             <th class="col-xs-2">
               前回ログイン日時
             </th>
             <td class="col-xs-10">
-              <span ng-class="classLastLogin(vm.worker.account.last_login)">{{ vm.worker.account.last_login | dateTimeFormat }}</span>
+              <span ng-class="classLastLogin(vm.worker.account.last_login)">{{ vm.worker.account.last_login |
+                dateTimeFormat }}</span>
             </td>
           </tr>
           <tr>

@@ -726,3 +726,20 @@ a.text-muted:focus {
 	border-color: #009245;
 	background-color: #009245;
 }
+
+.status-send {
+	background-color: #22a6b3;
+	color: #fff;
+}
+.status-confirm {
+	background-color: #be2edd;
+	color: #fff;
+}
+.status-approve {
+	background-color: #4834d4;
+	color: #fff;
+}
+.status-done {
+	background-color: #130f40;
+	color: #fff;
+}

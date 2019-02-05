@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
   Report = mongoose.model('Report'),
   path = require('path'),
   config = require(path.resolve('./config/config')),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   _ = require('lodash'),
   multer = require('multer'),
   fs = require('fs'),
@@ -27,6 +27,7 @@ exports.create = function (req, res) {
 };
 
 exports.read = function (req, res) {
+
   res.json(req.model);
 };
 
@@ -92,7 +93,7 @@ exports.paging = function (req, res) {
   var sort = help.getSort(condition);
   var limit = help.getLimit(condition);
   Report.paginate(query, {
-    select: 'created number supplier pdf author_name status kind unit_name start end',
+    select: 'created number supplier pdf author_name status kind unit_name start end enable',
     sort: sort,
     page: page,
     limit: limit
@@ -147,6 +148,12 @@ exports.updateStatus = function (req, res) {
             session.endSession();
             return res.status(422).send({ message: '報告書が見つかりません。' });
           });
+      } else if (report.enable === false || status === report.status) {
+        session.abortTransaction()
+          .then(() => {
+            session.endSession();
+            return res.status(422).send({ message: '報告書が変更されていました。もう一度ご確認ください。' });
+          });
       } else {
         return updateReport(report).then(() => {
           session.commitTransaction().then(() => {
@@ -163,6 +170,23 @@ exports.updateStatus = function (req, res) {
         return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
       });
     });
+
+  // Report.findById(reportId)
+  //   .then(report => {
+  //     if (!report) {
+  //       return res.status(422).send({ message: '報告書が見つかりません。' });
+  //     } else if (report.enable === false || status === report.status) {
+  //       return res.status(422).send({ message: '報告書が変更されていました。もう一度ご確認ください。' });
+  //     } else {
+  //       return updateReport(report).then(() => {
+  //         return res.end();
+  //       });
+  //     }
+  //   })
+  //   .catch(err => {
+  //     logger.error(err);
+  //     return res.status(400).send({ message: 'サーバーでエラーが発生しました。' });
+  //   });
 
   function updateReport(report) {
     return new Promise((resolve, reject) => {
@@ -204,6 +228,7 @@ exports.updateStatus = function (req, res) {
 exports.updateEnable = function (req, res) {
   var reportId = req.body.reportId;
   var enable = req.body.enable;
+
   if (!mongoose.Types.ObjectId.isValid(reportId)) {
     return res.status(400).send({
       message: '報告書が見つかりません。'
@@ -214,6 +239,8 @@ exports.updateEnable = function (req, res) {
     .then(report => {
       if (!report) {
         return res.status(422).send({ message: '報告書が見つかりません。' });
+      } else if (enable === report.enable) {
+        return res.status(422).send({ message: '報告書が変更されていました。もう一度ご確認ください。' });
       } else {
         report.enable = enable;
         report.save()

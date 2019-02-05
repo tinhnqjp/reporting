@@ -45,7 +45,8 @@
           写真報告書有無
         </th>
         <td class="col-xs-10" colspan="3">
-          <label-enable model="vm.report.has_picture_report"></label-enable>
+          <span ng-if="vm.report.has_picture_report == true" class="label label-success">有</span>
+          <span ng-if="vm.report.has_picture_report == false" class="label label-danger">無</span>
         </td>
       </tr>
       <tr ng-if="vm.report.kind == 1">
@@ -53,7 +54,8 @@
           情報収集シート有無
         </th>
         <td class="col-xs-10" colspan="3">
-          <label-enable model="vm.report.has_info_collection"></label-enable>
+          <span ng-if="vm.report.has_info_collection == true" class="label label-success">有</span>
+          <span ng-if="vm.report.has_info_collection == false" class="label label-danger">無</span>
         </td>
       </tr>
       <tr ng-if="vm.report.kind == 2  || vm.report.kind == 3">

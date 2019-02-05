@@ -11,7 +11,7 @@ var _ = require('lodash'),
   Partner = mongoose.model('Partner'),
   Worker = mongoose.model('Worker'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   crypto = require('crypto'),
   fs = require('fs'),
   config = require(path.resolve('./config/config')),
@@ -183,7 +183,6 @@ exports.create = function (req, res) {
       var unit;
       var data = req.body.data;
       var report = new Report(data);
-      // console.log('TCL: exports.create -> report', report.picture);
 
       switch (report.kind) {
         case 1:
@@ -196,11 +195,8 @@ exports.create = function (req, res) {
             externals: data.externals,
             other_works: data.other_works
           };
-          // console.log(report.clean);
           break;
         case 2:
-          // var work_kind = _.find(CONFIG.repair_work_kind, { title: data.work_kind });
-          // var work_content = work_kind ? work_kind.content : '';
           report.repair = {
             work_kind: data.work_kind,
             internals: data.internals,

@@ -69,7 +69,20 @@
     vm.handleConditionChange = function () {
       vm.isChanged = true;
     };
-    vm.handleConditionChanged = function (changed) {
+    vm.handleConditionChanged = function (changed, key, old) {
+      if (!changed && (key === 'start_max' || key === 'end_max' || key === 'created_max')) {
+        if (old) {
+          var valNew = moment(vm.condition[key]);
+          var valOld = moment(old);
+          if (valNew.format('YYYYMMDD') !== valOld.format('YYYYMMDD')) {
+            vm.condition[key] = valNew.hour(23).minute(59).second(59).toDate();
+          }
+        } else {
+          console.log('default');
+          vm.condition[key] = moment(vm.condition[key]).hour(23).minute(59).second(59).toDate();
+        }
+      }
+
       if (changed || vm.isChanged) {
         vm.isChanged = false;
         vm.condition.page = 1;

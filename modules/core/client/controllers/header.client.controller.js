@@ -18,5 +18,13 @@
     function stateChangeSuccess() {
       vm.isCollapsed = false;
     }
+
+    $scope.logout = function () {
+      $scope.handleShowConfirm({
+        message: 'このログインIDをログアウトします。よろしいですか？'
+      }, function () {
+        window.location = '/api/auth/signout';
+      });
+    };
   }
 }());

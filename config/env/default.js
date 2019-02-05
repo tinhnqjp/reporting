@@ -102,6 +102,7 @@ module.exports = {
         limits: { fileSize: 100 * 1024 * 1024 },
         export: './modules/reports/client/excels/export/',
         clean: './modules/reports/client/excels/template/clean.xlsx',
+        repair: './modules/reports/client/excels/template/repair.xlsx',
         picture: './modules/reports/client/excels/template/picture.xlsx'
       }
     },

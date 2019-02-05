@@ -2,23 +2,12 @@
   <nav class="aside-nav">
     <ul class="nav">
       <li ng-repeat="item in vm.menu.items" ng-class="{ 'active': $state.includes(item.parrent_state) }">
-        <a ng-if="item.items.length == 0" ui-sref="{{item.state}}">
+        <a ng-if="item.roles.indexOf(Authentication.user.roles[0]) !== -1 && item.items.length == 0" ui-sref="{{item.state}}">
           <i ng-class="item.class" aria-hidden="true"></i>&nbsp;{{item.title}}
         </a>
-        <a ng-if="item.items.length > 0" href="#">
-          <i class="fa fa-clone" aria-hidden="true"></i>{{item.title}}
-          <span class="fa arrow"></span>
-        </a>
-        <ul ng-if="item.items.length > 0" class="nav nav-second-level">
-          <li ng-repeat="subItem in item.items" ng-class="{ 'active': $state.includes(subItem.parrent_state) }">
-            <a ui-sref="{{subItem.state}}">
-              <i ng-class="subItem.class" aria-hidden="true"></i>&nbsp;{{ subItem.title }}
-            </a>
-          </li>
-        </ul>
       </li>
       <li class="log-off" >
-        <a href="/api/auth/signout" target="_self">
+        <a ng-click="logout()">
           <i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;ログアウト</a>
       </li>
     </ul>

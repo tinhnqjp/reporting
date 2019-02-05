@@ -18,6 +18,7 @@
         vm.role = vm.user.roles[0];
       } else {
         vm.user.roles = [];
+        vm.role = 'employee';
       }
 
       UnitsService.query(function (data) {

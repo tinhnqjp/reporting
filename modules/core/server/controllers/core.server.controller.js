@@ -2,10 +2,12 @@
 
 var validator = require('validator'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   config = require(path.resolve('./config/config'));
 
+moment.tz.setDefault('Asia/Tokyo');
 moment.locale('ja');
+
 /**
  * Render the main application page
  */

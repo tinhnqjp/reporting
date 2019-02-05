@@ -26,6 +26,7 @@ var WorkerSchema = new Schema({
   petition: { type: Schema.ObjectId, ref: 'Petition' },
   partner: { type: Schema.ObjectId, ref: 'Partner', childPath: 'workers' },
   deleted: { type: Boolean, default: false },
+  last_login: { type: Date },
   created: { type: Date, default: Date.now }
 });
 WorkerSchema.plugin(paginate);

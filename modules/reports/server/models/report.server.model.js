@@ -6,12 +6,9 @@
 var mongoose = require('mongoose'),
   paginate = require('mongoose-paginate-v2'),
   path = require('path'),
-  fs = require('fs'),
-  moment = require('moment'),
   _ = require('lodash'),
   master_data = require(path.resolve('./config/lib/master-data')),
   config = require(path.resolve('./config/config')),
-  Excel = require('exceljs'),
   Schema = mongoose.Schema;
 
 var CounterSchema = new Schema({

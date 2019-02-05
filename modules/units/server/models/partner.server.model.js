@@ -21,6 +21,7 @@ var PartnerSchema = new Schema({
   password: { type: String, trim: true },
   workers: [{ type: Schema.ObjectId, ref: 'Worker' }],
   deleted: { type: Boolean, default: false },
+  last_login: { type: Date },
   created: { type: Date, default: Date.now }
 });
 PartnerSchema.plugin(paginate);

@@ -10,24 +10,26 @@
         <div class="col-sm-12 col-md-4">
           <div class="form-group">
             <label>検索キー</label>
-            <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力">
+            <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力"
+            event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="col-sm-12 col-md-4">
           <div class="form-group">
             <label>責任者検索</label>
-            <input type="text" name="manager" class="form-control" ng-model="vm.condition.manager" placeholder="責任者の名前を入力">
+            <input type="text" name="manager" class="form-control" ng-model="vm.condition.manager" placeholder="責任者の名前を入力"
+            event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="col-sm-12 col-md-4">
           <div class="form-group">
             <label>提出者検索</label>
-            <input type="text" name="author_name" class="form-control" ng-model="vm.condition.author_name" placeholder="提出者の名前を入力">
+            <input type="text" name="author_name" class="form-control" ng-model="vm.condition.author_name" placeholder="提出者の名前を入力"
+            event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="clearfix"></div>
       </div>
-
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3">
           <div class="form-group">
@@ -42,7 +44,8 @@
             <label>開始日時(To)</label>
             <input type="text" name="start_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
               ng-click="openCalendar($event, 'start_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.start_max"
-              class="form-control" ng-model="vm.condition.start_max">
+              class="form-control" ng-model="vm.condition.start_max"
+              ng-change="vm.handleConditionChanged(false, 'start_max', {{vm.condition.start_max || 'null'}})">
           </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-3">
@@ -58,7 +61,8 @@
             <label>終了日時(To)</label>
             <input type="text" name="end_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
               ng-click="openCalendar($event, 'end_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.end_max" class="form-control"
-              ng-model="vm.condition.end_max">
+              ng-model="vm.condition.end_max"
+              ng-change="vm.handleConditionChanged(false, 'end_max', {{vm.condition.end_max || 'null'}})">
           </div>
         </div>
         <div class="clearfix"></div>
@@ -66,7 +70,6 @@
 
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3">
-
           <div class="form-group">
             <label>提出日時(From)</label>
             <input type="text" name="created_min" datetime-picker="" datepicker-options="dateOptions"
@@ -79,7 +82,8 @@
             <label>提出日時(To)</label>
             <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
               timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
-              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max">
+              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max"
+              ng-change="vm.handleConditionChanged(false, 'created_max', {{vm.condition.created_max || 'null'}})">
           </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-3" ng-if="vm.showUnit">
@@ -167,6 +171,8 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
+              <th class="text-center" ng-click="vm.handleSortChanged('enable')" table-order tbtitle="有効・無効" tbmodel="enable"
+                tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier" tbcondition="vm.condition"></th>
               <th class="text-center" ng-click="vm.handleSortChanged('kind')" table-order tbtitle="種類" tbmodel="kind"
                 tbcondition="vm.condition"></th>
@@ -193,6 +199,9 @@
             </tr>
             <tr ng-repeat="item in vm.docs track by $index" class="clickable" ng-click="vm.goReportDetail(item.kind, item._id)">
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
+              <td class="text-center">
+                <label-enable model="item.enable"></label-enable>
+              </td>
               <td>{{ item.supplier }}</td>
               <td class="text-center">
                 <label-status item="item.kind" list="reportKind"></label-status>

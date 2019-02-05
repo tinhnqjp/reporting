@@ -16,7 +16,11 @@
       link: function (scope) {
         scope.handleBackScreen = function () {
           if ($state.previous.state.name) {
-            $state.go($state.previous.state.name, ($state.previous.state.name) ? $state.previous.params : {});
+            if (scope.state === $state.previous.state.name) {
+              $state.go(scope.back, scope.params);
+            } else {
+              $state.go($state.previous.state.name, ($state.previous.state.name) ? $state.previous.params : {});
+            }
           } else if (scope.back) {
             $state.go(scope.back, scope.params);
           }

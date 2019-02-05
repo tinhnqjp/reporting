@@ -38,8 +38,8 @@
                   <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <input type="text" name="phone" class="form-control" ng-model="vm.partner.phone"
-                    placeholder="電話番号を入力" required autocomplete="off" input-validator="tel">
+                  <input type="text" name="phone" class="form-control" ng-model="vm.partner.phone" placeholder="電話番号を入力"
+                    required autocomplete="off" input-validator="tel">
                 </td>
               </tr>
               <tr>
@@ -49,8 +49,8 @@
                 </th>
                 <td class="col-xs-10">
                   <input type="text" id="username" name="username" class="form-control" autocomplete="new-username"
-                  ng-model="vm.partner.account.username" placeholder="ログインIDを入力" required
-                  unique-validator params="{ type: 'username', username: vm.partner.account.username, id: vm.partner.account._id}" />
+                    ng-model="vm.partner.account.username" placeholder="ログインIDを入力" required unique-validator params="{ type: 'username', username: vm.partner.account.username, id: vm.partner.account._id}"
+                    maxlength="50" />
                 </td>
               </tr>
               <tr>
@@ -59,7 +59,8 @@
                   <span class="text-red" ng-if="!vm.partner._id">*</span>
                 </th>
                 <td class="col-xs-10">
-                  <button type="button" class="btn btn-warning btn-sm" ng-click="vm.randomPass()"><i class="glyphicon glyphicon-refresh"></i> ランダム作成</button>
+                  <button type="button" class="btn btn-warning btn-sm" ng-click="vm.randomPass()"><i class="glyphicon glyphicon-refresh"></i>
+                    ランダム作成</button>
                   <label class="alert alert-warning" ng-if="vm.password">{{vm.password}}</label>
                 </td>
               </tr>

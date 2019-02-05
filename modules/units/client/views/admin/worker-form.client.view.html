@@ -73,7 +73,9 @@
                 </th>
                 <td class="col-xs-10">
                   <input type="text" id="username" name="username" class="form-control" autocomplete="new-username"
-                    ng-model="vm.worker.account.username" placeholder="ログインIDを入力" required unique-validator params="{ type: 'username', username: vm.worker.account.username, id: vm.worker.account._id}" />
+                    ng-model="vm.worker.account.username" placeholder="ログインIDを入力" required unique-validator params="{ type: 'username',
+username: vm.worker.account.username, id: vm.worker.account._id}"
+                    maxlength="50" />
                 </td>
               </tr>
               <tr>

@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
   Unit = mongoose.model('Unit'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   _ = require('lodash'),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));

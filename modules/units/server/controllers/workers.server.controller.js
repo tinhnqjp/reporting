@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
   Petition = mongoose.model('Petition'),
   User = mongoose.model('User'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   _ = require('lodash'),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
@@ -245,6 +245,13 @@ function getQuery(condition) {
     ];
     and_arr.push({ $or: or_arr });
   }
+  if (condition.last_login_min) {
+    and_arr.push({ last_login: { '$gte': condition.last_login_min } });
+  }
+  if (condition.last_login_max) {
+    and_arr.push({ last_login: { '$lte': condition.last_login_max } });
+  }
+
   if (condition.created_min) {
     and_arr.push({ created: { '$gte': condition.created_min } });
   }

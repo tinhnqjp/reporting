@@ -7,7 +7,7 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   master_data = require(path.resolve('./config/lib/master-data')),
   helper = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller'));
@@ -25,7 +25,7 @@ exports.expire = function (req, res) {
     return res.status(400).send(helper.getMessage(errors));
 
   var userId = req.body.userId;
-  User.findOne({ _id: userId, deleted: false }).select('_id name username expire created').exec((err, user) => {
+  User.findOne({ _id: userId, deleted: false }).select('_id name username expire created roles').exec((err, user) => {
     if (err) {
       logger.error(err);
       return res.status(422).send({ message: 'サーバーエラーが発生しました。' });

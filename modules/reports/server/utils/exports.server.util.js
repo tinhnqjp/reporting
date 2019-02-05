@@ -6,12 +6,12 @@
 var mongoose = require('mongoose'),
   path = require('path'),
   fs = require('fs'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   _ = require('lodash'),
   master_data = require(path.resolve('./config/lib/master-data')),
   config = require(path.resolve('./config/config')),
   Excel = require('exceljs');
-
+moment.locale('ja');
 var CONFIG = master_data.config;
 var OUT_FILE_PATH = config.uploads.reports.excel.export;
 var FILE_EXT = '.xlsx';
@@ -27,6 +27,9 @@ exports.exportFile = function (reportId) {
         report = _report;
         if (report.kind === 1) {
           return exportClean(report);
+        }
+        if (report.kind === 2) {
+          return exportRepair(report);
         }
         if (report.kind === 4) {
           return exportPicture(report);
@@ -207,9 +210,10 @@ function exportClean(report) {
         extension: 'jpg'
       });
       sheet.addImage(draw1, {
-        tl: { col: 40.5, row: 84.5 },
+        tl: { col: 40.5, row: 83.5 },
         br: { col: 46.5, row: 85.5 }
       });
+      sheet.getCell('AP84').value = '';
     }
   }
   function write_works(sheet, report, sheetNo) {
@@ -358,6 +362,294 @@ function exportClean(report) {
         row++;
         sheet.getCell('AI' + row).value = other.detail;
         row++;
+      }
+    });
+  }
+}
+
+function exportRepair(report) {
+  return new Promise((resolve, reject) => {
+    var TEMPLATE_PATH = config.uploads.reports.excel.repair;
+    var urlOutput = '';
+    var workbook = new Excel.Workbook();
+    var work_content = [];
+
+    workbook.xlsx.readFile(TEMPLATE_PATH)
+      .then(function () {
+
+        urlOutput = OUT_FILE_PATH + report._id + FILE_EXT;
+        var wsExport = workbook.getWorksheet('報告書');
+        wsExport.pageSetup.printArea = 'A1:AC60';
+        wsTemplate = _.cloneDeep(wsExport);
+
+        // export
+        write_basic(workbook, wsExport, report);
+        write_works(wsExport, report, 1);
+        write_image(workbook, wsExport, report);
+        write_repair_internals(wsExport, report, 1);
+        write_repair_externals(wsExport, report, 1);
+        write_repair_datas(wsExport, report, 1);
+
+        if (report.repair.work_content) {
+          work_content = report.repair.work_content.split(/\r?\n/);
+          write_repair_work_content(wsExport, work_content, 1);
+        }
+
+        return workbook.xlsx.writeFile(urlOutput);
+      })
+      .then(function () {
+        // other sheet
+        var total = sheetTotalMax(report);
+        for (var index = 2; index <= total; index++) {
+          var copySheet = workbook.addWorksheet('報告書' + index, { state: 'visible' });
+          var ws = _.cloneDeep(wsTemplate);
+          copySheet.model = Object.assign(ws.model, {
+            mergeCells: ws.model.merges
+          });
+          copySheet.name = '報告書' + index;
+          // export
+          write_basic(workbook, copySheet, report);
+          write_works(copySheet, report, index);
+          write_repair_internals(copySheet, report, index);
+          write_repair_externals(copySheet, report, index);
+          write_repair_datas(copySheet, report, index);
+          if (work_content) {
+            write_repair_work_content(copySheet, work_content, index);
+          }
+        }
+
+        return workbook.xlsx.writeFile(urlOutput);
+      })
+      .then(function () {
+        return resolve(urlOutput);
+      })
+      .catch(function (err) {
+        return reject(err);
+      });
+  });
+
+  function sheetTotalMax(report) {
+    var workers = report.workers;
+    var internals = report.repair.internals;
+    var externals = report.repair.externals;
+    var max = 1;
+
+    if (workers && workers.length > 6) {
+      var workersPage = Math.ceil(workers.length / 6);
+      if (workersPage > max) {
+        max = workersPage;
+      }
+    }
+    if (internals && internals.length > 4) {
+      var intPage = Math.ceil(internals.length / 4);
+      if (intPage > max) {
+        max = intPage;
+      }
+    }
+    if (externals && externals.length > 4) {
+      var extPage = Math.ceil(externals.length / 4);
+      if (extPage > max) {
+        max = extPage;
+      }
+    }
+    if (internals && internals.length > 1 && externals && externals.length > 1) {
+      var totalIntExt = 0;
+      internals.forEach(item => {
+        totalIntExt++;
+      });
+      externals.forEach(item => {
+        totalIntExt++;
+      });
+      var intExtPage = Math.ceil(totalIntExt / 4);
+      if (totalIntExt > 4 && intExtPage > max) {
+        max = intExtPage;
+      }
+    }
+    return max;
+  }
+
+  function checkSheet(sheetNo, limit, index) {
+    if ((sheetNo * limit - limit) <= index && index < (sheetNo * limit)) {
+      return true;
+    }
+    return false;
+  }
+
+  function write_basic(workbook, sheet, report) {
+    sheet.getCell('C3').value = report.number;
+    sheet.getCell('D4').value = report.supplier;
+    sheet.getCell('D6').value = report.address1;
+    sheet.getCell('D7').value = report.address2;
+
+    var startStr = moment(report.start).format('YYYY年　MM月　DD日 （ddd）/HH/mm');
+    var starts = startStr.split('/');
+    sheet.getCell('R4').value = starts[0];
+    sheet.getCell('X4').value = starts[1];
+    sheet.getCell('AA4').value = starts[2];
+
+    var endStr = moment(report.end).format('YYYY年　MM月　DD日 （ddd）/HH/mm');
+    var ends = endStr.split('/');
+    sheet.getCell('R5').value = ends[0];
+    sheet.getCell('X5').value = ends[1];
+    sheet.getCell('AA5').value = ends[2];
+
+    sheet.getCell('R6').value = report.manager;
+    sheet.getCell('R9').value = report.saler;
+    sheet.getCell('D8').value = report.repair.work_kind;
+    sheet.getCell('D9').value = report.clean.work_result ? '完了' : '継続';
+
+
+    if (report.location) {
+      sheet.getCell('F59').value = report.location.replace('　', '\r\n');
+    }
+
+    if (report.signature && fs.existsSync('.' + report.signature)) {
+      var draw1 = workbook.addImage({
+        filename: '.' + report.signature,
+        extension: 'jpg'
+      });
+      sheet.addImage(draw1, {
+        tl: { col: 19.5, row: 56 },
+        br: { col: 26.5, row: 59.5 }
+      });
+      sheet.getCell('U57').value = '';
+    }
+  }
+  function write_works(sheet, report, sheetNo) {
+    var limit = 6;
+    var arrWorker = ['R7', 'U7', 'X7', 'R8', 'U8', 'X8'];
+    var col = 0;
+    report.workers.forEach((worker, index) => {
+      if (col === limit) {
+        col = 0;
+      }
+      if (checkSheet(sheetNo, limit, index)) {
+        sheet.getCell(arrWorker[col]).value = worker.name;
+        col++;
+      }
+    });
+  }
+  function write_image(workbook, sheet, report) {
+    if (report.repair.image1 && fs.existsSync('.' + report.repair.image1)) {
+      var image1 = workbook.addImage({
+        filename: '.' + report.repair.image1,
+        extension: 'jpg'
+      });
+      sheet.addImage(image1, 'S28:AA36');
+    }
+    if (report.repair.image2 && fs.existsSync('.' + report.repair.image2)) {
+      var image2 = workbook.addImage({
+        filename: '.' + report.repair.image2,
+        extension: 'jpg'
+      });
+      sheet.addImage(image2, 'S37:AA44');
+    }
+  }
+
+  function write_repair_work_content(sheet, work_content, sheetNo) {
+    var limit = 18;
+    var row = 29;
+    work_content.forEach((content, index) => {
+      if (row <= 46 && checkSheet(sheetNo, limit, index)) {
+        sheet.getCell('C' + row).value = content;
+        row++;
+      }
+    });
+  }
+  function write_repair_internals(sheet, report, sheetNo) {
+    var limit = 4;
+    var row = 17;
+    report.repair.internals.forEach((inter, index) => {
+      if (row <= 20 && checkSheet(sheetNo, limit, index)) {
+        sheet.getCell('B' + row).value = 'No.' + inter.number;
+        sheet.getCell('C' + row).value = inter.posision;
+        sheet.getCell('F' + row).value = inter.type;
+        sheet.getCell('I' + row).value = inter.maker;
+        sheet.getCell('L' + row).value = inter.model;
+
+        sheet.getCell('R' + row).value = inter.exterior_type;
+        sheet.getCell('V' + row).value = inter.serial;
+        sheet.getCell('Z' + row).value = inter.made_date;
+        row++;
+      }
+    });
+  }
+  function write_repair_externals(sheet, report, sheetNo) {
+    var limit = 4;
+    var row = 12;
+    report.repair.externals.forEach((exter, index) => {
+      if (row <= 15 && checkSheet(sheetNo, limit, index)) {
+        sheet.getCell('B' + row).value = 'No.' + exter.number;
+        sheet.getCell('C' + row).value = exter.posision;
+        sheet.getCell('F' + row).value = exter.internals;
+        sheet.getCell('I' + row).value = exter.maker;
+        sheet.getCell('L' + row).value = exter.model;
+        sheet.getCell('R' + row).value = exter.refrigerant_kind;
+        sheet.getCell('S' + row).value = exter.specified_amount;
+        sheet.getCell('V' + row).value = exter.serial;
+        sheet.getCell('Z' + row).value = exter.made_date;
+        row++;
+      }
+    });
+
+    var arrNumber = ['B24', 'B25', 'O24', 'O25'];
+    var arrRecovery = ['D24', 'D25', 'R24', 'R25'];
+    var arrFilling = ['G24', 'G25', 'U24', 'U25'];
+    var arrRemarks = ['J24', 'J25', 'X24', 'X25'];
+    var col = 0;
+    report.repair.externals.forEach((exter, index) => {
+      if (col === limit) {
+        col = 0;
+      }
+      if (checkSheet(sheetNo, limit, index)) {
+        sheet.getCell(arrNumber[col]).value = exter.target ? exter.target : '' + 'No.' + exter.number;
+        sheet.getCell(arrRecovery[col]).value = exter.recovery_amount;
+        sheet.getCell(arrFilling[col]).value = exter.filling_amount;
+        sheet.getCell(arrRemarks[col]).value = exter.remarks;
+        col++;
+      }
+    });
+  }
+
+  function write_repair_datas(sheet, report, sheetNo) {
+    var limit = 4;
+    // 指摘事項
+    var index = 0;
+    var rowDesc = 51;
+    report.repair.internals.forEach(inter => {
+      if (rowDesc <= 54 && inter.number) {
+        if (checkSheet(sheetNo, limit, index)) {
+          sheet.getCell('B' + rowDesc).value = '内機No.' + inter.number;
+          sheet.getCell('D' + rowDesc).value = inter.indoor_suction;
+          sheet.getCell('F' + rowDesc).value = inter.outdoor_suction;
+          sheet.getCell('H' + rowDesc).value = inter.high_pressure;
+          sheet.getCell('K' + rowDesc).value = inter.low_pressure;
+          sheet.getCell('N' + rowDesc).value = inter.discharge_pipe;
+          sheet.getCell('Q' + rowDesc).value = inter.suction_pipe;
+          sheet.getCell('S' + rowDesc).value = inter.u;
+          sheet.getCell('V' + rowDesc).value = inter.v;
+          sheet.getCell('Y' + rowDesc).value = inter.w;
+          rowDesc++;
+        }
+        index++;
+      }
+    });
+    report.repair.externals.forEach(exter => {
+      if (rowDesc <= 54 && exter.number) {
+        if (checkSheet(sheetNo, limit, index)) {
+          sheet.getCell('B' + rowDesc).value = '外機No.' + exter.number;
+          sheet.getCell('D' + rowDesc).value = exter.indoor_suction;
+          sheet.getCell('F' + rowDesc).value = exter.outdoor_suction;
+          sheet.getCell('H' + rowDesc).value = exter.high_pressure;
+          sheet.getCell('K' + rowDesc).value = exter.low_pressure;
+          sheet.getCell('N' + rowDesc).value = exter.discharge_pipe;
+          sheet.getCell('Q' + rowDesc).value = exter.suction_pipe;
+          sheet.getCell('S' + rowDesc).value = exter.u;
+          sheet.getCell('V' + rowDesc).value = exter.v;
+          sheet.getCell('Y' + rowDesc).value = exter.w;
+          rowDesc++;
+        }
+        index++;
       }
     });
   }

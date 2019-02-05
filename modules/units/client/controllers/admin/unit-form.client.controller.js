@@ -13,14 +13,15 @@
     vm.update = update;
 
     function update(isValid) {
+      if (!isValid) {
+        vm.isSaveClick = true;
+        $scope.$broadcast('show-errors-check-validity', 'vm.unitForm');
+        return false;
+      }
       $scope.handleShowConfirm({
         message: 'この部署を保存します。よろしいですか？'
       }, function () {
-        if (!isValid) {
-          vm.isSaveClick = true;
-          $scope.$broadcast('show-errors-check-validity', 'vm.unitForm');
-          return false;
-        }
+
         vm.unit.createOrUpdate()
           .then(successCallback)
           .catch(errorCallback);

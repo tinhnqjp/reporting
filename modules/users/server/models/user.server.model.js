@@ -51,9 +51,45 @@ var UserSchema = new Schema({
 });
 UserSchema.plugin(paginate);
 UserSchema.pre('save', function (next) {
+  var doc = this;
   if (this.password && this.isModified('password')) {
     this.salt = crypto.randomBytes(16).toString('base64');
     this.password = this.hashPassword(this.password);
+  }
+  if (doc.last_login && doc.isModified('last_login')) {
+    if (doc.roles && doc.roles[0] === 'user') {
+      var Worker = mongoose.model('Worker');
+      Worker.findOne({ account: doc._id, deleted: false })
+        .exec((err, worker) => {
+          if (err) {
+            next(err);
+          }
+          if (!worker) {
+            next({ message: '下請けが削除されました。インタネット環境でアプリを再起動してください。' });
+          }
+          worker.last_login = doc.last_login;
+          worker.save(function (err) {
+            if (err) next(err);
+            next();
+          });
+        });
+    } else if (doc.roles && doc.roles[0] === 'partner') {
+      var Partner = mongoose.model('Partner');
+      Partner.findOne({ account: doc._id, deleted: false })
+        .exec((err, partner) => {
+          if (err) {
+            next(err);
+          }
+          if (!partner) {
+            next({ message: '協力業者が削除されました。インタネット環境でアプリを再起動してください。' });
+          }
+          partner.last_login = doc.last_login;
+          partner.save(function (err) {
+            if (err) next(err);
+            next();
+          });
+        });
+    }
   }
   next();
 });

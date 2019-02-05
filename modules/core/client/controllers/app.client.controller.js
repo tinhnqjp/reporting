@@ -36,10 +36,10 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   // 状態 1: 提出 - 2: 確認済 - 3: 承認済 - 4: 確定済
   /** report status */
   $scope.reportStatus = [
-    { id: 1, name: '提出済', class: 'label-default' },
-    { id: 2, name: '確認済', class: 'label-primary' },
-    { id: 3, name: '承認済', class: 'label-success' },
-    { id: 4, name: '確定済', class: 'label-danger' }
+    { id: 1, name: '提出済', class: 'status-send' },
+    { id: 2, name: '確認済', class: 'status-confirm' },
+    { id: 3, name: '承認済', class: 'status-approve' },
+    { id: 4, name: '確定済', class: 'status-done' }
   ];
   // 1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ
   $scope.reportKind = [
@@ -73,10 +73,12 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
         .success(function (res) {
           $scope.handleShowToast('報告書の' + text + '化が完了しました。');
           report.enable = update;
+          if (!$scope.$$phase) $scope.$digest();
         })
         .error(function (err) {
           var message = (err) ? err.message || err.data.message : '報告書の' + text + '化が失敗しました。';
           $scope.handleShowToast(message, true);
+          $state.reload();
         });
     });
   };
@@ -90,10 +92,12 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
         .success(function (res) {
           $scope.handleShowToast('報告書の' + text + 'が完了しました。');
           report.status = update;
+          if (!$scope.$$phase) $scope.$digest();
         })
         .error(function (err) {
           var message = (err) ? err.message || err.data.message : '報告書の' + text + 'が失敗しました。';
           $scope.handleShowToast(message, true);
+          $state.reload();
         });
     });
   };

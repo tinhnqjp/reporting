@@ -5,7 +5,7 @@
  */
 var sharp = require('sharp'),
   path = require('path'),
-  moment = require('moment'),
+  moment = require('moment-timezone'),
   mongoose = require('mongoose'),
   config = require(path.resolve('./config/config')),
   fs = require('fs');
