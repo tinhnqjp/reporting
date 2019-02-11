@@ -126,6 +126,17 @@
         });
     };
 
+    vm.removeWorker = function (worker) {
+      $scope.handleShowConfirm({
+        message: 'この作業者を削除します。よろしいですか？'
+      }, function () {
+        var index = vm.report.workers.indexOf(worker);
+        if (index !== -1) {
+          vm.report.workers.splice(index, 1);
+        }
+      });
+    };
+
     vm.modalInternal = function (item) {
       if (item) {
         $scope.internal = Object.create(item);
@@ -228,12 +239,12 @@
               item.temp_after_blow = $scope.internal.temp_after_blow;
               item.temp_after_diff = $scope.internal.temp_after_diff;
 
-              item.wind_before_suction = $scope.internal.wind_before_suction;
-              item.wind_before_blow = $scope.internal.wind_before_blow;
-              item.wind_before_diff = $scope.internal.wind_before_diff;
-              item.wind_after_suction = $scope.internal.wind_after_suction;
-              item.wind_after_blow = $scope.internal.wind_after_blow;
-              item.wind_after_diff = $scope.internal.wind_after_diff;
+              item.wind_suction_before = $scope.internal.wind_suction_before;
+              item.wind_suction_after = $scope.internal.wind_suction_after;
+              item.wind_suction_diff = $scope.internal.wind_suction_diff;
+              item.wind_blow_before = $scope.internal.wind_blow_before;
+              item.wind_blow_after = $scope.internal.wind_blow_after;
+              item.wind_blow_diff = $scope.internal.wind_blow_diff;
 
               item.assembler = $scope.internal.assembler;
               item.exterior_type = $scope.internal.exterior_type;
@@ -398,14 +409,14 @@
           };
 
           $scope.changeWindBefore = function () {
-            var wind_before_suction = $scope.internal.wind_before_suction || 0;
-            var wind_before_blow = $scope.internal.wind_before_blow || 0;
-            $scope.internal.wind_before_diff = roundAbs(wind_before_suction - wind_before_blow);
+            var wind_suction_before = $scope.internal.wind_suction_before || 0;
+            var wind_suction_after = $scope.internal.wind_suction_after || 0;
+            $scope.internal.wind_suction_diff = roundAbs(wind_suction_before - wind_suction_after);
           };
           $scope.changeWindAfter = function () {
-            var wind_after_suction = $scope.internal.wind_after_suction || 0;
-            var wind_after_blow = $scope.internal.wind_after_blow || 0;
-            $scope.internal.wind_after_diff = roundAbs(wind_after_suction - wind_after_blow);
+            var wind_blow_before = $scope.internal.wind_blow_before || 0;
+            var wind_blow_after = $scope.internal.wind_blow_after || 0;
+            $scope.internal.wind_blow_diff = roundAbs(wind_blow_before - wind_blow_after);
           };
 
           function roundAbs(num) {
@@ -418,6 +429,17 @@
         }, function (res) {
           delete $scope.internal;
         });
+    };
+
+    vm.removeInternal = function (item) {
+      $scope.handleShowConfirm({
+        message: 'この内機を削除します。よろしいですか？'
+      }, function () {
+        var index = vm.report.repair.internals.indexOf(item);
+        if (index !== -1) {
+          vm.report.repair.internals.splice(index, 1);
+        }
+      });
     };
 
     vm.modalExternal = function (item) {
@@ -659,6 +681,17 @@
         }, function (res) {
           delete $scope.external;
         });
+    };
+
+    vm.removeExternal = function (item) {
+      $scope.handleShowConfirm({
+        message: 'この外機を削除します。よろしいですか？'
+      }, function () {
+        var index = vm.report.repair.externals.indexOf(item);
+        if (index !== -1) {
+          vm.report.repair.externals.splice(index, 1);
+        }
+      });
     };
 
     vm.modalLocation = function (location) {

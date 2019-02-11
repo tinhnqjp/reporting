@@ -59,6 +59,9 @@
         resolve: {
           workerResolve: getWorker
         },
+        params: {
+          isPetition: null
+        },
         data: {
           pageTitle: '下請け詳細'
         }

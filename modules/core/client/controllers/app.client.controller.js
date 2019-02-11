@@ -18,6 +18,14 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
   $scope.timeOptions = {
     showMeridian: false
   };
+
+  if (Authentication.user && Authentication.user.roles[0]) {
+    $scope.user_role = Authentication.user.roles[0];
+  } else {
+    Authentication.user = null;
+    $state.go('authentication.signin');
+  }
+
   /** roles */
   $scope.roles = [
     { id: 'admin', name: 'システム管理者', class: 'label-danger' },
@@ -41,13 +49,13 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     { id: 3, name: '承認済', class: 'status-approve' },
     { id: 4, name: '確定済', class: 'status-done' }
   ];
-  // 1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ
+  // 1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリー
   $scope.reportKind = [
     { id: 1, name: '洗浄', class: 'label-danger' },
     { id: 2, name: '修理', class: 'label-warning' },
     { id: 3, name: '設置', class: 'label-info' },
     { id: 4, name: '写真', class: 'label-success' },
-    { id: 5, name: 'フリ', class: 'label-primary' }
+    { id: 5, name: 'フリー', class: 'label-primary' }
   ];
 
   $scope.classLastLogin = function (last_login) {
@@ -115,6 +123,14 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
       return 0;
     }
   };
+
+  $scope.cndEdit = function (status) {
+    if (status === 4 || $scope.user_role === 'bsoperator') {
+      return false;
+    }
+    return true;
+  };
+
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
   };

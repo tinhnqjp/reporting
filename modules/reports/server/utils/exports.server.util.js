@@ -7,6 +7,8 @@ var mongoose = require('mongoose'),
   path = require('path'),
   fs = require('fs'),
   moment = require('moment-timezone'),
+  sharp = require('sharp'),
+  sizeOf = require('image-size'),
   _ = require('lodash'),
   master_data = require(path.resolve('./config/lib/master-data')),
   config = require(path.resolve('./config/config')),
@@ -205,13 +207,10 @@ function exportClean(report) {
     }
 
     if (report.signature && fs.existsSync('.' + report.signature)) {
-      var draw1 = workbook.addImage({
-        filename: '.' + report.signature,
-        extension: 'jpg'
-      });
-      sheet.addImage(draw1, {
+      var signature = addImage(workbook, report.signature);
+      sheet.addImage(signature, {
         tl: { col: 40.5, row: 83.5 },
-        br: { col: 46.5, row: 85.5 }
+        br: { col: 47.5, row: 85.5 }
       });
       sheet.getCell('AP84').value = '';
     }
@@ -235,11 +234,8 @@ function exportClean(report) {
     if (report.drawings && report.drawings[sheetNo - 1]) {
       var draw = report.drawings[sheetNo - 1];
       if (draw && fs.existsSync('.' + draw)) {
-        var draw1 = workbook.addImage({
-          filename: '.' + draw,
-          extension: 'jpg'
-        });
-        sheet.addImage(draw1, 'B' + row + ':AV' + (row + 15));
+        var image = addImage(workbook, draw);
+        sheet.addImage(image, 'B' + row + ':AV' + (row + 15));
       }
     }
   }
@@ -342,12 +338,12 @@ function exportClean(report) {
         sheet.getCell('AB' + row).value = inter.temp_after_blow;
         sheet.getCell('AD' + row).value = inter.temp_after_diff;
 
-        sheet.getCell('AF' + row).value = inter.wind_before_suction;
-        sheet.getCell('AH' + row).value = inter.wind_before_blow;
-        sheet.getCell('AJ' + row).value = inter.wind_before_diff;
-        sheet.getCell('AL' + row).value = inter.wind_after_suction;
-        sheet.getCell('AN' + row).value = inter.wind_after_blow;
-        sheet.getCell('AP' + row).value = inter.wind_after_diff;
+        sheet.getCell('AF' + row).value = inter.wind_suction_before;
+        sheet.getCell('AH' + row).value = inter.wind_suction_after;
+        sheet.getCell('AJ' + row).value = inter.wind_suction_diff;
+        sheet.getCell('AL' + row).value = inter.wind_blow_before;
+        sheet.getCell('AN' + row).value = inter.wind_blow_after;
+        sheet.getCell('AP' + row).value = inter.wind_blow_diff;
         sheet.getCell('AR' + row).value = inter.exterior_type;
         row++;
       }
@@ -504,11 +500,8 @@ function exportRepair(report) {
     }
 
     if (report.signature && fs.existsSync('.' + report.signature)) {
-      var draw1 = workbook.addImage({
-        filename: '.' + report.signature,
-        extension: 'jpg'
-      });
-      sheet.addImage(draw1, {
+      var image = addImage(workbook, report.signature);
+      sheet.addImage(image, {
         tl: { col: 19.5, row: 56 },
         br: { col: 26.5, row: 59.5 }
       });
@@ -531,17 +524,11 @@ function exportRepair(report) {
   }
   function write_image(workbook, sheet, report) {
     if (report.repair.image1 && fs.existsSync('.' + report.repair.image1)) {
-      var image1 = workbook.addImage({
-        filename: '.' + report.repair.image1,
-        extension: 'jpg'
-      });
+      var image1 = addImage(workbook, report.repair.image1);
       sheet.addImage(image1, 'S28:AA36');
     }
     if (report.repair.image2 && fs.existsSync('.' + report.repair.image2)) {
-      var image2 = workbook.addImage({
-        filename: '.' + report.repair.image2,
-        extension: 'jpg'
-      });
+      var image2 = addImage(workbook, report.repair.image2);
       sheet.addImage(image2, 'S37:AA44');
     }
   }
@@ -666,7 +653,7 @@ function exportPicture(report) {
 
         urlOutput = OUT_FILE_PATH + report._id + FILE_EXT;
         var wsExport = workbook.getWorksheet('基本情報');
-        wsExport.pageSetup.printArea = 'A1:H40';
+        wsExport.pageSetup.printArea = 'A1:AA47';
         wsExport.state = 'visible';
         // basics
         write_basic(workbook, wsExport, report);
@@ -678,7 +665,7 @@ function exportPicture(report) {
         var total = report.picture.machines.length;
         for (var index = 1; index <= total; index++) {
           var copySheet = workbook.addWorksheet('管理No' + index, { state: 'visible' });
-          // copySheet.pageSetup.printArea = 'A1:H59';
+          copySheet.pageSetup.printArea = 'A1:AI70';
           var ws = _.cloneDeep(wsTemplate);
           copySheet.model = Object.assign(ws.model, {
             mergeCells: ws.model.merges
@@ -707,38 +694,31 @@ function exportPicture(report) {
     }
     return false;
   }
+
   function write_basic(workbook, sheet, report) {
-    sheet.getCell('D15').value = report.supplier;
+    sheet.getCell('I15').value = report.supplier;
 
     var startStr = moment(report.start).format('YYYY年MM月DD(ddd)/HH:mm');
     var starts = startStr.split('/');
-    sheet.getCell('D17').value = starts[0];
-    sheet.getCell('D19').value = starts[1];
+    sheet.getCell('I17').value = starts[0];
+    sheet.getCell('I19').value = starts[1];
 
-    sheet.getCell('D40').value = report.saler;
-    sheet.getCell('F40').value = report.manager;
-
+    sheet.getCell('G46').value = report.saler;
+    sheet.getCell('Q46').value = report.manager;
 
     if (report.location) {
-      var locations = report.location.split('　');
-      sheet.getCell('F36').value = locations[0];
-      sheet.getCell('B37').value = locations[1];
+      var locations = report.location;
+      sheet.getCell('D44').value = locations;
     }
 
     if (report.picture.store_image && fs.existsSync('.' + report.picture.store_image)) {
-      var store_image = workbook.addImage({
-        filename: '.' + report.picture.store_image,
-        extension: 'jpg'
-      });
-      sheet.addImage(store_image, {
-        tl: { col: 1.1, row: 21.1 },
-        br: { col: 6.90, row: 30.90 }
-      });
+      var store_image = addImage(workbook, report.picture.store_image);
+      sheet.addImage(store_image, dimensionStore('.' + report.picture.store_image, 22));
     }
   }
 
   function process_machine(workbook, sheet, machine) {
-    sheet.getCell('B1').value = machine.number;
+    sheet.getCell('E1').value = machine.number;
     var wsTemplate;
     var total_page = Math.ceil(machine.sets.length / 4);
     if (total_page > 1) {
@@ -746,7 +726,7 @@ function exportPicture(report) {
     }
     for (let sheetNo = 1; sheetNo <= total_page; sheetNo++) {
       if (sheetNo === 1) {
-        sheet.getCell('B1').value = machine.number;
+        sheet.getCell('E1').value = machine.number;
         write_machine(workbook, sheet, machine, sheetNo);
       } else {
         var ws = _.cloneDeep(wsTemplate);
@@ -756,7 +736,7 @@ function exportPicture(report) {
           mergeCells: ws.model.merges
         });
         copySheet.name = sheetName + '_' + sheetNo;
-        copySheet.getCell('B1').value = machine.number;
+        copySheet.getCell('E1').value = machine.number;
         write_machine(workbook, copySheet, machine, sheetNo);
       }
     }
@@ -769,9 +749,9 @@ function exportPicture(report) {
       if (checkSheet(sheetNo, limit, index)) {
         var x = index % 4;
         if (x === 0) {
-          row = 5;
+          row = 4;
         } else {
-          row = 14 * x + 5;
+          row = 16 * x + 4 + x;
         }
         write_set(workbook, sheet, set, row);
       }
@@ -780,20 +760,95 @@ function exportPicture(report) {
 
   function write_set(workbook, sheet, set, row) {
     if (set.before && fs.existsSync('.' + set.before)) {
-      var before = workbook.addImage({
-        filename: '.' + set.before,
-        extension: 'jpg'
-      });
-      sheet.addImage(before, 'A' + row + ':D' + (row + 10));
+      var dimensionb = dimensions('.' + set.before, row, true);
+      var before = addImage(workbook, set.before);
+      sheet.addImage(before, dimensionb);
+      sheet.getCell('Y' + (row + 7)).value = '';
     }
     if (set.after && fs.existsSync('.' + set.after)) {
-      var after = workbook.addImage({
-        filename: '.' + set.after,
-        extension: 'jpg'
-      });
-      sheet.addImage(after, 'E' + row + ':H' + (row + 10));
+      var dimensiona = dimensions('.' + set.after, row, false);
+      var after = addImage(workbook, set.after);
+      sheet.addImage(after, dimensiona);
+      sheet.getCell('H' + (row + 7)).value = '';
     }
-    sheet.getCell('B' + (row + 11)).value = set.comment;
+    sheet.getCell('D' + (row + 13)).value = set.comment;
+  }
+
+  function dimensions(filename, row, isBefore) {
+    var dimensions = sizeOf(filename);
+
+    var maxWidth = 16;
+    var maxHeight = 12;
+    var ratio = 0;
+    var width = dimensions.width;
+    var height = dimensions.height;
+    var imageObj = { width: maxWidth, height: maxHeight };
+
+    if (width > height) {
+      ratio = maxWidth / width;
+      imageObj.height = Math.round(height * ratio);
+    } else {
+      ratio = maxHeight / height;
+      imageObj.width = Math.round(width * ratio);
+    }
+    var tb;
+    var rowS = row - 1;
+    var rowE = row + imageObj.height;
+    var colS = 0;
+    if (!isBefore) {
+      colS = 17;
+    }
+    var colE = colS + 17;
+    var evg = colS + 8;
+    if (imageObj.width > 0 && imageObj.width < 16) {
+      tb = Math.round(imageObj.width / 2);
+      colS = evg - tb;
+      colE = evg + (imageObj.width - tb);
+    }
+    return {
+      tl: { col: colS + 1, row: rowS + 1 },
+      br: { col: colE - 1, row: rowE - 1 }
+    };
+  }
+
+  function dimensionStore(filename, row) {
+    var dimensions = sizeOf(filename);
+
+    var maxWidth = 19;
+    var maxHeight = 13;
+    var ratio = 0;
+    var width = dimensions.width;
+    var height = dimensions.height;
+    var imageObj = { width: maxWidth, height: maxHeight };
+
+    if (width > height) {
+      ratio = maxWidth / width;
+      var newHeight = Math.round(height * ratio);
+      if (newHeight < maxHeight) {
+        imageObj.height = newHeight;
+      }
+    } else {
+      ratio = maxHeight / height;
+      var newWidth = Math.round(height * ratio);
+      if (newWidth < maxWidth) {
+        imageObj.width = newWidth;
+      }
+    }
+    var tb;
+    var rowS = row - 1;
+    var rowE = row + imageObj.height - 1;
+    var colS = 3;
+    var colE = colS + maxWidth;
+    var evg = colS + Math.round(maxWidth / 2);
+    if (imageObj.width > 0 && imageObj.width < maxWidth) {
+      tb = Math.round(imageObj.width / 2);
+      colS = evg - tb;
+      colE = evg + (imageObj.width - tb);
+    }
+    return {
+      tl: { col: colS + 1, row: rowS + 1 },
+      br: { col: colE - 1, row: rowE - 1 }
+    };
   }
 }
 
@@ -860,5 +915,12 @@ function converPdf(file) {
       }
       resolve(true);
     });
+  });
+}
+
+function addImage(workbook, filename) {
+  return workbook.addImage({
+    filename: '.' + filename,
+    extension: path.extname(filename).substr(1)
   });
 }

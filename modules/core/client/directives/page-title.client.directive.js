@@ -4,9 +4,9 @@
   angular.module('core')
     .directive('pageTitle', pageTitle);
 
-  pageTitle.$inject = ['$rootScope', '$interpolate', '$state'];
+  pageTitle.$inject = ['$rootScope', '$interpolate', '$state', '$window'];
 
-  function pageTitle($rootScope, $interpolate, $state) {
+  function pageTitle($rootScope, $interpolate, $state, $window) {
     var directive = {
       restrict: 'A',
       link: link
@@ -30,6 +30,8 @@
         // }
         stateTitle = stateTitle.slice(0, 0 - separator.length);
         element.text(stateTitle);
+
+        $window.scrollTo(0, 0);
       }
     }
   }

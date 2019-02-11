@@ -11,21 +11,21 @@
           <div class="form-group">
             <label>検索キー</label>
             <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力"
-            event-enter="vm.handleConditionChanged(true)">
+              event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="col-sm-12 col-md-4">
           <div class="form-group">
             <label>責任者検索</label>
             <input type="text" name="manager" class="form-control" ng-model="vm.condition.manager" placeholder="責任者の名前を入力"
-            event-enter="vm.handleConditionChanged(true)">
+              event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="col-sm-12 col-md-4">
           <div class="form-group">
             <label>提出者検索</label>
             <input type="text" name="author_name" class="form-control" ng-model="vm.condition.author_name" placeholder="提出者の名前を入力"
-            event-enter="vm.handleConditionChanged(true)">
+              event-enter="vm.handleConditionChanged(true)">
           </div>
         </div>
         <div class="clearfix"></div>
@@ -44,8 +44,7 @@
             <label>開始日時(To)</label>
             <input type="text" name="start_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
               ng-click="openCalendar($event, 'start_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.start_max"
-              class="form-control" ng-model="vm.condition.start_max"
-              ng-change="vm.handleConditionChanged(false, 'start_max', {{vm.condition.start_max || 'null'}})">
+              class="form-control" ng-model="vm.condition.start_max" ng-change="vm.handleConditionChanged(false, 'start_max', {{vm.condition.start_max || 'null'}})">
           </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-3">
@@ -61,8 +60,7 @@
             <label>終了日時(To)</label>
             <input type="text" name="end_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
               ng-click="openCalendar($event, 'end_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.end_max" class="form-control"
-              ng-model="vm.condition.end_max"
-              ng-change="vm.handleConditionChanged(false, 'end_max', {{vm.condition.end_max || 'null'}})">
+              ng-model="vm.condition.end_max" ng-change="vm.handleConditionChanged(false, 'end_max', {{vm.condition.end_max || 'null'}})">
           </div>
         </div>
         <div class="clearfix"></div>
@@ -82,8 +80,7 @@
             <label>提出日時(To)</label>
             <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions"
               timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm"
-              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max"
-              ng-change="vm.handleConditionChanged(false, 'created_max', {{vm.condition.created_max || 'null'}})">
+              is-open="open.created_max" class="form-control" ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{vm.condition.created_max || 'null'}})">
           </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-3" ng-if="vm.showUnit">
@@ -212,8 +209,8 @@
                 <label-status item="item.status" list="reportStatus"></label-status>
               </td>
               <td>{{ item.unit_name }}</td>
-              <td class="text-center" ng-bind="item.start | dateTimeFormat"></td>
-              <td class="text-center" ng-bind="item.end | dateTimeFormat"></td>
+              <td class="text-center" ng-bind="item.start | dateTimeLTFormat"></td>
+              <td class="text-center" ng-bind="item.end | dateTimeLTFormat"></td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w100" ui-sref-ignore>
                 <a class="btn btn-xs btn-primary" ng-click="vm.goReportEdit(item.kind, item._id); $event.stopPropagation();">

@@ -21,7 +21,7 @@
 
     $scope.logout = function () {
       $scope.handleShowConfirm({
-        message: 'このログインIDをログアウトします。よろしいですか？'
+        message: 'システムからログアウトします。よろしいですか？'
       }, function () {
         window.location = '/api/auth/signout';
       });

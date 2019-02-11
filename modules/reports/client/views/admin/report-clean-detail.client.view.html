@@ -52,13 +52,13 @@
                 開始
               </th>
               <td class="col-xs-4">
-                {{vm.report.start | dateTimeFormat}}
+                {{vm.report.start | dateTimeLTFormat}}
               </td>
               <th class="col-xs-2">
                 終了
               </th>
               <td class="col-xs-4">
-                {{vm.report.end | dateTimeFormat}}
+                {{vm.report.end | dateTimeLTFormat}}
               </td>
             </tr>
             <tr>
@@ -133,8 +133,8 @@
                     <tr ng-repeat="item in vm.report.workers">
                       <td>{{item.name}}</td>
                       <td>{{item.company}}</td>
-                      <td>{{item.work_start | dateTimeFormat}}</td>
-                      <td>{{item.work_end | dateTimeFormat}}</td>
+                      <td>{{item.work_start | dateTimeLTFormat}}</td>
+                      <td>{{item.work_end | dateTimeLTFormat}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -224,8 +224,8 @@
                       <th class="text-center" colspan="4">作業後</th>
                       <th class="text-center" colspan="3">作業前 （温度℃）</th>
                       <th class="text-center" colspan="3">作業後 （温度℃）</th>
-                      <th class="text-center" colspan="3">作業前 （温度℃）</th>
-                      <th class="text-center" colspan="3">作業後 （温度℃）</th>
+                      <th class="text-center" colspan="3">作業前（風速ｍ/ｓ）</th>
+                      <th class="text-center" colspan="3">作業後（風速ｍ/ｓ）</th>
                       <th class="text-center" rowspan="2">外装パネル型式</th>
                       <th class="text-center" rowspan="2">指摘事項</th>
                     </tr>
@@ -268,12 +268,12 @@
                       <td class="text-center">{{internal.temp_after_suction}}</td>
                       <td class="text-center">{{internal.temp_after_blow}}</td>
                       <td class="text-center">{{internal.temp_after_diff}}</td>
-                      <td class="text-center">{{internal.wind_before_suction}}</td>
-                      <td class="text-center">{{internal.wind_before_blow}}</td>
-                      <td class="text-center">{{internal.wind_before_diff}}</td>
-                      <td class="text-center">{{internal.wind_after_suction}}</td>
-                      <td class="text-center">{{internal.wind_after_blow}}</td>
-                      <td class="text-center">{{internal.wind_after_diff}}</td>
+                      <td class="text-center">{{internal.wind_suction_before}}</td>
+                      <td class="text-center">{{internal.wind_suction_after}}</td>
+                      <td class="text-center">{{internal.wind_suction_diff}}</td>
+                      <td class="text-center">{{internal.wind_blow_before}}</td>
+                      <td class="text-center">{{internal.wind_blow_after}}</td>
+                      <td class="text-center">{{internal.wind_blow_diff}}</td>
 
                       <td>{{internal.exterior_type}}</td>
                       <td class="pre-wrap">{{internal.description}}</td>
@@ -311,7 +311,7 @@
                       <th class="text-center">冷媒種類</th>
                       <th class="text-center">製造年月</th>
 
-                      <th class="text-center">動作確認</th>
+                      <th class="text-center">異音・振動</th>
                       <th class="text-center">破損・凹み</th>
                       <th class="text-center">熱交換器</th>
                       <th class="text-center">外装清掃</th>

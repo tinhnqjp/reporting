@@ -36,7 +36,7 @@
             </tr>
             <tr>
               <th class="col-xs-2">実施日時</th>
-              <td class="col-xs-4">{{vm.report.start | dateTimeFormat}}</td>
+              <td class="col-xs-4">{{vm.report.start | dateTimeLTFormat}}</td>
               <th class="col-xs-2">提出先</th>
               <td class="col-xs-4">{{vm.report.unit_name}}</td>
             </tr>
@@ -97,7 +97,7 @@
           <div ng-include="'/modules/reports/client/views/admin/button-upload-status.client.view.html'"></div>
         </div>
         <div class="col-xs-2 text-right">
-          <button-edit back="admin.reports.list" state="admin.reports.clean_edit" params="{reportId: vm.report._id}"></button-edit>
+          <button-edit back="admin.reports.list" state="admin.reports.picture_edit" params="{reportId: vm.report._id}"></button-edit>
         </div>
       </div>
     </div>

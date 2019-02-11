@@ -22,7 +22,7 @@
       position: 4,
       roles: ['admin'],
       class: 'fa fa-food-circle-o',
-      title: '下請け管理',
+      title: '下請管理',
       state: 'admin.workers.list',
       parrent_state: 'admin.workers'
     });
@@ -31,7 +31,7 @@
       position: 5,
       roles: ['admin'],
       class: 'fa fa-food-circle-o',
-      title: '下請け申請管理',
+      title: '下請申請管理',
       state: 'admin.petitions.list',
       parrent_state: 'admin.petitions'
     });

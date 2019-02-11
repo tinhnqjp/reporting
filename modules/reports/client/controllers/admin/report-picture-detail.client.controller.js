@@ -15,6 +15,7 @@
     onCreate();
 
     function onCreate() {
+      vm.imageUrl = $scope.getImageDefault('');
       if (Authentication.user.roles[0]) {
         vm.user_role = Authentication.user.roles[0];
       }

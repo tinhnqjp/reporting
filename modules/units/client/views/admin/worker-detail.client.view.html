@@ -6,7 +6,7 @@
           <form-title></form-title>
         </div>
         <div class="col-xs-6 text-right">
-          <button-edit back="admin.workers.list" state="admin.workers.edit" params="{workerId: vm.worker._id}"></button-edit>
+          <button-edit back="admin.workers.list" noback="admin.workers.create" state="admin.workers.edit" params="{workerId: vm.worker._id, isPetition: vm.isPetition }"></button-edit>
         </div>
       </div>
       <table class="table table-bordered table-detail">
@@ -60,7 +60,7 @@
               有効期限
             </th>
             <td class="col-xs-10">
-              <span ng-if="vm.worker.account.expire">{{vm.worker.account.expire | dateTimeFormat}}</span>
+              <span ng-if="vm.worker.account.expire">{{vm.worker.account.expire | dateTimeLTFormat}}</span>
               <span ng-if="!vm.worker.account.expire">未設定</span>
             </td>
           </tr>
@@ -82,7 +82,7 @@
         </tbody>
       </table>
       <div class="form-group mgnb mg50b text-center">
-        <button-edit back="admin.workers.list" state="admin.workers.edit" params="{workerId: vm.worker._id}"></button-edit>
+        <button-edit back="admin.workers.list" noback="admin.workers.create" state="admin.workers.edit" params="{workerId: vm.worker._id, isPetition: vm.isPetition }"></button-edit>
       </div>
     </div>
   </div>

@@ -50,7 +50,7 @@ module.exports = {
           username: 'admin',
           firstName: 'Admin',
           lastName: 'Local',
-          roles: ['admin', 'user']
+          roles: ['admin']
         }
       }
         // , {

@@ -74,7 +74,7 @@ var ReportSchema = new Schema({
   // ///////////////////////////////////////////////////////////////////
 
   // ------------------------- Common ------------------------------
-  // 報告書種類 （1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリ）
+  // 報告書種類 （1: 洗浄 - 2: 修理 - 3: 設置 - 4: 写真 - 5: フリー）
   // Loại Report (1: Clean - 2: Repair - 3: Construct - 4: Picture - 5: Free)
   kind: { type: Number, default: 1 },
   // 納入先 (Picture report sẽ là 店舗名)
@@ -132,7 +132,7 @@ var ReportSchema = new Schema({
     // 内機 (Internal machine)
     internals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 写真撮影機器
       has_picture: { type: Boolean, default: false }, // Button tap to change (false: bar, true: circle)
       // メーカー
@@ -204,7 +204,7 @@ var ReportSchema = new Schema({
     // 外機 (External machine)
     externals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 写真撮影機器
       has_picture: { type: Boolean, default: false }, // Button tap to change (false: bar, true: circle)
       // メーカー
@@ -247,7 +247,7 @@ var ReportSchema = new Schema({
     // 機器一覧
     machines: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 備考
       note: { type: String, default: '' }, // Multiple lines
       sets: [{
@@ -267,7 +267,7 @@ var ReportSchema = new Schema({
     // 内機 (Internal machine)
     internals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 設置場所
       posision: { type: String },
       // メーカー
@@ -304,7 +304,7 @@ var ReportSchema = new Schema({
     // 外機 (External machine)
     externals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 設置場所
       posision: { type: String },
       // メーカー
@@ -363,7 +363,7 @@ var ReportSchema = new Schema({
     // 内機 (Internal machine)
     internals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 系統名
       lineage_name: { type: String },
       // 既設機器 -> メーカー
@@ -392,7 +392,7 @@ var ReportSchema = new Schema({
     // 外機 (External machine)
     externals: [{
       // 管理No
-      number: { type: Number, required: true }, // Int
+      number: { type: Number, required: true, max: 9999 }, // Int
       // 系統名
       lineage_name: { type: String },
       // 既設機器 -> メーカー

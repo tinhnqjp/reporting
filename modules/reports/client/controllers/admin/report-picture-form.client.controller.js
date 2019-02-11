@@ -97,8 +97,10 @@
 
     vm.modalMachine = function (machine) {
       var defaultImg = $scope.getImageDefault('');
+      vm.imageBeforeUrl = defaultImg;
+      vm.imageAfterUrl = defaultImg;
       if (!machine) {
-        $scope.machine = { number: '', note: '', sets: [{ comment: '', before: defaultImg, after: defaultImg }] };
+        $scope.machine = { number: '', note: '', sets: [{ comment: '', before: '', after: '' }] };
       } else {
         $scope.machine = machine;
       }
@@ -131,7 +133,7 @@
           };
 
           $scope.addSet = function () {
-            $scope.machine.sets.push({ comment: '', before: defaultImg, after: defaultImg });
+            $scope.machine.sets.push({ comment: '', before: '', after: '' });
           };
           $scope.removeSet = function (set) {
             var index = $scope.machine.sets.indexOf(set);
@@ -141,9 +143,9 @@
           };
           $scope.removeImage = function (set, before) {
             if (before) {
-              set.before = defaultImg;
+              set.before = '';
             } else {
-              set.after = defaultImg;
+              set.after = '';
             }
           };
 

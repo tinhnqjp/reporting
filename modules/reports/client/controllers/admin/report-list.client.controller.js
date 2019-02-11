@@ -78,7 +78,6 @@
             vm.condition[key] = valNew.hour(23).minute(59).second(59).toDate();
           }
         } else {
-          console.log('default');
           vm.condition[key] = moment(vm.condition[key]).hour(23).minute(59).second(59).toDate();
         }
       }

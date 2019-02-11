@@ -10,7 +10,7 @@
             <button-save back="admin.reports.list"></button-save>
           </div>
         </div>
-        <div ng-if="vm.report.status != 4">
+        <div ng-if="cndEdit(vm.report.status)">
           <!-- 基本情報 -->
           <div class="panel panel-primary">
             <div class="panel-heading">基本情報</div>
@@ -75,6 +75,9 @@
                             <div class="title">
                               <span>{{ item.number }}</span>
                             </div>
+                            <button class="btn btn-danger btn-sm" type="button" ng-click="vm.removeMachine(item); $event.stopPropagation();">
+                              <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
                           </div>
                         </div>
                         <div class="col-xs-2">

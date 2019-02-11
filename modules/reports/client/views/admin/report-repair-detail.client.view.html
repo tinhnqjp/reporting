@@ -52,13 +52,13 @@
                 開始
               </th>
               <td class="col-xs-4">
-                {{vm.report.start | dateTimeFormat}}
+                {{vm.report.start | dateTimeLTFormat}}
               </td>
               <th class="col-xs-2">
                 終了
               </th>
               <td class="col-xs-4">
-                {{vm.report.end | dateTimeFormat}}
+                {{vm.report.end | dateTimeLTFormat}}
               </td>
             </tr>
             <tr>
@@ -108,8 +108,8 @@
                     <tr ng-repeat="item in vm.report.workers">
                       <td>{{item.name}}</td>
                       <td>{{item.company}}</td>
-                      <td>{{item.work_start | dateTimeFormat}}</td>
-                      <td>{{item.work_end | dateTimeFormat}}</td>
+                      <td>{{item.work_start | dateTimeLTFormat}}</td>
+                      <td>{{item.work_end | dateTimeLTFormat}}</td>
                     </tr>
                   </tbody>
                 </table>

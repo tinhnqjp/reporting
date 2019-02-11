@@ -10,7 +10,7 @@
         <div class="form-group">
           <label>検索キー</label>
           <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword" placeholder="検索キーを入力"
-          event-enter="vm.handleConditionChanged(true)">
+            event-enter="vm.handleConditionChanged(true)">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -35,8 +35,7 @@
           <label>登録日時(To)</label>
           <input type="text" name="created_max" datetime-picker="" datepicker-options="dateOptions" timepicker-options="timeOptions"
             ng-click="openCalendar($event, 'created_max')" placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max"
-            class="form-control" ng-model="vm.condition.created_max"
-            ng-change="vm.handleConditionChanged(false, 'created_max', {{vm.condition.created_max || 'null'}})">
+            class="form-control" ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{vm.condition.created_max || 'null'}})">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-3">
@@ -66,8 +65,9 @@
               <th ng-click="vm.handleSortChanged('username')" table-order tbtitle="ログインID" tbmodel="username"
                 tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="氏名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('roles')" table-order tbtitle="役割" tbmodel="roles" tbcondition="vm.condition"></th>
-              <th>部署</th>
+              <th class="text-center" ng-click="vm.handleSortChanged('roles')" table-order tbtitle="役割" tbmodel="roles"
+                tbcondition="vm.condition"></th>
+              <th class="text-center">部署</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
                 class="text-center"></th>
               <th class="text-center w150">操作</th>
@@ -81,10 +81,10 @@
               <td class="text-center">{{ tableIndex(vm.condition, $index) }}</td>
               <td>{{ item.username }}</td>
               <td>{{ item.name }}</td>
-              <td>
+              <td class="text-center">
                 <label-role role="item.roles" roles="roles"></label-role>
               </td>
-              <td>{{ item.unit.name }}</td>
+              <td class="text-center">{{ item.unit.name }}</td>
               <td class="text-center" ng-bind="item.created | dateTimeFormat"></td>
               <td class="text-center w150" ui-sref-ignore>
                 <a ng-if="Authentication.user.username != item.username" class="btn btn-xs btn-primary" ui-sref="admin.users.edit({userId: item._id})"><i

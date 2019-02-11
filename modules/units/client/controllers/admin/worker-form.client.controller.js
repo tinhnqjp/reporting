@@ -13,6 +13,7 @@
     vm.petition = petition;
     vm.update = update;
     vm.password = null;
+    vm.isPetition = false;
     onCreate();
     function onCreate() {
       PartnerService.query(function (data) {
@@ -26,6 +27,7 @@
         vm.password = $scope.generateRandomPassphrase();
       }
       if (vm.petition._id) {
+        vm.isPetition = true;
         vm.worker.name = vm.petition.name;
         vm.worker.phone = vm.petition.phone;
         vm.worker.manager = vm.petition.manager;
@@ -43,8 +45,13 @@
         $scope.$broadcast('show-errors-check-validity', 'vm.workerForm');
         return false;
       }
+
+      var action = '保存';
+      if (vm.isPetition) {
+        action = '追加';
+      }
       $scope.handleShowConfirm({
-        message: 'この下請けを保存します。よろしいですか？'
+        message: 'この下請けを' + action + 'します。よろしいですか？'
       }, function () {
         if (vm.password) {
           vm.worker.account.password = vm.password;
@@ -55,12 +62,12 @@
           .catch(errorCallback);
 
         function successCallback(res) {
-          $state.go('admin.workers.detail', { workerId: vm.worker._id });
-          $scope.handleShowToast('この下請けの保存が完了しました。');
+          $state.go('admin.workers.detail', { workerId: vm.worker._id, isPetition: vm.isPetition });
+          $scope.handleShowToast('この下請けの' + action + 'が完了しました。');
         }
 
         function errorCallback(res) {
-          var message = (res) ? res.message || res.data.message : '下請けの保存が失敗しました。';
+          var message = (res) ? res.message || res.data.message : '下請けの' + action + 'が失敗しました。';
           $scope.handleShowToast(message, true);
         }
       });

@@ -26,7 +26,9 @@
         if (!allowed) {
           event.preventDefault();
           if (Authentication.user !== null && typeof Authentication.user === 'object') {
-            $state.transitionTo('forbidden');
+            Authentication.user == null;
+            // $state.transitionTo('forbidden');
+            $state.go('authentication.signin');
           } else {
             $state.go('authentication.signin').then(function () {
               // Record previous state

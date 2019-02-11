@@ -152,7 +152,7 @@ exports.updateStatus = function (req, res) {
         session.abortTransaction()
           .then(() => {
             session.endSession();
-            return res.status(422).send({ message: '報告書が変更されていました。もう一度ご確認ください。' });
+            return res.status(422).send({ message: 'このデータが他のユーザーに変更されましたので操作できません。再ロードして確認してください。' });
           });
       } else {
         return updateReport(report).then(() => {
@@ -376,7 +376,7 @@ function getQuery(condition, user) {
     ];
     and_arr.push({ $or: or_arr });
   }
-  if (condition.unit) {
+  if (condition.unit && condition.unit.length > 0) {
     var units = _.map(condition.unit, '_id');
     var index = units.indexOf('null');
     if (index !== -1) {
@@ -389,19 +389,19 @@ function getQuery(condition, user) {
       and_arr.push({ unit: { $in: units } });
     }
   }
-  if (condition.role) {
+  if (condition.role && condition.role.length > 0) {
     var roles = _.map(condition.role, 'id');
     and_arr.push({ role: { $in: roles } });
   }
-  if (condition.status) {
+  if (condition.status && condition.status.length > 0) {
     var status = _.map(condition.status, 'id');
     and_arr.push({ status: { $in: status } });
   }
-  if (condition.kind) {
+  if (condition.kind && condition.kind.length > 0) {
     var kinds = _.map(condition.kind, 'id');
     and_arr.push({ kind: { $in: kinds } });
   }
-  if (condition.location) {
+  if (condition.location && condition.location.length > 0) {
     and_arr.push({ location: { $in: condition.location } });
   }
   if (condition.manager && condition.manager !== '') {

@@ -51,7 +51,7 @@
               <div class="col-xs-5">
                 <b>Before</b>
                 <div class="panel panel-default">
-                  <img class="img-responsive" src="{{item.before}}" ng-click="handleShowImage(item.before)">
+                  <img class="img-responsive" src="{{item.before || vm.imageBeforeUrl}}" ng-click="handleShowImage(item.before || vm.imageBeforeUrl )">
                   <div class="panel-footer text-center">
                     <button class="btn btn-danger btn-sm" type="button" ng-click="removeImage(item, true)">
                       <i class="fa fa-times" aria-hidden="true"></i></button>
@@ -63,7 +63,7 @@
               <div class="col-xs-5">
                 <b>After</b>
                 <div class="panel panel-default">
-                  <img class="img-responsive" src="{{item.after}}" ng-click="handleShowImage(item.after)">
+                  <img class="img-responsive" src="{{item.after || vm.imageAfterUrl}}" ng-click="handleShowImage(item.after || vm.imageAfterUrl)">
                   <div class="panel-footer text-center">
                     <button class="btn btn-danger btn-sm" type="button" ng-click="removeImage(item, false)">
                       <i class="fa fa-times" aria-hidden="true"></i></button>
@@ -83,15 +83,21 @@
             </div>
             <hr>
           </div>
-          <div class="col-xs-3 col-xs-offset-4 mg10t">
-            <div class="box-part text-center label-success" ng-click="addSet()">
-              <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
-              <div class="title">
-                <span>追加</span>
+          <div class="col-xs-12 mg10t">
+            <div class="row">
+              <div class="col-xs-2">
+              </div>
+              <div class="col-xs-offset-4 col-xs-2 text-center">
+                <div class="box-part text-center label-success" ng-click="addSet()">
+                  <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                  <div class="title">
+                    <span>追加</span>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
