@@ -6,6 +6,7 @@
 var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Config = mongoose.model('Config'),
   path = require('path'),
   moment = require('moment-timezone'),
   master_data = require(path.resolve('./config/lib/master-data')),
@@ -39,7 +40,13 @@ exports.expire = function (req, res) {
     user.last_login = Date.now();
     user.save();
     // Trường hợp user hợp lệ thì trả về user + version
-    return res.jsonp({ user: user, version: master_data.version });
+    Config.findOne().exec((err, conf) => {
+      if (!conf || err) {
+        return res.jsonp({ user: user, masterVersion: master_data.version, unitVersion: '', version: master_data.version });
+      } else {
+        return res.jsonp({ user: user, masterVersion: master_data.version, unitVersion: conf.unitVersion, version: master_data.version });
+      }
+    });
   });
 };
 
@@ -58,7 +65,13 @@ exports.m_signin = function (req, res) {
     .then(user => {
       user.last_login = Date.now();
       user.save();
-      return res.jsonp({ user: user, version: master_data.version });
+      Config.findOne().exec((err, conf) => {
+        if (!conf || err) {
+          return res.jsonp({ user: user, masterVersion: master_data.version, unitVersion: '', version: master_data.version });
+        } else {
+          return res.jsonp({ user: user, masterVersion: master_data.version, unitVersion: conf.unitVersion, version: master_data.version });
+        }
+      });
     })
     .catch(err => {
       logger.error(err);
@@ -71,7 +84,13 @@ exports.m_signin = function (req, res) {
 * @returns { config: object, version: string }
 */
 exports.config = function (req, res) {
-  return res.json({ config: master_data.config, version: master_data.version });
+  Config.findOne().exec((err, conf) => {
+    if (!conf || err) {
+      return res.jsonp({ config: master_data.config, masterVersion: master_data.version, unitVersion: '', version: master_data.version });
+    } else {
+      return res.json({ config: master_data.config, masterVersion: master_data.version, unitVersion: conf.unitVersion, version: master_data.version });
+    }
+  });
 };
 
 // ----------------------------------------------------------------
@@ -85,13 +104,22 @@ function verifyLogin(username, password) {
       if (!user)
         return reject({ status: 403, message: 'アカウントを認証できません。' });
 
-      if (!user.authenticate(password))
+      if (!user.authenticate(password) || !checkRole(user.roles))
         return reject({ status: 400, message: 'パスワードが違います。' });
 
       if (user.expire && moment(user.expire, 'YYYY-MM-DD hh:mm').isBefore(moment())) {
         return reject({ status: 422, message: 'このアカウントは有効期限が切れました。' });
       }
+
       return resolve(user);
     });
   });
+
+
+  function checkRole(roles) {
+    if (roles && roles[0] && ['dispatcher', 'employee', 'partner', 'user'].indexOf(roles[0]) >= 0) {
+      return true;
+    }
+    return false;
+  }
 }

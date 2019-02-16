@@ -168,26 +168,27 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th class="text-center" ng-click="vm.handleSortChanged('enable')" table-order tbtitle="有効・無効" tbmodel="enable"
+              <th class="text-center w100" ng-click="vm.handleSortChanged('enable')" table-order tbtitle="有効・無効"
+                tbmodel="enable" tbcondition="vm.condition"></th>
+              <th class="mw300 min-w100" ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('supplier')" table-order tbtitle="納入先" tbmodel="supplier" tbcondition="vm.condition"></th>
-              <th class="text-center" ng-click="vm.handleSortChanged('kind')" table-order tbtitle="種類" tbmodel="kind"
+              <th class="text-center w50" ng-click="vm.handleSortChanged('kind')" table-order tbtitle="種類" tbmodel="kind"
                 tbcondition="vm.condition"></th>
-              <th class="text-center" ng-click="vm.handleSortChanged('number')" table-order tbtitle="番号" tbmodel="number"
+              <th class="text-center w50" ng-click="vm.handleSortChanged('number')" table-order tbtitle="番号" tbmodel="number"
                 tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('author_name')" table-order tbtitle="提出業者" tbmodel="author_name"
-                tbcondition="vm.condition"></th>
-              <th class="text-center" ng-click="vm.handleSortChanged('status')" table-order tbtitle="状態" tbmodel="status"
+                tbcondition="vm.condition" class="mw200 min-w100"></th>
+              <th class="text-center w50" ng-click="vm.handleSortChanged('status')" table-order tbtitle="状態" tbmodel="status"
                 tbcondition="vm.condition"></th>
               <th ng-click="vm.handleSortChanged('unit_name')" table-order tbtitle="提出先" tbmodel="unit_name"
-                tbcondition="vm.condition"></th>
+                tbcondition="vm.condition" class="w150"></th>
               <th ng-click="vm.handleSortChanged('start')" table-order tbtitle="開始日時" tbmodel="start" tbcondition="vm.condition"
-                class="text-center"></th>
+                class="text-center w150"></th>
               <th ng-click="vm.handleSortChanged('end')" table-order tbtitle="終了日時" tbmodel="end" tbcondition="vm.condition"
-                class="text-center"></th>
+                class="text-center w150"></th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="提出日時" tbmodel="created" tbcondition="vm.condition"
-                class="text-center"></th>
-              <th class="text-center w150">操作</th>
+                class="text-center w200"></th>
+              <th class="text-center w100">操作</th>
             </tr>
           </thead>
           <tbody>

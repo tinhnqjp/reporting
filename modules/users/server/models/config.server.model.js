@@ -10,7 +10,6 @@ var mongoose = require('mongoose'),
  * Config Schema
  */
 var ConfigSchema = new Schema({
-  // リクエスト回数
-  apiCnt: { type: Number, default: 0 }
+  unitVersion: { type: String, default: '20180212000000' }
 });
 mongoose.model('Config', ConfigSchema);

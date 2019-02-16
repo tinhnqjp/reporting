@@ -200,7 +200,15 @@ function exportClean(report) {
     sheet.getCell('F10').value = report.saler;
 
     sheet.getCell('AQ9').value = report.clean.other_works.length > 0 ? 'あり' : 'なし';
-    sheet.getCell('AQ10').value = report.clean.work_result ? '完了' : '継続';
+
+    var work_result = '';
+    if (report.work_result === true) {
+      work_result = '完了';
+    }
+    if (report.work_result === false) {
+      work_result = '継続';
+    }
+    sheet.getCell('AQ10').value = work_result;
 
     if (report.location) {
       sheet.getCell('F85').value = report.location.replace('　', '\r\n');
@@ -208,10 +216,11 @@ function exportClean(report) {
 
     if (report.signature && fs.existsSync('.' + report.signature)) {
       var signature = addImage(workbook, report.signature);
-      sheet.addImage(signature, {
-        tl: { col: 40.5, row: 83.5 },
-        br: { col: 47.5, row: 85.5 }
-      });
+      // sheet.addImage(signature, {
+      //   tl: { col: 40.5, row: 83.5 },
+      //   br: { col: 47.5, row: 85.5 }
+      // });
+      sheet.addImage(signature, getDimension('.' + report.signature, 42, 48, 84, 88, 24, 23));
       sheet.getCell('AP84').value = '';
     }
   }
@@ -230,12 +239,12 @@ function exportClean(report) {
     });
   }
   function write_drawing(workbook, sheet, report, sheetNo) {
-    var row = 65;
     if (report.drawings && report.drawings[sheetNo - 1]) {
       var draw = report.drawings[sheetNo - 1];
       if (draw && fs.existsSync('.' + draw)) {
         var image = addImage(workbook, draw);
-        sheet.addImage(image, 'B' + row + ':AV' + (row + 15));
+
+        sheet.addImage(image, getDimension('.' + draw, 5, 47, 64, 81, 24, 23));
       }
     }
   }
@@ -331,19 +340,19 @@ function exportClean(report) {
         sheet.getCell('AL' + row).value = three_taps(inter.grill);
         sheet.getCell('AO' + row).value = three_taps(inter.filter);
 
-        sheet.getCell('T' + row).value = inter.temp_before_suction;
-        sheet.getCell('V' + row).value = inter.temp_before_blow;
-        sheet.getCell('X' + row).value = inter.temp_before_diff;
-        sheet.getCell('Z' + row).value = inter.temp_after_suction;
-        sheet.getCell('AB' + row).value = inter.temp_after_blow;
-        sheet.getCell('AD' + row).value = inter.temp_after_diff;
+        sheet.getCell('T' + row).value = fixDecimal(inter.temp_before_suction);
+        sheet.getCell('V' + row).value = fixDecimal(inter.temp_before_blow);
+        sheet.getCell('X' + row).value = fixDecimal(inter.temp_before_diff);
+        sheet.getCell('Z' + row).value = fixDecimal(inter.temp_after_suction);
+        sheet.getCell('AB' + row).value = fixDecimal(inter.temp_after_blow);
+        sheet.getCell('AD' + row).value = fixDecimal(inter.temp_after_diff);
 
-        sheet.getCell('AF' + row).value = inter.wind_suction_before;
-        sheet.getCell('AH' + row).value = inter.wind_suction_after;
-        sheet.getCell('AJ' + row).value = inter.wind_suction_diff;
-        sheet.getCell('AL' + row).value = inter.wind_blow_before;
-        sheet.getCell('AN' + row).value = inter.wind_blow_after;
-        sheet.getCell('AP' + row).value = inter.wind_blow_diff;
+        sheet.getCell('AF' + row).value = fixDecimal(inter.wind_suction_before);
+        sheet.getCell('AH' + row).value = fixDecimal(inter.wind_suction_after);
+        sheet.getCell('AJ' + row).value = fixDecimal(inter.wind_suction_diff);
+        sheet.getCell('AL' + row).value = fixDecimal(inter.wind_blow_before);
+        sheet.getCell('AN' + row).value = fixDecimal(inter.wind_blow_after);
+        sheet.getCell('AP' + row).value = fixDecimal(inter.wind_blow_diff);
         sheet.getCell('AR' + row).value = inter.exterior_type;
         row++;
       }
@@ -375,7 +384,7 @@ function exportRepair(report) {
 
         urlOutput = OUT_FILE_PATH + report._id + FILE_EXT;
         var wsExport = workbook.getWorksheet('報告書');
-        wsExport.pageSetup.printArea = 'A1:AC60';
+        wsExport.pageSetup.printArea = 'A1:AJ67';
         wsTemplate = _.cloneDeep(wsExport);
 
         // export
@@ -430,8 +439,8 @@ function exportRepair(report) {
     var externals = report.repair.externals;
     var max = 1;
 
-    if (workers && workers.length > 6) {
-      var workersPage = Math.ceil(workers.length / 6);
+    if (workers && workers.length > 8) {
+      var workersPage = Math.ceil(workers.length / 8);
       if (workersPage > max) {
         max = workersPage;
       }
@@ -457,6 +466,8 @@ function exportRepair(report) {
         totalIntExt++;
       });
       var intExtPage = Math.ceil(totalIntExt / 4);
+      console.log('TCL: sheetTotalMax -> totalIntExt', totalIntExt);
+      console.log('TCL: sheetTotalMax -> intExtPage', intExtPage);
       if (totalIntExt > 4 && intExtPage > max) {
         max = intExtPage;
       }
@@ -477,40 +488,49 @@ function exportRepair(report) {
     sheet.getCell('D6').value = report.address1;
     sheet.getCell('D7').value = report.address2;
 
-    var startStr = moment(report.start).format('YYYY年　MM月　DD日 （ddd）/HH/mm');
+    var startStr = moment(report.start).format('YYYY/MM/DD/ddd/HH/mm');
     var starts = startStr.split('/');
     sheet.getCell('R4').value = starts[0];
-    sheet.getCell('X4').value = starts[1];
-    sheet.getCell('AA4').value = starts[2];
+    sheet.getCell('U4').value = starts[1];
+    sheet.getCell('X4').value = starts[2];
+    sheet.getCell('AB4').value = starts[3];
+    sheet.getCell('AD4').value = starts[4];
+    sheet.getCell('AG4').value = starts[5];
 
-    var endStr = moment(report.end).format('YYYY年　MM月　DD日 （ddd）/HH/mm');
+    var endStr = moment(report.end).format('YYYY/MM/DD/ddd/HH/mm');
     var ends = endStr.split('/');
     sheet.getCell('R5').value = ends[0];
-    sheet.getCell('X5').value = ends[1];
-    sheet.getCell('AA5').value = ends[2];
+    sheet.getCell('U5').value = ends[1];
+    sheet.getCell('X5').value = ends[2];
+    sheet.getCell('AB5').value = ends[3];
+    sheet.getCell('AD5').value = ends[4];
+    sheet.getCell('AG5').value = ends[5];
+
 
     sheet.getCell('R6').value = report.manager;
     sheet.getCell('R9').value = report.saler;
     sheet.getCell('D8').value = report.repair.work_kind;
-    sheet.getCell('D9').value = report.clean.work_result ? '完了' : '継続';
-
+    var work_result = '';
+    if (report.work_result === true) {
+      work_result = '完了';
+    }
+    if (report.work_result === false) {
+      work_result = '継続';
+    }
+    sheet.getCell('D9').value = work_result;
 
     if (report.location) {
-      sheet.getCell('F59').value = report.location.replace('　', '\r\n');
+      sheet.getCell('C63').value = report.location.replace('　', '\r\n');
     }
 
     if (report.signature && fs.existsSync('.' + report.signature)) {
-      var image = addImage(workbook, report.signature);
-      sheet.addImage(image, {
-        tl: { col: 19.5, row: 56 },
-        br: { col: 26.5, row: 59.5 }
-      });
-      sheet.getCell('U57').value = '';
+      var signature = addImage(workbook, report.signature);
+      sheet.addImage(signature, getDimension('.' + report.signature, 23, 33, 61, 67, 20, 20));
     }
   }
   function write_works(sheet, report, sheetNo) {
-    var limit = 6;
-    var arrWorker = ['R7', 'U7', 'X7', 'R8', 'U8', 'X8'];
+    var limit = 8;
+    var arrWorker = ['R7', 'V7', 'Z7', 'AD7', 'R8', 'V8', 'Z8', 'AD8'];
     var col = 0;
     report.workers.forEach((worker, index) => {
       if (col === limit) {
@@ -525,11 +545,13 @@ function exportRepair(report) {
   function write_image(workbook, sheet, report) {
     if (report.repair.image1 && fs.existsSync('.' + report.repair.image1)) {
       var image1 = addImage(workbook, report.repair.image1);
-      sheet.addImage(image1, 'S28:AA36');
+      sheet.addImage(image1, getDimension('.' + report.repair.image1, 18, 33, 28, 38, 20, 20));
+      // sheet.addImage(image1, 'S28:AA36');
     }
     if (report.repair.image2 && fs.existsSync('.' + report.repair.image2)) {
       var image2 = addImage(workbook, report.repair.image2);
-      sheet.addImage(image2, 'S37:AA44');
+      sheet.addImage(image2, getDimension('.' + report.repair.image2, 18, 33, 39, 49, 20, 22));
+      // sheet.addImage(image2, 'S37:AA44');
     }
   }
 
@@ -554,9 +576,9 @@ function exportRepair(report) {
         sheet.getCell('I' + row).value = inter.maker;
         sheet.getCell('L' + row).value = inter.model;
 
-        sheet.getCell('R' + row).value = inter.exterior_type;
-        sheet.getCell('V' + row).value = inter.serial;
-        sheet.getCell('Z' + row).value = inter.made_date;
+        sheet.getCell('Q' + row).value = inter.exterior_type;
+        sheet.getCell('Z' + row).value = inter.serial;
+        sheet.getCell('AE' + row).value = inter.made_date;
         row++;
       }
     });
@@ -571,27 +593,28 @@ function exportRepair(report) {
         sheet.getCell('F' + row).value = exter.internals;
         sheet.getCell('I' + row).value = exter.maker;
         sheet.getCell('L' + row).value = exter.model;
-        sheet.getCell('R' + row).value = exter.refrigerant_kind;
-        sheet.getCell('S' + row).value = exter.specified_amount;
-        sheet.getCell('V' + row).value = exter.serial;
-        sheet.getCell('Z' + row).value = exter.made_date;
+        sheet.getCell('Q' + row).value = exter.refrigerant_kind;
+        sheet.getCell('V' + row).value = fixDecimal(exter.specified_amount, 2);
+        sheet.getCell('Z' + row).value = exter.serial;
+        sheet.getCell('AE' + row).value = exter.made_date;
         row++;
       }
     });
 
-    var arrNumber = ['B24', 'B25', 'O24', 'O25'];
-    var arrRecovery = ['D24', 'D25', 'R24', 'R25'];
-    var arrFilling = ['G24', 'G25', 'U24', 'U25'];
-    var arrRemarks = ['J24', 'J25', 'X24', 'X25'];
+    var arrNumber = ['B24', 'B25', 'P24', 'P25'];
+    var arrRecovery = ['D24', 'D25', 'S24', 'S25'];
+    var arrFilling = ['G24', 'G25', 'W24', 'W25'];
+    var arrRemarks = ['J24', 'J25', 'AA24', 'AA25'];
     var col = 0;
     report.repair.externals.forEach((exter, index) => {
       if (col === limit) {
         col = 0;
       }
       if (checkSheet(sheetNo, limit, index)) {
-        sheet.getCell(arrNumber[col]).value = exter.target ? exter.target : '' + 'No.' + exter.number;
-        sheet.getCell(arrRecovery[col]).value = exter.recovery_amount;
-        sheet.getCell(arrFilling[col]).value = exter.filling_amount;
+        var target = exter.target ? exter.target : '';
+        sheet.getCell(arrNumber[col]).value = target + ' No.' + exter.number;
+        sheet.getCell(arrRecovery[col]).value = fixDecimal(exter.recovery_amount, 2);
+        sheet.getCell(arrFilling[col]).value = fixDecimal(exter.filling_amount, 2);
         sheet.getCell(arrRemarks[col]).value = exter.remarks;
         col++;
       }
@@ -602,38 +625,40 @@ function exportRepair(report) {
     var limit = 4;
     // 指摘事項
     var index = 0;
-    var rowDesc = 51;
+    var rowDesc = 55;
     report.repair.internals.forEach(inter => {
-      if (rowDesc <= 54 && inter.number) {
+      if (rowDesc <= 58 && inter.number) {
         if (checkSheet(sheetNo, limit, index)) {
           sheet.getCell('B' + rowDesc).value = '内機No.' + inter.number;
-          sheet.getCell('D' + rowDesc).value = inter.indoor_suction;
-          sheet.getCell('F' + rowDesc).value = inter.outdoor_suction;
-          sheet.getCell('H' + rowDesc).value = inter.high_pressure;
-          sheet.getCell('K' + rowDesc).value = inter.low_pressure;
-          sheet.getCell('N' + rowDesc).value = inter.discharge_pipe;
-          sheet.getCell('Q' + rowDesc).value = inter.suction_pipe;
-          sheet.getCell('S' + rowDesc).value = inter.u;
-          sheet.getCell('V' + rowDesc).value = inter.v;
-          sheet.getCell('Y' + rowDesc).value = inter.w;
+          sheet.getCell('E' + rowDesc).value = fixDecimal(inter.indoor_suction);
+          sheet.getCell('G' + rowDesc).value = fixDecimal(inter.outdoor_suction);
+          sheet.getCell('I' + rowDesc).value = fixDecimal(inter.high_pressure);
+          sheet.getCell('L' + rowDesc).value = fixDecimal(inter.low_pressure);
+
+          sheet.getCell('P' + rowDesc).value = fixDecimal(inter.discharge_pipe);
+          sheet.getCell('S' + rowDesc).value = fixDecimal(inter.suction_pipe);
+          sheet.getCell('W' + rowDesc).value = fixDecimal(inter.u);
+          sheet.getCell('AA' + rowDesc).value = fixDecimal(inter.v);
+          sheet.getCell('AE' + rowDesc).value = fixDecimal(inter.w);
           rowDesc++;
         }
         index++;
       }
     });
     report.repair.externals.forEach(exter => {
-      if (rowDesc <= 54 && exter.number) {
+      if (rowDesc <= 58 && exter.number) {
         if (checkSheet(sheetNo, limit, index)) {
           sheet.getCell('B' + rowDesc).value = '外機No.' + exter.number;
-          sheet.getCell('D' + rowDesc).value = exter.indoor_suction;
-          sheet.getCell('F' + rowDesc).value = exter.outdoor_suction;
-          sheet.getCell('H' + rowDesc).value = exter.high_pressure;
-          sheet.getCell('K' + rowDesc).value = exter.low_pressure;
-          sheet.getCell('N' + rowDesc).value = exter.discharge_pipe;
-          sheet.getCell('Q' + rowDesc).value = exter.suction_pipe;
-          sheet.getCell('S' + rowDesc).value = exter.u;
-          sheet.getCell('V' + rowDesc).value = exter.v;
-          sheet.getCell('Y' + rowDesc).value = exter.w;
+          sheet.getCell('E' + rowDesc).value = fixDecimal(exter.indoor_suction);
+          sheet.getCell('G' + rowDesc).value = fixDecimal(exter.outdoor_suction);
+          sheet.getCell('I' + rowDesc).value = fixDecimal(exter.high_pressure);
+          sheet.getCell('L' + rowDesc).value = fixDecimal(exter.low_pressure);
+
+          sheet.getCell('P' + rowDesc).value = fixDecimal(exter.discharge_pipe);
+          sheet.getCell('S' + rowDesc).value = fixDecimal(exter.suction_pipe);
+          sheet.getCell('W' + rowDesc).value = fixDecimal(exter.u);
+          sheet.getCell('AA' + rowDesc).value = fixDecimal(exter.v);
+          sheet.getCell('AE' + rowDesc).value = fixDecimal(exter.w);
           rowDesc++;
         }
         index++;
@@ -713,7 +738,7 @@ function exportPicture(report) {
 
     if (report.picture.store_image && fs.existsSync('.' + report.picture.store_image)) {
       var store_image = addImage(workbook, report.picture.store_image);
-      sheet.addImage(store_image, dimensionStore('.' + report.picture.store_image, 22));
+      sheet.addImage(store_image, getDimension('.' + report.picture.store_image, 4, 21, 23, 34, 31, 27));
     }
   }
 
@@ -744,7 +769,7 @@ function exportPicture(report) {
 
   function write_machine(workbook, sheet, machine, sheetNo) {
     var limit = 4;
-    var row = 5;
+    var row = 4;
     machine.sets.forEach((set, index) => {
       if (checkSheet(sheetNo, limit, index)) {
         var x = index % 4;
@@ -760,95 +785,20 @@ function exportPicture(report) {
 
   function write_set(workbook, sheet, set, row) {
     if (set.before && fs.existsSync('.' + set.before)) {
-      var dimensionb = dimensions('.' + set.before, row, true);
+      var dimensionb = getDimension('.' + set.before, 0, 17, (row), (row + 13), 18, 14);
+      // var dimensionb = getDimension('.' + set.before, 1, 16, (row + 1), (row + 12), 18, 14);
       var before = addImage(workbook, set.before);
       sheet.addImage(before, dimensionb);
       sheet.getCell('Y' + (row + 7)).value = '';
     }
     if (set.after && fs.existsSync('.' + set.after)) {
-      var dimensiona = dimensions('.' + set.after, row, false);
+      var dimensiona = getDimension('.' + set.after, 17, 34, (row), (row + 13), 18, 14);
+      // var dimensiona = getDimension('.' + set.after, 18, 33, (row + 1), (row + 12), 18, 14);
       var after = addImage(workbook, set.after);
       sheet.addImage(after, dimensiona);
       sheet.getCell('H' + (row + 7)).value = '';
     }
     sheet.getCell('D' + (row + 13)).value = set.comment;
-  }
-
-  function dimensions(filename, row, isBefore) {
-    var dimensions = sizeOf(filename);
-
-    var maxWidth = 16;
-    var maxHeight = 12;
-    var ratio = 0;
-    var width = dimensions.width;
-    var height = dimensions.height;
-    var imageObj = { width: maxWidth, height: maxHeight };
-
-    if (width > height) {
-      ratio = maxWidth / width;
-      imageObj.height = Math.round(height * ratio);
-    } else {
-      ratio = maxHeight / height;
-      imageObj.width = Math.round(width * ratio);
-    }
-    var tb;
-    var rowS = row - 1;
-    var rowE = row + imageObj.height;
-    var colS = 0;
-    if (!isBefore) {
-      colS = 17;
-    }
-    var colE = colS + 17;
-    var evg = colS + 8;
-    if (imageObj.width > 0 && imageObj.width < 16) {
-      tb = Math.round(imageObj.width / 2);
-      colS = evg - tb;
-      colE = evg + (imageObj.width - tb);
-    }
-    return {
-      tl: { col: colS + 1, row: rowS + 1 },
-      br: { col: colE - 1, row: rowE - 1 }
-    };
-  }
-
-  function dimensionStore(filename, row) {
-    var dimensions = sizeOf(filename);
-
-    var maxWidth = 19;
-    var maxHeight = 13;
-    var ratio = 0;
-    var width = dimensions.width;
-    var height = dimensions.height;
-    var imageObj = { width: maxWidth, height: maxHeight };
-
-    if (width > height) {
-      ratio = maxWidth / width;
-      var newHeight = Math.round(height * ratio);
-      if (newHeight < maxHeight) {
-        imageObj.height = newHeight;
-      }
-    } else {
-      ratio = maxHeight / height;
-      var newWidth = Math.round(height * ratio);
-      if (newWidth < maxWidth) {
-        imageObj.width = newWidth;
-      }
-    }
-    var tb;
-    var rowS = row - 1;
-    var rowE = row + imageObj.height - 1;
-    var colS = 3;
-    var colE = colS + maxWidth;
-    var evg = colS + Math.round(maxWidth / 2);
-    if (imageObj.width > 0 && imageObj.width < maxWidth) {
-      tb = Math.round(imageObj.width / 2);
-      colS = evg - tb;
-      colE = evg + (imageObj.width - tb);
-    }
-    return {
-      tl: { col: colS + 1, row: rowS + 1 },
-      br: { col: colE - 1, row: rowE - 1 }
-    };
   }
 }
 
@@ -923,4 +873,62 @@ function addImage(workbook, filename) {
     filename: '.' + filename,
     extension: path.extname(filename).substr(1)
   });
+}
+
+function getDimension(filename, colS, colE, rowS, rowE, widthCol, heightRow) {
+  rowS = rowS - 1;
+  rowE = rowE - 1;
+  var dimensions = sizeOf(filename);
+  var width = dimensions.width;
+  var height = dimensions.height;
+  var maxWidth = (colE - colS) * widthCol;
+  var maxHeight = (rowE - rowS) * heightRow;
+  var imageObj = { width: maxWidth, height: maxHeight };
+  var isBaseMaxWidth = false;
+
+  if (width > height) {
+    imageObj.width = maxWidth;
+    imageObj.height = maxWidth * height / width;
+    isBaseMaxWidth = true;
+    if (imageObj.height > maxHeight) {
+      imageObj.width = maxHeight * width / height;
+      imageObj.height = maxHeight;
+      isBaseMaxWidth = false;
+    }
+  } else {
+    imageObj.width = maxHeight * width / height;
+    imageObj.height = maxHeight;
+    isBaseMaxWidth = false;
+    if (imageObj.width > maxWidth) {
+      imageObj.width = maxWidth;
+      imageObj.height = maxWidth * height / width;
+      isBaseMaxWidth = true;
+    }
+  }
+
+  var totalCol = imageObj.width / widthCol;
+  var totalRow = imageObj.height / heightRow;
+  var cotdu = 0;
+  if (!isBaseMaxWidth) {
+    var du = (maxWidth - imageObj.width);
+    cotdu = Math.floor(du / widthCol / 2);
+  }
+
+  rowE = rowS + totalRow;
+  colS = colS + cotdu;
+  colE = colS + totalCol;
+  return {
+    tl: { col: colS, row: rowS },
+    br: { col: colE, row: rowE }
+  };
+}
+
+function fixDecimal(value, maxDecimal) {
+  if (!maxDecimal) {
+    maxDecimal = 1;
+  }
+  if (!value) {
+    value = '0';
+  }
+  return parseFloat(value).toFixed(maxDecimal);
 }

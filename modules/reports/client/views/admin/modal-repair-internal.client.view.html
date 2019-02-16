@@ -23,6 +23,7 @@
                 </th>
                 <td class="col-xs-10" colspan="3">
                   <input type="number" name="number" class="form-control" ng-model="internal.number" placeholder="管理Noを入力"
+                    ng-disabled="block_number" ng-change="handlerNumberInternal(internal.number)" min="1" max="9999"
                     autocomplete="off" required>
                 </td>
               </tr>
@@ -96,8 +97,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="indoor_suction"
-                      ng-model="internal.indoor_suction" placeholder="室内吸込を入力">
+                    <input type="text" class="form-control" name="indoor_suction" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="true" ng-model="internal.indoor_suction" placeholder="室内吸込を入力">
                     <span class="input-group-addon">℃</span>
                   </div>
                 </td>
@@ -106,8 +107,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="outdoor_suction"
-                      ng-model="internal.outdoor_suction" placeholder="室内吹出を入力">
+                    <input type="text" class="form-control" name="outdoor_suction" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="true" ng-model="internal.outdoor_suction" placeholder="室内吹出を入力">
                     <span class="input-group-addon">℃</span>
                   </div>
                 </td>
@@ -118,8 +119,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="high_pressure"
-                      ng-model="internal.high_pressure" placeholder="高圧を入力">
+                    <input type="text" class="form-control" name="high_pressure" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="false" ng-model="internal.high_pressure" placeholder="高圧を入力">
                     <span class="input-group-addon">Mpa</span>
                   </div>
                 </td>
@@ -128,8 +129,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="low_pressure"
-                      ng-model="internal.low_pressure" placeholder="低圧を入力">
+                    <input type="text" class="form-control" name="low_pressure" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="false" ng-model="internal.low_pressure" placeholder="低圧を入力">
                     <span class="input-group-addon">Mpa</span>
                   </div>
                 </td>
@@ -140,8 +141,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="discharge_pipe"
-                      ng-model="internal.discharge_pipe" placeholder="吐出管を入力">
+                    <input type="text" class="form-control" name="discharge_pipe" input-float="" max-integer="3"
+                      max-decimal="1" has-negative="false" ng-model="internal.discharge_pipe" placeholder="吐出管を入力">
                     <span class="input-group-addon">℃</span>
                   </div>
                 </td>
@@ -150,8 +151,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="suction_pipe"
-                      ng-model="internal.suction_pipe" placeholder="吸入管を入力">
+                    <input type="text" class="form-control" name="suction_pipe" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="true" ng-model="internal.suction_pipe" placeholder="吸入管を入力">
                     <span class="input-group-addon">℃</span>
                   </div>
                 </td>
@@ -166,8 +167,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="u" ng-model="internal.u"
-                      placeholder="Uを入力">
+                    <input type="text" class="form-control" name="u" ng-model="internal.u" input-float="" max-integer="3"
+                      max-decimal="1" has-negative="false" placeholder="Uを入力">
                     <span class="input-group-addon">A</span>
                   </div>
                 </td>
@@ -176,8 +177,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="v" ng-model="internal.v"
-                      placeholder="Vを入力">
+                    <input type="text" class="form-control" name="v" ng-model="internal.v" input-float="" max-integer="3"
+                      max-decimal="1" has-negative="false" placeholder="Vを入力">
                     <span class="input-group-addon">A</span>
                   </div>
                 </td>
@@ -188,8 +189,8 @@
                 </th>
                 <td class="col-xs-4">
                   <div class="input-group">
-                    <input type="number" class="form-control" input-validator="float_decimal" name="w" ng-model="internal.w"
-                      placeholder="Wを入力">
+                    <input type="text" class="form-control" name="w" ng-model="internal.w" input-float="" max-integer="3"
+                      max-decimal="1" has-negative="false" placeholder="Wを入力">
                     <span class="input-group-addon">A</span>
                   </div>
                 </td>
@@ -205,6 +206,9 @@
     <div ng-if="isSaveClick">
       <div ng-messages="vm.modalInternalForm.number.$error" role="alert">
         <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+        <li class="text-red" ng-message="min">管理Noはを1以上を入力してください。</li>
+        <li class="text-red" ng-message="max">管理Noはを9999以下を入力してください。</li>
+        <li class="text-red" ng-message="dupl">管理Noが重複しています</li>
       </div>
       <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
         <li class="text-red" ng-message="required">氏名を入力してください。</li>
@@ -217,6 +221,33 @@
       </div>
       <div ng-messages="vm.modalInternalForm.made_date.$error" role="alert">
         <li class="text-red" ng-message="made_date">製造年月の[YYYY/MM]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.indoor_suction.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">室内吸込の[-xx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.outdoor_suction.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">室内吹出の[-xx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.high_pressure.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">高圧の[xx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.low_pressure.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">低圧の[xx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.discharge_pipe.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">吐出管の[xxx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.suction_pipe.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">吸入管の[-xx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.u.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">Uの[xxx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.v.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">Vの[xxx.x]入力形式に誤りがあります。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.w.$error" role="alert">
+        <li class="text-red" ng-message="inputFloat">Wの[xxx.x]入力形式に誤りがあります。</li>
       </div>
     </div>
   </div>

@@ -32,7 +32,7 @@
     <div class="panel-heading">写真データ</div>
     <div class="panel-body">
       <div class="table-custom" style="border:0px;">
-        <div class="col-xs-12" ng-repeat="item in machine.sets">
+        <div class="col-xs-12" ng-repeat="item in machine.sets" ng-if="item.before || item.after">
           <div class="row">
             <div class="col-xs-2">
             </div>

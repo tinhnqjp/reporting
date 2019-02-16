@@ -727,19 +727,22 @@ a.text-muted:focus {
 	background-color: #009245;
 }
 
+.status {
+	color: #fff;
+}
+.status:hover {
+	color: #eee;
+	opacity: 0.8;
+}
 .status-send {
 	background-color: #22a6b3;
-	color: #fff;
 }
 .status-confirm {
 	background-color: #be2edd;
-	color: #fff;
 }
 .status-approve {
 	background-color: #4834d4;
-	color: #fff;
 }
 .status-done {
 	background-color: #130f40;
-	color: #fff;
 }

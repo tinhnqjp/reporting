@@ -101,6 +101,14 @@
       vm.imageAfterUrl = defaultImg;
       if (!machine) {
         $scope.machine = { number: '', note: '', sets: [{ comment: '', before: '', after: '' }] };
+        var maxObj = _.maxBy(vm.report.picture.machines, 'number');
+        var max = maxObj ? maxObj.number : 0;
+        if (max < 9999) {
+          $scope.machine.number = max + 1;
+        } else {
+          $scope.block_add = true;
+          return;
+        }
       } else {
         $scope.machine = machine;
       }
@@ -130,6 +138,26 @@
             }
 
             $scope.confirm();
+          };
+
+          $scope.handlerNumberMachine = function (_number) {
+            if (!_number) {
+              return;
+            }
+            var isValid = false;
+            vm.report.picture.machines.forEach(mac => {
+              if (mac !== machine && mac.number === _number) {
+                isValid = true;
+              }
+            });
+
+            if (isValid) {
+              vm.modalMachineForm.number.$setValidity('dupl', false);
+              return false;
+            } else {
+              vm.modalMachineForm.number.$setValidity('dupl', true);
+              return true;
+            }
           };
 
           $scope.addSet = function () {

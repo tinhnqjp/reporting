@@ -13,7 +13,7 @@
           <div class="table-custom">
             <table class="table table-detail">
               <tbody>
-                <tr>
+                <!-- <tr>
                   <th class="col-xs-2">
                     名前
                     <span class="text-red">*</span>
@@ -21,6 +21,26 @@
                   <td class="col-xs-10">
                     <input type="text" name="foodname" class="form-control" ng-model="vm.food.foodname"
                       placeholder="名前を入力" required autocomplete="off">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="col-xs-2">
+                    onlyDigits
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="foodname" class="form-control" ng-model="vm.food.foodname"
+                      only-digits allow-decimal="true" allow-negative="true" max-leng="6"
+                      placeholder="onlyDigits">
+                  </td>
+                </tr> -->
+                <tr>
+                  <th class="col-xs-2">
+                    onlyDigits 2
+                  </th>
+                  <td class="col-xs-10">
+                    <input type="text" name="foodname" class="form-control" ng-model="vm.food.foodname"
+                      mask-float="" max-integer="2" max-decimal="2" has-negative="true"
+                      placeholder="onlyDigits">
                   </td>
                 </tr>
                 <tr>

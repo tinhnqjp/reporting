@@ -19,13 +19,6 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     showMeridian: false
   };
 
-  if (Authentication.user && Authentication.user.roles[0]) {
-    $scope.user_role = Authentication.user.roles[0];
-  } else {
-    Authentication.user = null;
-    $state.go('authentication.signin');
-  }
-
   /** roles */
   $scope.roles = [
     { id: 'admin', name: 'システム管理者', class: 'label-danger' },
@@ -130,6 +123,17 @@ function AppController($scope, $state, $stateParams, Authentication, ngDialog, N
     }
     return true;
   };
+
+  $scope.fixDecimal = function (value, maxDecimal) {
+    if (!maxDecimal) {
+      maxDecimal = 1;
+    }
+    if (!value) {
+      value = '0';
+    }
+    return parseFloat(value).toFixed(maxDecimal);
+  };
+
 
   $scope.handleBackScreen = function (state) {
     $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});

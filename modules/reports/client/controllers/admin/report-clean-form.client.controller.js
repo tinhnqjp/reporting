@@ -136,17 +136,30 @@
     };
 
     vm.modalInternal = function (item) {
+      $scope.block_number = false;
       if (item) {
         $scope.internal = Object.create(item);
+        vm.report.clean.externals.forEach(exter => {
+          if (exter.internals && exter.internals.split(',').indexOf(item.number + '') > -1) {
+            $scope.block_number = true;
+          }
+        });
+      } else {
+        $scope.internal = {};
+        var maxObj = _.maxBy(vm.report.clean.internals, 'number');
+        var max = maxObj ? maxObj.number : 0;
+        if (max < 9999) {
+          $scope.internal.number = max + 1;
+        } else {
+          $scope.block_add_inter = true;
+          return;
+        }
       }
       $scope.pic_taps = vm.configs.pic_taps;
       $scope.type_taps = vm.configs.type_taps;
       $scope.two_taps = vm.configs.two_taps;
       $scope.three_taps = vm.configs.three_taps;
       $scope.four_taps = vm.configs.four_taps;
-      if (!$scope.internal) {
-        $scope.internal = {};
-      }
       if (!$scope.internal.has_picture) {
         $scope.internal.has_picture = false;
       }
@@ -251,7 +264,25 @@
 
             $scope.confirm();
           };
+          $scope.handlerNumberInternal = function (_number) {
+            if (!_number) {
+              return;
+            }
+            var isValid = false;
+            vm.report.clean.internals.forEach(inter => {
+              if (inter !== item && inter.number === _number) {
+                isValid = true;
+              }
+            });
 
+            if (isValid) {
+              vm.modalInternalForm.number.$setValidity('dupl', false);
+              return false;
+            } else {
+              vm.modalInternalForm.number.$setValidity('dupl', true);
+              return true;
+            }
+          };
           $scope.modalMaker = function (maker) {
             $scope.makers = vm.configs.makers;
             if (maker) {
@@ -293,7 +324,6 @@
                 delete $scope.maker;
               });
           };
-
           $scope.modalType = function (type) {
             $scope.types = vm.configs.types;
             if (type) {
@@ -335,9 +365,9 @@
                 delete $scope.type;
               });
           };
-
           $scope.modalDescription = function (description) {
             $scope.descriptions = vm.configs.phrases;
+            $scope.input = '';
             if (description) {
               var index = _.indexOf($scope.descriptions, description);
               if (index >= 0) {
@@ -364,9 +394,8 @@
                 };
                 $scope.selectValue = function (value) {
                   if ($scope.internal) {
-                    $scope.internal.description = value;
+                    $scope.input += value;
                   }
-                  $scope.confirm();
                 };
               }]
             })
@@ -376,7 +405,6 @@
                 delete $scope.description;
               });
           };
-
           $scope.tapTwo = function (id, name) {
             $scope.internal[name] = !id;
           };
@@ -394,29 +422,30 @@
               $scope.internal[name] = 1;
             }
           };
-
           $scope.changeTempBefore = function () {
             var temp_before_suction = $scope.internal.temp_before_suction || 0;
             var temp_before_blow = $scope.internal.temp_before_blow || 0;
-            $scope.internal.temp_before_diff = roundAbs(temp_before_suction - temp_before_blow);
+            var temp_before_diff = roundAbs(temp_before_suction - temp_before_blow);
+            $scope.internal.temp_before_diff = $scope.fixDecimal(temp_before_diff, 2);
           };
           $scope.changeTempAfter = function () {
             var temp_after_suction = $scope.internal.temp_after_suction || 0;
             var temp_after_blow = $scope.internal.temp_after_blow || 0;
-            $scope.internal.temp_after_diff = roundAbs(temp_after_suction - temp_after_blow);
+            var temp_after_diff = roundAbs(temp_after_suction - temp_after_blow);
+            $scope.internal.temp_after_diff = $scope.fixDecimal(temp_after_diff, 2);
           };
-
           $scope.changeWindBefore = function () {
             var wind_suction_before = $scope.internal.wind_suction_before || 0;
             var wind_suction_after = $scope.internal.wind_suction_after || 0;
-            $scope.internal.wind_suction_diff = roundAbs(wind_suction_before - wind_suction_after);
+            var wind_suction_diff = roundAbs(wind_suction_before - wind_suction_after);
+            $scope.internal.wind_suction_diff = $scope.fixDecimal(wind_suction_diff, 2);
           };
           $scope.changeWindAfter = function () {
             var wind_blow_before = $scope.internal.wind_blow_before || 0;
             var wind_blow_after = $scope.internal.wind_blow_after || 0;
-            $scope.internal.wind_blow_diff = roundAbs(wind_blow_before - wind_blow_after);
+            var wind_blow_diff = roundAbs(wind_blow_before - wind_blow_after);
+            $scope.internal.wind_blow_diff = $scope.fixDecimal(wind_blow_diff, 2);
           };
-
           function roundAbs(num) {
             return Math.round(Math.abs(num) * 100) / 100;
           }
@@ -443,13 +472,21 @@
     vm.modalExternal = function (item) {
       if (item) {
         $scope.external = Object.create(item);
+      } else {
+        $scope.external = {};
+        var maxObj = _.maxBy(vm.report.clean.externals, 'number');
+        var max = maxObj ? maxObj.number : 0;
+        if (max < 9999) {
+          $scope.external.number = max + 1;
+        } else {
+          $scope.block_add_exter = true;
+          return;
+        }
       }
+
       $scope.pic_taps = vm.configs.pic_taps;
       $scope.four_taps = vm.configs.four_taps;
 
-      if (!$scope.external) {
-        $scope.external = {};
-      }
       if (!$scope.external.has_picture) {
         $scope.external.has_picture = false;
       }
@@ -506,6 +543,26 @@
             }
 
             $scope.confirm();
+          };
+
+          $scope.handlerNumberExternal = function (_number) {
+            if (!_number) {
+              return;
+            }
+            var isValid = false;
+            vm.report.clean.externals.forEach(inter => {
+              if (inter !== item && inter.number === _number) {
+                isValid = true;
+              }
+            });
+
+            if (isValid) {
+              vm.modalExternalForm.number.$setValidity('dupl', false);
+              return false;
+            } else {
+              vm.modalExternalForm.number.$setValidity('dupl', true);
+              return true;
+            }
           };
 
           $scope.modalMaker = function (maker) {
@@ -622,6 +679,7 @@
 
           $scope.modalDescription = function (description) {
             $scope.descriptions = vm.configs.phrases;
+            $scope.input = '';
             if (description) {
               var index = _.indexOf($scope.descriptions, description);
               if (index >= 0) {
@@ -648,9 +706,8 @@
                 };
                 $scope.selectValue = function (value) {
                   if ($scope.external) {
-                    $scope.external.description = value;
+                    $scope.input += value;
                   }
-                  $scope.confirm();
                 };
               }]
             })

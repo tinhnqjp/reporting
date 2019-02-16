@@ -63,7 +63,7 @@ exports.list = function (req, res) {
  * @version 2018/12/24
  */
 exports.petition = function (req, res) {
-  var pattern = /^([0-9]{9,13}$)/;
+  var pattern = /^([0-9+-]{0,20}$)/;
   req.checkBody('userId', 'アカウントを入力してください。').notEmpty();
   req.checkBody('action', '申請種類を入力してください。').notEmpty();
   var action = req.body.action;

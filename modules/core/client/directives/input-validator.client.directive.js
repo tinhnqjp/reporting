@@ -3,7 +3,8 @@
 
   angular
     .module('core')
-    .directive('inputValidator', inputValidator);
+    .directive('inputValidator', inputValidator)
+    .directive('inputFloat', inputFloat);
   inputValidator.$inject = ['$window'];
 
   function inputValidator($window) {
@@ -87,7 +88,7 @@
             ngModel.$setValidity(ZIP, validator.matches(value, pattern));
             break;
           case TEL:
-            pattern = /^([0-9]{9,13}$)/;
+            pattern = /^([0-9+-]{0,20}$)/;
             ngModel.$setValidity(TEL, validator.matches(value, pattern));
             break;
           case FLOAT:
@@ -105,6 +106,80 @@
           default:
             break;
         }
+      });
+    }
+  }
+
+  inputFloat.$inject = ['$window'];
+  function inputFloat($window) {
+    var directive = {
+      require: 'ngModel',
+      scope: {
+        maxInteger: '=',
+        maxDecimal: '=',
+        hasNegative: '='
+      },
+      link: link
+    };
+    return directive;
+
+    function link(scope, element, attrs, ngModel) {
+      var flg = false;
+      element.bind('keydown keypress', function (e) {
+        if (event.which === 8) {
+          flg = true;
+        } else {
+          flg = false;
+        }
+      });
+      element.bind('input', function (e) {
+        var value = this.value.replace(/[^0-9-.]/g, '');
+        if (value.charAt(0) === '.') {
+          value = value.slice(1);
+        }
+        var position = value.indexOf('.') + 1;
+        if (position >= 0) {
+          value = value.substr(0, position) + value.slice(position).replace('.', '');
+        }
+
+        var maxInteger = 0;
+        if (value.length > 0) {
+          if (!scope.hasNegative) {
+            value = value.replace('-', '');
+          }
+
+          if (value.indexOf('-') > -1) {
+            maxInteger = scope.maxInteger + 1;
+          } else {
+            maxInteger = scope.maxInteger;
+          }
+          if (!flg && value.length === maxInteger && value.indexOf('.') === -1) {
+            value = value + '.';
+          }
+          if (value.length > 0 && value.indexOf('.') > -1) {
+            var pos = console.log(value.indexOf('.'));
+            var split = value.split('.');
+            if (split[1] && split[1].length > scope.maxDecimal) {
+              value = split[0] + '.' + split[1].substring(0, scope.maxDecimal);
+            }
+          }
+        }
+
+        if (this.value !== value) {
+          ngModel.$setViewValue(value);
+          ngModel.$render();
+          scope.$apply();
+          e.preventDefault();
+        }
+      });
+      element.bind('blur', function (e) {
+        var value = this.value;
+        if (value.length > 0) {
+          ngModel.$setViewValue(parseFloat(value).toFixed(scope.maxDecimal));
+          ngModel.$render();
+          scope.$apply();
+        }
+        e.preventDefault();
       });
     }
   }

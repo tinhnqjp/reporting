@@ -39,6 +39,7 @@
                 </th>
                 <td class="col-xs-10" colspan="3">
                   <input type="number" name="number" class="form-control" ng-model="internal.number" placeholder="管理Noを入力"
+                    ng-disabled="block_number" ng-change="handlerNumberInternal(internal.number)" min="1" max="9999"
                     autocomplete="off" required>
                 </td>
               </tr>
@@ -222,8 +223,9 @@
                           吸込
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="temp_before_suction"
-                            ng-model="internal.temp_before_suction" placeholder="吸込を入力" ng-change="changeTempBefore()">
+                          <input type="text" class="form-control" autocomplete="off" name="temp_before_suction"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="true" placeholder="吸込を入力"
+                            ng-model="internal.temp_before_suction" ng-change="changeTempBefore()">
                         </td>
                       </tr>
                       <tr>
@@ -231,8 +233,9 @@
                           吹出
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="temp_before_blow"
-                            ng-model="internal.temp_before_blow" placeholder="吹出を入力" ng-change="changeTempBefore()">
+                          <input type="text" class="form-control" autocomplete="off" name="temp_before_blow"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="true" ng-model="internal.temp_before_blow"
+                            placeholder="吹出を入力" ng-change="changeTempBefore()">
                         </td>
                       </tr>
                       <tr>
@@ -262,8 +265,9 @@
                           吸込
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="temp_after_suction"
-                            ng-model="internal.temp_after_suction" placeholder="吸込を入力" ng-change="changeTempAfter()">
+                          <input type="text" class="form-control" autocomplete="off" name="temp_after_suction"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="true" ng-model="internal.temp_after_suction"
+                            placeholder="吸込を入力" ng-change="changeTempAfter()">
                         </td>
                       </tr>
                       <tr>
@@ -271,8 +275,9 @@
                           吹出
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="temp_after_blow"
-                            ng-model="internal.temp_after_blow" placeholder="吹出を入力" ng-change="changeTempAfter()">
+                          <input type="text" class="form-control" autocomplete="off" name="temp_after_blow" input-float=""
+                            max-integer="2" max-decimal="1" has-negative="true" ng-model="internal.temp_after_blow"
+                            placeholder="吹出を入力" ng-change="changeTempAfter()">
                         </td>
                       </tr>
                       <tr>
@@ -309,8 +314,9 @@
                           前
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="wind_suction_before"
-                            ng-model="internal.wind_suction_before" placeholder="吸込を入力" ng-change="changeWindBefore()">
+                          <input type="text" class="form-control" autocomplete="off" name="wind_suction_before"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="false" ng-model="internal.wind_suction_before"
+                            placeholder="吸込を入力" ng-change="changeWindBefore()">
                         </td>
                       </tr>
                       <tr>
@@ -318,8 +324,9 @@
                           後
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="wind_suction_after"
-                            ng-model="internal.wind_suction_after" placeholder="吹出を入力" ng-change="changeWindBefore()">
+                          <input type="text" class="form-control" autocomplete="off" name="wind_suction_after"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="false" ng-model="internal.wind_suction_after"
+                            placeholder="吹出を入力" ng-change="changeWindBefore()">
                         </td>
                       </tr>
                       <tr>
@@ -349,8 +356,9 @@
                           前
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="wind_blow_before"
-                            ng-model="internal.wind_blow_before" placeholder="吸込を入力" ng-change="changeWindAfter()">
+                          <input type="text" class="form-control" autocomplete="off" name="wind_blow_before"
+                            input-float="" max-integer="2" max-decimal="1" has-negative="false" ng-model="internal.wind_blow_before"
+                            placeholder="吸込を入力" ng-change="changeWindAfter()">
                         </td>
                       </tr>
                       <tr>
@@ -358,8 +366,9 @@
                           後
                         </th>
                         <td class="col-xs-8">
-                          <input type="text" class="form-control" autocomplete="off" input-validator="float" name="wind_blow_after"
-                            ng-model="internal.wind_blow_after" placeholder="吹出を入力" ng-change="changeWindAfter()">
+                          <input type="text" class="form-control" autocomplete="off" name="wind_blow_after" input-float=""
+                            max-integer="2" max-decimal="1" has-negative="false" ng-model="internal.wind_blow_after"
+                            placeholder="吹出を入力" ng-change="changeWindAfter()">
                         </td>
                       </tr>
                       <tr>
@@ -422,7 +431,7 @@
                   指摘事項
                 </th>
                 <td class="col-xs-10" colspan="3">
-                  <textarea class="form-control" ng-model="internal.description" ng-click="modalDescription(internal.description)"
+                  <textarea class="form-control" rows="5" ng-model="internal.description" ng-click="modalDescription(internal.description)"
                     placeholder="指摘事項を入力"></textarea>
                 </td>
               </tr>
@@ -435,6 +444,9 @@
     <div ng-if="isSaveClick">
       <div ng-messages="vm.modalInternalForm.number.$error" role="alert">
         <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+        <li class="text-red" ng-message="min">管理Noはを1以上を入力してください。</li>
+        <li class="text-red" ng-message="max">管理Noはを9999以下を入力してください。</li>
+        <li class="text-red" ng-message="dupl">管理Noが重複しています</li>
       </div>
       <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
         <li class="text-red" ng-message="required">氏名を入力してください。</li>
@@ -446,29 +458,28 @@
         <li class="text-red" ng-message="datetime">終了時間の入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.temp_before_suction.$error" role="alert">
-        <li class="text-red" ng-message="float">吸込の作業前の温度の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">温度の作業前の吸込の[-xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.temp_before_blow.$error" role="alert">
-        <li class="text-red" ng-message="float">吹出の作業前の温度の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">温度の作業前の吹出の[-xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.temp_after_suction.$error" role="alert">
-        <li class="text-red" ng-message="float">吸込の作業後の温度の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">温度の作業後の吸込の[-xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.temp_after_blow.$error" role="alert">
-        <li class="text-red" ng-message="float">吹出の作業後の温度の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">温度の作業後の吹出の[-xx.x]入力形式に誤りがあります。</li>
       </div>
-
       <div ng-messages="vm.modalInternalForm.wind_suction_before.$error" role="alert">
-        <li class="text-red" ng-message="float">吸込の作業前の風速の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">風速の作業前の吸込の[xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.wind_suction_after.$error" role="alert">
-        <li class="text-red" ng-message="float">吹出の作業前の風速の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">風速の作業前の吹出の[xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.wind_blow_before.$error" role="alert">
-        <li class="text-red" ng-message="float">吸込の作業後の風速の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">風速の作業後の吸込の[xx.x]入力形式に誤りがあります。</li>
       </div>
       <div ng-messages="vm.modalInternalForm.wind_blow_after.$error" role="alert">
-        <li class="text-red" ng-message="float">吹出の作業後の風速の[Float]入力形式に誤りがあります。</li>
+        <li class="text-red" ng-message="inputFloat">風速の作業後の吹出の[xx.x]入力形式に誤りがあります。</li>
       </div>
     </div>
   </div>

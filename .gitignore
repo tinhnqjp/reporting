@@ -24,6 +24,9 @@ uploads
 modules/users/client/img/profile/uploads
 modules/reports/client/img/drawings
 modules/reports/client/img/signature
+modules/reports/client/img/store_image
+modules/reports/client/img/image1
+modules/reports/client/img/image2
 modules/reports/client/excels/export
 modules/reports/client/pdf
 config/env/local.js

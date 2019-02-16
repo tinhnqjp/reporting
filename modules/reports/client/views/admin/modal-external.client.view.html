@@ -39,7 +39,7 @@
                 </th>
                 <td class="col-xs-10" colspan="3">
                   <input type="number" name="number" class="form-control" ng-model="external.number" placeholder="管理Noを入力"
-                    autocomplete="off" required>
+                    ng-change="handlerNumberExternal(external.number)" min="1" max="9999" autocomplete="off" required>
                 </td>
               </tr>
               <tr>
@@ -164,7 +164,7 @@
                   指摘事項
                 </th>
                 <td class="col-xs-10" colspan="3">
-                  <textarea class="form-control" ng-model="external.description" ng-click="modalDescription(external.description)"
+                  <textarea class="form-control" rows="5" ng-model="external.description" ng-click="modalDescription(external.description)"
                     placeholder="指摘事項を入力"></textarea>
                 </td>
               </tr>
@@ -177,6 +177,9 @@
     <div ng-if="isSaveClick">
       <div ng-messages="vm.modalExternalForm.number.$error" role="alert">
         <li class="text-red" ng-message="required">管理Noを入力してください。</li>
+        <li class="text-red" ng-message="min">管理Noはを1以上を入力してください。</li>
+        <li class="text-red" ng-message="max">管理Noはを9999以下を入力してください。</li>
+        <li class="text-red" ng-message="dupl">管理Noが重複しています</li>
       </div>
       <div ng-messages="vm.modalExternalForm.made_date.$error" role="alert">
         <li class="text-red" ng-message="made_date">製造年月の[YYYY/MM]入力形式に誤りがあります。</li>

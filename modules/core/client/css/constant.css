@@ -1521,6 +1521,19 @@
   width: 500px !important;
 }
 
+.min-w100 {
+  min-width: 100px !important;
+}
+.mw100 {
+  max-width: 100px !important;
+}
+.mw200 {
+  max-width: 200px !important;
+}
+.mw300 {
+  max-width: 300px !important;
+}
+
 .h1 {
   height: 1px !important;
 }

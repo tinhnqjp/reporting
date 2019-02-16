@@ -221,6 +221,11 @@ exports.create = function (req, res) {
             store_image: data.store_image,
             machines: data.machines
           };
+          report.picture.machines.forEach(mac => {
+            if (mac && mac.number && typeof mac.sets != 'undefined' && mac.sets.length === 0) {
+              mac.sets = [{}];
+            }
+          });
           break;
       }
 
@@ -261,9 +266,15 @@ exports.create = function (req, res) {
         })
         .catch(function (err) {
           logger.error(err);
-          return res
-            .status(422)
-            .send({ message: err.message });
+          if (err.name === 'ValidationError') {
+            console.error('Error Validating!', err);
+            res.status(422).json(err);
+          } else {
+            return res
+              .status(500)
+              .send({ message: err.message });
+          }
+
         });
     } else {
       return res.status(422).send({ message: 'アクセス権限が必要。' });

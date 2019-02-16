@@ -163,11 +163,13 @@ function createImage(path, input) {
       var fileName = path + name + '.jpg';
 
       fs.writeFile(fileName, data, {
-        encoding: 'base64'
+        encoding: 'base64',
+        mode: '777'
       }, function (err) {
         if (err) {
           reject(err);
         } else {
+          fs.chmodSync(fileName, '777');
           fileName = fileName.substr(1);
           resolve(fileName);
         }

@@ -422,7 +422,7 @@ var ReportSchema = new Schema({
       // 設置時追加充填量
       filling_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 対象機
-      target: { type: Number }, // Chọn giữa 内機 và 外機
+      target: { type: String }, // Chọn giữa 内機 và 外機
       // 備考
       remarks: { type: String, maxlength: 15 }
     }],

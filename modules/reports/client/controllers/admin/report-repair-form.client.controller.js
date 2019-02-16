@@ -138,58 +138,28 @@
     };
 
     vm.modalInternal = function (item) {
+      $scope.block_number = false;
       if (item) {
         $scope.internal = Object.create(item);
+        vm.report.repair.externals.forEach(exter => {
+          if (exter.internals && exter.internals.split(',').indexOf(item.number + '') > -1) {
+            $scope.block_number = true;
+          }
+        });
+      } else {
+        $scope.internal = {};
+        var maxObj = _.maxBy(vm.report.repair.internals, 'number');
+        var max = maxObj ? maxObj.number : 0;
+        if (max < 9999) {
+          $scope.internal.number = max + 1;
+        } else {
+          $scope.block_add_inter = true;
+          return;
+        }
       }
-      $scope.pic_taps = vm.configs.pic_taps;
-      $scope.type_taps = vm.configs.type_taps;
-      $scope.two_taps = vm.configs.two_taps;
-      $scope.three_taps = vm.configs.three_taps;
-      $scope.four_taps = vm.configs.four_taps;
+
       if (!$scope.internal) {
         $scope.internal = {};
-      }
-      if (!$scope.internal.has_picture) {
-        $scope.internal.has_picture = false;
-      }
-      if (!$scope.internal.drain_pump) {
-        $scope.internal.drain_pump = 1;
-      }
-      if (!$scope.internal.hose) {
-        $scope.internal.hose = 1;
-      }
-      if (!$scope.internal.hose) {
-        $scope.internal.hose = 1;
-      }
-      if (!$scope.internal.heat_exchanger) {
-        $scope.internal.heat_exchanger = 1;
-      }
-      if (!$scope.internal.drain_pan) {
-        $scope.internal.drain_pan = 1;
-      }
-      if (!$scope.internal.grill) {
-        $scope.internal.grill = 1;
-      }
-      if (!$scope.internal.filter) {
-        $scope.internal.filter = 1;
-      }
-      if (!$scope.internal.before_confirmed) {
-        $scope.internal.before_confirmed = 1;
-      }
-      if (!$scope.internal.damage) {
-        $scope.internal.damage = false;
-      }
-      if (!$scope.internal.drainage) {
-        $scope.internal.drainage = 1;
-      }
-      if (!$scope.internal.noise_and_vibration) {
-        $scope.internal.noise_and_vibration = 1;
-      }
-      if (!$scope.internal.after_confirmed) {
-        $scope.internal.after_confirmed = 1;
-      }
-      if (!$scope.internal.measure) {
-        $scope.internal.measure = false;
       }
 
       ngDialog.openConfirm({
@@ -213,45 +183,46 @@
             if (!item) {
               vm.report.repair.internals.push($scope.internal);
             } else {
-              item.has_picture = $scope.internal.has_picture;
               item.number = $scope.internal.number;
+              item.posision = $scope.internal.posision;
               item.maker = $scope.internal.maker;
               item.type = $scope.internal.type;
               item.model = $scope.internal.model;
               item.serial = $scope.internal.serial;
-              item.drain_pump = $scope.internal.drain_pump;
-              item.hose = $scope.internal.hose;
-              item.heat_exchanger = $scope.internal.heat_exchanger;
-              item.drain_pan = $scope.internal.drain_pan;
-              item.grill = $scope.internal.grill;
-              item.filter = $scope.internal.filter;
-              item.before_confirmed = $scope.internal.before_confirmed;
-              item.damage = $scope.internal.damage;
-              item.drainage = $scope.internal.drainage;
-              item.noise_and_vibration = $scope.internal.noise_and_vibration;
-              item.after_confirmed = $scope.internal.after_confirmed;
-              item.measure = $scope.internal.measure;
-
-              item.temp_before_suction = $scope.internal.temp_before_suction;
-              item.temp_before_blow = $scope.internal.temp_before_blow;
-              item.temp_before_diff = $scope.internal.temp_before_diff;
-              item.temp_after_suction = $scope.internal.temp_after_suction;
-              item.temp_after_blow = $scope.internal.temp_after_blow;
-              item.temp_after_diff = $scope.internal.temp_after_diff;
-
-              item.wind_suction_before = $scope.internal.wind_suction_before;
-              item.wind_suction_after = $scope.internal.wind_suction_after;
-              item.wind_suction_diff = $scope.internal.wind_suction_diff;
-              item.wind_blow_before = $scope.internal.wind_blow_before;
-              item.wind_blow_after = $scope.internal.wind_blow_after;
-              item.wind_blow_diff = $scope.internal.wind_blow_diff;
-
-              item.assembler = $scope.internal.assembler;
               item.exterior_type = $scope.internal.exterior_type;
-              item.description = $scope.internal.description;
+              item.made_date = $scope.internal.made_date;
+              item.indoor_suction = $scope.internal.indoor_suction;
+              item.outdoor_suction = $scope.internal.outdoor_suction;
+              item.high_pressure = $scope.internal.high_pressure;
+              item.low_pressure = $scope.internal.low_pressure;
+              item.discharge_pipe = $scope.internal.discharge_pipe;
+              item.suction_pipe = $scope.internal.suction_pipe;
+              item.u = $scope.internal.u;
+              item.v = $scope.internal.v;
+              item.w = $scope.internal.w;
             }
 
             $scope.confirm();
+          };
+
+          $scope.handlerNumberInternal = function (_number) {
+            if (!_number) {
+              return;
+            }
+            var isValid = false;
+            vm.report.repair.internals.forEach(inter => {
+              if (inter !== item && inter.number === _number) {
+                isValid = true;
+              }
+            });
+
+            if (isValid) {
+              vm.modalInternalForm.number.$setValidity('dupl', false);
+              return false;
+            } else {
+              vm.modalInternalForm.number.$setValidity('dupl', true);
+              return true;
+            }
           };
 
           $scope.modalMaker = function (maker) {
@@ -337,91 +308,6 @@
                 delete $scope.type;
               });
           };
-
-          $scope.modalDescription = function (description) {
-            $scope.descriptions = vm.configs.phrases;
-            if (description) {
-              var index = _.indexOf($scope.descriptions, description);
-              if (index >= 0) {
-                $scope.selected = description;
-                $scope.input = '';
-              } else {
-                $scope.input = description;
-                $scope.selected = '';
-              }
-            }
-
-            ngDialog.openConfirm({
-              templateUrl: '/modules/reports/client/views/admin/modal-description.client.view.html',
-              scope: $scope,
-              showClose: false,
-              closeByDocument: false,
-              width: 600,
-              controller: ['$scope', function ($scope) {
-                $scope.confirmForm = function () {
-                  if ($scope.internal) {
-                    $scope.internal.description = $scope.input;
-                  }
-                  $scope.confirm();
-                };
-                $scope.selectValue = function (value) {
-                  if ($scope.internal) {
-                    $scope.internal.description = value;
-                  }
-                  $scope.confirm();
-                };
-              }]
-            })
-              .then(function (res) {
-                delete $scope.description;
-              }, function (res) {
-                delete $scope.description;
-              });
-          };
-
-          $scope.tapTwo = function (id, name) {
-            $scope.internal[name] = !id;
-          };
-          $scope.tapThree = function (id, name) {
-            if (id < 3) {
-              $scope.internal[name] = id + 1;
-            } else {
-              $scope.internal[name] = 1;
-            }
-          };
-          $scope.tapFour = function (id, name) {
-            if (id < 4) {
-              $scope.internal[name] = id + 1;
-            } else {
-              $scope.internal[name] = 1;
-            }
-          };
-
-          $scope.changeTempBefore = function () {
-            var temp_before_suction = $scope.internal.temp_before_suction || 0;
-            var temp_before_blow = $scope.internal.temp_before_blow || 0;
-            $scope.internal.temp_before_diff = roundAbs(temp_before_suction - temp_before_blow);
-          };
-          $scope.changeTempAfter = function () {
-            var temp_after_suction = $scope.internal.temp_after_suction || 0;
-            var temp_after_blow = $scope.internal.temp_after_blow || 0;
-            $scope.internal.temp_after_diff = roundAbs(temp_after_suction - temp_after_blow);
-          };
-
-          $scope.changeWindBefore = function () {
-            var wind_suction_before = $scope.internal.wind_suction_before || 0;
-            var wind_suction_after = $scope.internal.wind_suction_after || 0;
-            $scope.internal.wind_suction_diff = roundAbs(wind_suction_before - wind_suction_after);
-          };
-          $scope.changeWindAfter = function () {
-            var wind_blow_before = $scope.internal.wind_blow_before || 0;
-            var wind_blow_after = $scope.internal.wind_blow_after || 0;
-            $scope.internal.wind_blow_diff = roundAbs(wind_blow_before - wind_blow_after);
-          };
-
-          function roundAbs(num) {
-            return Math.round(Math.abs(num) * 100) / 100;
-          }
         }]
       })
         .then(function (res) {
@@ -445,29 +331,21 @@
     vm.modalExternal = function (item) {
       if (item) {
         $scope.external = Object.create(item);
+      } else {
+        $scope.external = {};
+        var maxObj = _.maxBy(vm.report.repair.externals, 'number');
+        var max = maxObj ? maxObj.number : 0;
+        if (max < 9999) {
+          $scope.external.number = max + 1;
+        } else {
+          $scope.block_add_exter = true;
+          return;
+        }
       }
-      $scope.pic_taps = vm.configs.pic_taps;
-      $scope.four_taps = vm.configs.four_taps;
 
       if (!$scope.external) {
         $scope.external = {};
       }
-      if (!$scope.external.has_picture) {
-        $scope.external.has_picture = false;
-      }
-      if (!$scope.external.before_noise_and_vibration) {
-        $scope.external.before_noise_and_vibration = 1;
-      }
-      if (!$scope.external.breakage_dent) {
-        $scope.external.breakage_dent = 1;
-      }
-      if (!$scope.external.heat_exchanger) {
-        $scope.external.heat_exchanger = 1;
-      }
-      if (!$scope.external.exterior_repair) {
-        $scope.external.exterior_repair = 1;
-      }
-
       ngDialog.openConfirm({
         templateUrl: '/modules/reports/client/views/admin/modal-repair-external.client.view.html',
         scope: $scope,
@@ -489,25 +367,52 @@
             if (!item) {
               vm.report.repair.externals.push($scope.external);
             } else {
-              item.has_picture = $scope.external.has_picture;
               item.number = $scope.external.number;
+              item.posision = $scope.external.posision;
               item.maker = $scope.external.maker;
-              item.internals = $scope.external.internals;
               item.model = $scope.external.model;
-              item.serial = $scope.external.serial;
+              item.internals = $scope.external.internals;
               item.refrigerant_kind = $scope.external.refrigerant_kind;
+              item.specified_amount = $scope.external.specified_amount;
+              item.serial = $scope.external.serial;
               item.made_date = $scope.external.made_date;
 
-              item.before_noise_and_vibration = $scope.external.before_noise_and_vibration;
-              item.breakage_dent = $scope.external.breakage_dent;
-              item.heat_exchanger = $scope.external.heat_exchanger;
-              item.exterior_repair = $scope.external.exterior_repair;
-              item.after_noise_and_vibration = $scope.external.after_noise_and_vibration;
-
-              item.description = $scope.external.description;
+              item.recovery_amount = $scope.external.recovery_amount;
+              item.filling_amount = $scope.external.filling_amount;
+              item.remarks = $scope.external.remarks;
+              item.target = $scope.external.target;
+              item.indoor_suction = $scope.external.indoor_suction;
+              item.outdoor_suction = $scope.external.outdoor_suction;
+              item.high_pressure = $scope.external.high_pressure;
+              item.low_pressure = $scope.external.low_pressure;
+              item.discharge_pipe = $scope.external.discharge_pipe;
+              item.suction_pipe = $scope.external.suction_pipe;
+              item.u = $scope.external.u;
+              item.w = $scope.external.w;
+              item.v = $scope.external.v;
             }
 
             $scope.confirm();
+          };
+
+          $scope.handlerNumberExternal = function (_number) {
+            if (!_number) {
+              return;
+            }
+            var isValid = false;
+            vm.report.repair.externals.forEach(inter => {
+              if (inter !== item && inter.number === _number) {
+                isValid = true;
+              }
+            });
+
+            if (isValid) {
+              vm.modalExternalForm.number.$setValidity('dupl', false);
+              return false;
+            } else {
+              vm.modalExternalForm.number.$setValidity('dupl', true);
+              return true;
+            }
           };
 
           $scope.modalMaker = function (maker) {
@@ -620,59 +525,6 @@
               }, function (res) {
                 delete $scope.refrigerant_kind;
               });
-          };
-
-          $scope.modalDescription = function (description) {
-            $scope.descriptions = vm.configs.phrases;
-            if (description) {
-              var index = _.indexOf($scope.descriptions, description);
-              if (index >= 0) {
-                $scope.selected = description;
-                $scope.input = '';
-              } else {
-                $scope.input = description;
-                $scope.selected = '';
-              }
-            }
-
-            ngDialog.openConfirm({
-              templateUrl: '/modules/reports/client/views/admin/modal-description.client.view.html',
-              scope: $scope,
-              showClose: false,
-              closeByDocument: false,
-              width: 600,
-              controller: ['$scope', function ($scope) {
-                $scope.confirmForm = function () {
-                  if ($scope.external) {
-                    $scope.external.description = $scope.input;
-                  }
-                  $scope.confirm();
-                };
-                $scope.selectValue = function (value) {
-                  if ($scope.external) {
-                    $scope.external.description = value;
-                  }
-                  $scope.confirm();
-                };
-              }]
-            })
-              .then(function (res) {
-                delete $scope.description;
-              }, function (res) {
-                delete $scope.description;
-              });
-          };
-
-          $scope.tapTwo = function (id, name) {
-            $scope.external[name] = !id;
-          };
-
-          $scope.tapFour = function (id, name) {
-            if (id < 4) {
-              $scope.external[name] = id + 1;
-            } else {
-              $scope.external[name] = 1;
-            }
           };
         }]
       })

@@ -105,8 +105,8 @@
                 作業結果
               </th>
               <td class="col-xs-4">
-                <span ng-if="vm.report.work_result">完了</span>
-                <span ng-if="!vm.report.work_result">継続</span>
+                <span ng-if="vm.report.work_result == true">完了</span>
+                <span ng-if="vm.report.work_result == false">継続</span>
               </td>
             </tr>
           </tbody>
@@ -262,18 +262,18 @@
                       <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.noise_and_vibration == item.id">{{item.value}}</span></td>
                       <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.after_confirmed == item.id">{{item.value}}</span></td>
                       <td class="text-center"><span ng-repeat="item in type_taps" ng-if="internal.measure == item.id">{{item.value}}</span></td>
-                      <td class="text-center">{{internal.temp_before_suction}}</td>
-                      <td class="text-center">{{internal.temp_before_blow}}</td>
-                      <td class="text-center">{{internal.temp_before_diff}}</td>
-                      <td class="text-center">{{internal.temp_after_suction}}</td>
-                      <td class="text-center">{{internal.temp_after_blow}}</td>
-                      <td class="text-center">{{internal.temp_after_diff}}</td>
-                      <td class="text-center">{{internal.wind_suction_before}}</td>
-                      <td class="text-center">{{internal.wind_suction_after}}</td>
-                      <td class="text-center">{{internal.wind_suction_diff}}</td>
-                      <td class="text-center">{{internal.wind_blow_before}}</td>
-                      <td class="text-center">{{internal.wind_blow_after}}</td>
-                      <td class="text-center">{{internal.wind_blow_diff}}</td>
+                      <td class="text-center">{{internal.temp_before_suction | number: 1}}</td>
+                      <td class="text-center">{{internal.temp_before_blow | number: 1}}</td>
+                      <td class="text-center">{{internal.temp_before_diff | number: 1}}</td>
+                      <td class="text-center">{{internal.temp_after_suction | number: 1}}</td>
+                      <td class="text-center">{{internal.temp_after_blow | number: 1}}</td>
+                      <td class="text-center">{{internal.temp_after_diff | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_suction_before | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_suction_after | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_suction_diff | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_blow_before | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_blow_after | number: 1}}</td>
+                      <td class="text-center">{{internal.wind_blow_diff | number: 1}}</td>
 
                       <td>{{internal.exterior_type}}</td>
                       <td class="pre-wrap">{{internal.description}}</td>

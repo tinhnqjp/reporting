@@ -72,8 +72,8 @@
                 作業結果
               </th>
               <td class="col-xs-4">
-                <span ng-if="vm.report.work_result">完了</span>
-                <span ng-if="!vm.report.work_result">継続</span>
+                <span ng-if="vm.report.work_result == true">完了</span>
+                <span ng-if="vm.report.work_result == false">継続</span>
               </td>
             </tr>
             <tr>
@@ -194,15 +194,15 @@
                     </tr>
                     <tr ng-repeat="internal in vm.report.repair.internals">
                       <td class="text-center">No.{{internal.number}}</td>
-                      <td class="text-center">{{internal.indoor_suction}}</td>
-                      <td class="text-center">{{internal.outdoor_suction}}</td>
-                      <td class="text-center">{{internal.high_pressure}}</td>
-                      <td class="text-center">{{internal.low_pressure}}</td>
-                      <td class="text-center">{{internal.discharge_pipe}}</td>
-                      <td class="text-center">{{internal.suction_pipe}}</td>
-                      <td class="text-center">{{internal.u}}</td>
-                      <td class="text-center">{{internal.v}}</td>
-                      <td class="text-center">{{internal.w}}</td>
+                      <td class="text-center">{{internal.indoor_suction | number: 1}}</td>
+                      <td class="text-center">{{internal.outdoor_suction | number: 1}}</td>
+                      <td class="text-center">{{internal.high_pressure | number: 1}}</td>
+                      <td class="text-center">{{internal.low_pressure | number: 1}}</td>
+                      <td class="text-center">{{internal.discharge_pipe | number: 1}}</td>
+                      <td class="text-center">{{internal.suction_pipe | number: 1}}</td>
+                      <td class="text-center">{{internal.u | number: 1}}</td>
+                      <td class="text-center">{{internal.v | number: 1}}</td>
+                      <td class="text-center">{{internal.w | number: 1}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -240,7 +240,7 @@
                       <td class="text-center">{{external.model}}</td>
 
                       <td class="text-center">{{external.refrigerant_kind}}</td>
-                      <td class="text-center">{{external.specified_amount}} Kg</td>
+                      <td class="text-center">{{external.specified_amount | number: 2}} Kg</td>
                       <td class="text-center">{{external.serial}}</td>
                       <td class="text-center">{{external.made_date}}</td>
                     </tr>
@@ -263,8 +263,8 @@
                     <tr ng-repeat="external in vm.report.repair.externals">
                       <td class="text-center">{{external.target}}</td>
                       <td class="text-center">No.{{external.number}}</td>
-                      <td class="text-center">{{external.recovery_amount}} Kg</td>
-                      <td class="text-center">{{external.filling_amount}} Kg</td>
+                      <td class="text-center">{{external.recovery_amount | number: 2}} Kg</td>
+                      <td class="text-center">{{external.filling_amount | number: 2}} Kg</td>
                       <td class="text-center">{{external.remarks}}</td>
                     </tr>
                   </tbody>
@@ -299,15 +299,15 @@
                     </tr>
                     <tr ng-repeat="external in vm.report.repair.externals">
                       <td class="text-center">No.{{external.number}}</td>
-                      <td class="text-center">{{external.indoor_suction}}</td>
-                      <td class="text-center">{{external.outdoor_suction}}</td>
-                      <td class="text-center">{{external.high_pressure}}</td>
-                      <td class="text-center">{{external.low_pressure}}</td>
-                      <td class="text-center">{{external.discharge_pipe}}</td>
-                      <td class="text-center">{{external.suction_pipe}}</td>
-                      <td class="text-center">{{external.u}}</td>
-                      <td class="text-center">{{external.v}}</td>
-                      <td class="text-center">{{external.w}}</td>
+                      <td class="text-center">{{external.indoor_suction | number: 1}}</td>
+                      <td class="text-center">{{external.outdoor_suction | number: 1}}</td>
+                      <td class="text-center">{{external.high_pressure | number: 1}}</td>
+                      <td class="text-center">{{external.low_pressure | number: 1}}</td>
+                      <td class="text-center">{{external.discharge_pipe | number: 1}}</td>
+                      <td class="text-center">{{external.suction_pipe | number: 1}}</td>
+                      <td class="text-center">{{external.u | number: 1}}</td>
+                      <td class="text-center">{{external.v | number: 1}}</td>
+                      <td class="text-center">{{external.w | number: 1}}</td>
                     </tr>
                   </tbody>
                 </table>

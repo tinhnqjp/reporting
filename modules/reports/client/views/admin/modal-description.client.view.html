@@ -6,7 +6,9 @@
           <tr>
             <td class="col-xs-12">
               <div class="row pdn">
-                <div class="col-xs-6 text-left"><h4>指摘事項</h4></div>
+                <div class="col-xs-6 text-left">
+                  <h4>指摘事項</h4>
+                </div>
                 <div class="col-xs-6 text-right">
                   <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
                   <button class="btn btn-primary btn-sm" type="submit">完了</button>
@@ -16,15 +18,15 @@
           </tr>
           <tr>
             <td class="col-xs-12">
-              <textarea class="form-control" ng-model="input" placeholder="フリー入力"></textarea>
+              <textarea class="form-control" rows="5" ng-model="input" placeholder="フリー入力"></textarea>
             </td>
           </tr>
           <tr>
             <td class="col-xs-12">
               <h4>定型文</h4>
               <div class="list-group">
-                <button type="button" class="list-group-item" ng-repeat="item in descriptions"
-                ng-class="{'active': item == selected }" ng-click="selectValue(item)">{{item}}</button>
+                <button type="button" class="list-group-item" ng-repeat="item in descriptions" ng-class="{'active': item == selected }"
+                  ng-click="selectValue(item)">{{item}}</button>
               </div>
             </td>
           </tr>
