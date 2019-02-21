@@ -426,25 +426,25 @@
             var temp_before_suction = $scope.internal.temp_before_suction || 0;
             var temp_before_blow = $scope.internal.temp_before_blow || 0;
             var temp_before_diff = roundAbs(temp_before_suction - temp_before_blow);
-            $scope.internal.temp_before_diff = $scope.fixDecimal(temp_before_diff, 2);
+            $scope.internal.temp_before_diff = $scope.fixDecimal(temp_before_diff, 1);
           };
           $scope.changeTempAfter = function () {
             var temp_after_suction = $scope.internal.temp_after_suction || 0;
             var temp_after_blow = $scope.internal.temp_after_blow || 0;
             var temp_after_diff = roundAbs(temp_after_suction - temp_after_blow);
-            $scope.internal.temp_after_diff = $scope.fixDecimal(temp_after_diff, 2);
+            $scope.internal.temp_after_diff = $scope.fixDecimal(temp_after_diff, 1);
           };
           $scope.changeWindBefore = function () {
             var wind_suction_before = $scope.internal.wind_suction_before || 0;
             var wind_suction_after = $scope.internal.wind_suction_after || 0;
             var wind_suction_diff = roundAbs(wind_suction_before - wind_suction_after);
-            $scope.internal.wind_suction_diff = $scope.fixDecimal(wind_suction_diff, 2);
+            $scope.internal.wind_suction_diff = $scope.fixDecimal(wind_suction_diff, 1);
           };
           $scope.changeWindAfter = function () {
             var wind_blow_before = $scope.internal.wind_blow_before || 0;
             var wind_blow_after = $scope.internal.wind_blow_after || 0;
             var wind_blow_diff = roundAbs(wind_blow_before - wind_blow_after);
-            $scope.internal.wind_blow_diff = $scope.fixDecimal(wind_blow_diff, 2);
+            $scope.internal.wind_blow_diff = $scope.fixDecimal(wind_blow_diff, 1);
           };
           function roundAbs(num) {
             return Math.round(Math.abs(num) * 100) / 100;

@@ -62,14 +62,14 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('username')" table-order tbtitle="ログインID" tbmodel="username"
+              <th class="w200" ng-click="vm.handleSortChanged('username')" table-order tbtitle="ログインID" tbmodel="username"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="氏名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th class="text-center" ng-click="vm.handleSortChanged('roles')" table-order tbtitle="役割" tbmodel="roles"
+              <th class="mw300 min-w100" ng-click="vm.handleSortChanged('name')" table-order tbtitle="氏名" tbmodel="name" tbcondition="vm.condition"></th>
+              <th class="text-center w50" ng-click="vm.handleSortChanged('roles')" table-order tbtitle="役割" tbmodel="roles"
                 tbcondition="vm.condition"></th>
-              <th class="text-center">部署</th>
+              <th class="text-center w100">部署</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
-                class="text-center"></th>
+                class="text-center w200"></th>
               <th class="text-center w150">操作</th>
             </tr>
           </thead>

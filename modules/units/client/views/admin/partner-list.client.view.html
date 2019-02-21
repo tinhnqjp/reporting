@@ -71,14 +71,14 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('description')" table-order tbtitle="備考" tbmodel="description"
+              <th class="w200" ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
+              <th class="mw300 min-w100" ng-click="vm.handleSortChanged('description')" table-order tbtitle="備考" tbmodel="description"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone" tbcondition="vm.condition"></th>
-              <th>ログインID</th>
-              <th>前回ログイン日時</th>
+              <th class="w150" ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone" tbcondition="vm.condition"></th>
+              <th class="w150">ログインID</th>
+              <th class="text-center w200">前回ログイン日時</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
-                class="text-center"></th>
+                class="text-center w200"></th>
               <th class="text-center w150">操作</th>
             </tr>
           </thead>

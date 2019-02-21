@@ -126,6 +126,10 @@
     function link(scope, element, attrs, ngModel) {
       var flg = false;
       element.bind('keydown keypress', function (e) {
+        if ((event.ctrlKey || event.metaKey) && event.keyCode === 86) {
+          e.preventDefault();
+        }
+
         if (event.which === 8) {
           flg = true;
         } else {
@@ -137,6 +141,7 @@
         if (value.charAt(0) === '.') {
           value = value.slice(1);
         }
+
         var position = value.indexOf('.') + 1;
         if (position >= 0) {
           value = value.substr(0, position) + value.slice(position).replace('.', '');
@@ -146,6 +151,8 @@
         if (value.length > 0) {
           if (!scope.hasNegative) {
             value = value.replace('-', '');
+          } else if (value.length > 1 && value.charAt(value.length - 1) === '-') {
+            value = value.substring(0, value.length - 1);
           }
 
           if (value.indexOf('-') > -1) {
@@ -157,7 +164,6 @@
             value = value + '.';
           }
           if (value.length > 0 && value.indexOf('.') > -1) {
-            var pos = console.log(value.indexOf('.'));
             var split = value.split('.');
             if (split[1] && split[1].length > scope.maxDecimal) {
               value = split[0] + '.' + split[1].substring(0, scope.maxDecimal);
@@ -174,11 +180,16 @@
       });
       element.bind('blur', function (e) {
         var value = this.value;
-        if (value.length > 0) {
-          ngModel.$setViewValue(parseFloat(value).toFixed(scope.maxDecimal));
-          ngModel.$render();
-          scope.$apply();
+        var validator = $window.validator;
+        var isFloat = validator.isFloat(value);
+        if (value.length > 0 && isFloat) {
+          value = parseFloat(value).toFixed(scope.maxDecimal);
+        } else {
+          value = '';
         }
+        ngModel.$setViewValue(value);
+        ngModel.$render();
+        scope.$apply();
         e.preventDefault();
       });
     }

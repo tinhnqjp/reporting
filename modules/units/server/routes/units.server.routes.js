@@ -21,4 +21,7 @@ module.exports = function (app) {
 
   // Finish by binding the unit middleware
   app.param('unitId', units.unitByID);
+
+
+  app.route('/api/mobile/units/import').post(units.importdata);
 };

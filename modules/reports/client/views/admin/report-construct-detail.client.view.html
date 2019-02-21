@@ -1,0 +1,350 @@
+<div class="container-fluid form-detail">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-4">
+          <form-title></form-title>
+        </div>
+        <div class="col-xs-4 text-center">
+        </div>
+        <div class="col-xs-4 text-right">
+          <button-edit back="admin.reports.list" state="admin.reports.construct_edit" params="{reportId: vm.report._id}"></button-edit>
+        </div>
+      </div>
+      <!-- 基本情報 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">基本情報</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                状態
+              </th>
+              <td class="col-xs-4">
+                <label-status item="vm.report.status" list="reportStatus"></label-status>
+              </td>
+              <th class="col-xs-2">
+                有効・無効
+              </th>
+              <td class="col-xs-4">
+                <label-enable model="vm.report.enable"></label-enable>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                納入先
+              </th>
+              <td class="col-xs-10" colspan="3">
+                {{vm.report.supplier}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                住所
+              </th>
+              <td class="col-xs-10" colspan="3">
+                {{vm.report.address1}}<br />
+                {{vm.report.address2}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                開始
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.start | dateTimeLTFormat}}
+              </td>
+              <th class="col-xs-2">
+                終了
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.end | dateTimeLTFormat}}
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                提出先
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.unit_name}}
+              </td>
+              <th class="col-xs-2">
+                作業結果
+              </th>
+              <td class="col-xs-4">
+                <span ng-if="vm.report.work_result == true">完了</span>
+                <span ng-if="vm.report.work_result == false">継続</span>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                作業内容
+              </th>
+              <td class="col-xs-10" colspan="3">
+                {{vm.report.construct.work_kind}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 作業者 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">作業者</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="col-xs-3">氏名</th>
+                      <th class="col-xs-3">会社名</th>
+                      <th class="col-xs-3">開始時間</th>
+                      <th class="col-xs-3">終了時間</th>
+                    </tr>
+                    <tr>
+                      <td colspan="4" ng-show="!vm.report.workers || vm.report.workers.length === 0">該当データが0件でした。</td>
+                    </tr>
+                    <tr ng-repeat="item in vm.report.workers">
+                      <td>{{item.name}}</td>
+                      <td>{{item.company}}</td>
+                      <td>{{item.work_start | dateTimeLTFormat}}</td>
+                      <td>{{item.work_end | dateTimeLTFormat}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                責任者
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.manager}}
+              </td>
+              <th class="col-xs-2">
+                営業担当者
+              </th>
+              <td class="col-xs-4">
+                {{vm.report.saler}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 内機一覧 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">内機一覧</div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" colspan="2">内機情報</th>
+                      <th class="text-center" colspan="3">既設機器</th>
+                      <th class="text-center" colspan="3">新規機器</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">内機</th>
+                      <th class="text-center">系統名</th>
+
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+
+                    </tr>
+                    <tr ng-repeat="internal in vm.report.construct.internals">
+                      <td class="text-center">No.{{internal.number}}</td>
+                      <td class="text-center">{{internal.lineage_name}}</td>
+                      <td class="text-center">{{internal.old_maker}}</td>
+                      <td class="text-center">{{internal.old_model}}</td>
+                      <td class="text-center">{{internal.old_serial}}</td>
+
+                      <td class="text-center">{{internal.new_maker}}</td>
+                      <td class="text-center">{{internal.new_model}}</td>
+                      <td class="text-center">{{internal.new_serial}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" colspan="2">内機情報</th>
+                      <th class="text-center" colspan="5">作業確認欄</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">内機</th>
+                      <th class="text-center">系統名</th>
+
+                      <th class="text-center">耐圧試験</th>
+                      <th class="text-center">通水確認</th>
+                      <th class="text-center">試運転</th>
+                      <th class="text-center">吸込温度</th>
+                      <th class="text-center">吹出温度</th>
+                    </tr>
+                    <tr ng-repeat="internal in vm.report.construct.internals">
+                      <td class="text-center">No.{{internal.number}}</td>
+                      <td class="text-center">{{internal.lineage_name}}</td>
+
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.pressure_test == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.Water_flow == item.id">{{item.value}}</span></td>
+                      <td class="text-center"><span ng-repeat="item in four_taps" ng-if="internal.test == item.id">{{item.value}}</span></td>
+                      <td class="text-center">{{internal.suction_temperature | number: 1}} ℃</td>
+                      <td class="text-center">{{internal.blowing_temperature | number: 1}} ℃</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 外機一覧 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">外機一覧</div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <td class="col-xs-12" colspan="4">
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" colspan="2">外機情報</th>
+                      <th class="text-center" colspan="3">既設機器</th>
+                      <th class="text-center" colspan="3">新規機器</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">外機</th>
+                      <th class="text-center">系統名</th>
+
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+
+                      <th class="text-center">メーカー</th>
+                      <th class="text-center">機器型式</th>
+                      <th class="text-center">製造番号</th>
+                    </tr>
+                    <tr ng-repeat="external in vm.report.construct.externals">
+                      <td class="text-center">No.{{external.number}}</td>
+                      <td class="text-center">{{external.lineage_name}}</td>
+                      <td class="text-center">{{external.old_maker}}</td>
+                      <td class="text-center">{{external.old_model}}</td>
+                      <td class="text-center">{{external.old_serial}}</td>
+
+                      <td class="text-center">{{external.new_maker}}</td>
+                      <td class="text-center">{{external.new_model}}</td>
+                      <td class="text-center">{{external.new_serial}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table class="table table-bordered table-detail">
+                  <tbody>
+                    <tr>
+                      <th class="text-center" rowspan="2">対象機</th>
+                      <th class="text-center" rowspan="2">系統名</th>
+                      <th class="text-center" rowspan="2">既設仕様</th>
+                      <th class="text-center" rowspan="2">新規仕様</th>
+
+                      <th class="text-center" colspan="2">冷媒回収量</th>
+                      <th class="text-center" colspan="2">冷媒規定量</th>
+
+                      <th class="text-center" rowspan="2">設置時追加充填量</th>
+                      <th class="text-center" rowspan="2">備考</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">冷媒種類 </th>
+                      <th class="text-center">回収量 </th>
+                      <th class="text-center">冷媒種類 </th>
+                      <th class="text-center">規定量 </th>
+                    </tr>
+                    <tr ng-repeat="external in vm.report.construct.externals">
+                      <td class="text-center">{{external.target}} No.{{external.number}}</td>
+                      <td class="text-center">{{external.lineage_name}}</td>
+                      <td class="text-center">{{external.old_spec}}</td>
+                      <td class="text-center">{{external.new_spec}}</td>
+                      <td class="text-center">{{external.recovery_refrigerant_kind}}</td>
+                      <td class="text-center">{{external.recovery_amount | number: 2}}</td>
+                      <td class="text-center">{{external.specified_refrigerant_kind}}</td>
+                      <td class="text-center">{{external.specified_amount | number: 2}}</td>
+
+                      <td class="text-center">{{external.filling_amount | number: 2}}</td>
+                      <td class="text-center">{{external.remarks}}</td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 見取り図 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">見取り図</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+
+              <td class="col-xs-12" colspan="4">
+                <div ng-show="!vm.report.drawings || vm.report.drawings.length === 0">該当データが0件でした。</div>
+                <div class="col-xs-3" ng-repeat="item in vm.report.drawings">
+                  <img class="thumbnail img-responsive" src="{{item}}" ng-click="handleShowImage(item)">
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 工事概要 -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">工事概要</div>
+        <table class="table table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                工事概要
+              </th>
+              <td class="col-xs-10 pre-wrap" ng-bind="vm.report.construct.summary">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- お客様サイン -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">お客様サイン</div>
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                お客様サイン
+              </th>
+              <td class="col-xs-10" colspan="3">
+                <img class="img-thumbnail img-responsive" src="{{vm.report.signature}}" ng-click="handleShowImage(vm.report.signature)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/reports/client/views/admin/report-detail-common-under.client.view.html'"></div>
+
+      <div class="row mg50b">
+        <div class="col-xs-2">
+        </div>
+        <div class="col-xs-8 text-center">
+          <div ng-include="'/modules/reports/client/views/admin/button-upload-status.client.view.html'"></div>
+        </div>
+        <div class="col-xs-2 text-right">
+          <button-edit back="admin.reports.list" state="admin.reports.construct_edit" params="{reportId: vm.report._id}"></button-edit>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

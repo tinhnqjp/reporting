@@ -690,6 +690,7 @@ a.text-muted:focus {
 
 .col-index {
 	text-align: center;
+	width: 50px;
 }
 
 .icon {

@@ -140,9 +140,9 @@ var ReportSchema = new Schema({
       // タイプ
       type: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 機器型式
-      model: { type: String, default: '', maxlength: 13 }, // Free input
+      model: { type: String, default: '', maxlength: 18 }, // Free input
       // 製造番号
-      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      serial: { type: String, default: '', maxlength: 15 }, // Free input
       // ドレンポンプ
       drain_pump: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle)
       // ホース内
@@ -210,9 +210,9 @@ var ReportSchema = new Schema({
       // メーカー
       maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 機器型式
-      model: { type: String, default: '', maxlength: 13 }, // Free input
+      model: { type: String, default: '', maxlength: 18 }, // Free input
       // 製造番号
-      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 冷媒種類
       refrigerant_kind: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 製造年月
@@ -275,9 +275,9 @@ var ReportSchema = new Schema({
       // タイプ
       type: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 機器型式
-      model: { type: String, default: '', maxlength: 13 }, // Free input
+      model: { type: String, default: '', maxlength: 18 }, // Free input
       // 製造番号
-      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 外装パネル型式
       exterior_type: { type: String, maxlength: 14 }, // Free input
       // 製造年月
@@ -310,7 +310,7 @@ var ReportSchema = new Schema({
       // メーカー
       maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 機器型式
-      model: { type: String, default: '', maxlength: 13 }, // Free input
+      model: { type: String, default: '', maxlength: 18 }, // Free input
       // 対応内機
       internals: { type: String }, // Chuỗi các number của Máy trong nhà, ngăn cách nhau bởi dấu [,]
       // 冷媒種類
@@ -318,7 +318,7 @@ var ReportSchema = new Schema({
       // 規定量
       specified_amount: { type: Number }, // Kg Float có dạng: 123.12 (phía trước [.] tối đa 3 số, phía sau [.] tối đa 2 số)
       // 製造番号
-      serial: { type: String, default: '', maxlength: 12 }, // Free input
+      serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 製造年月
       made_date: { type: String, maxlength: 7 }, // YYYY/MM (MM có thể không nhập YYYY/-)
       // 回収量
@@ -369,15 +369,15 @@ var ReportSchema = new Schema({
       // 既設機器 -> メーカー
       old_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 既設機器 -> 機器型式
-      old_model: { type: String, default: '', maxlength: 13 }, // Free input
+      old_model: { type: String, default: '', maxlength: 18 }, // Free input
       // 既設機器 -> 製造番号
-      old_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      old_serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 新規機器 -> メーカー
       new_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 新規機器 -> 機器型式
-      new_model: { type: String, default: '', maxlength: 13 }, // Free input
+      new_model: { type: String, default: '', maxlength: 18 }, // Free input
       // 新規機器 -> 製造番号
-      new_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      new_serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 耐圧試験
       pressure_test: { type: Number, default: 1 }, // Button tap to change (1: bar, 2: circle, 3: triangle, 4: X)
       // 通水確認
@@ -398,15 +398,15 @@ var ReportSchema = new Schema({
       // 既設機器 -> メーカー
       old_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 既設機器 -> 機器型式
-      old_model: { type: String, default: '', maxlength: 13 }, // Free input
+      old_model: { type: String, default: '', maxlength: 18 }, // Free input
       // 既設機器 -> 製造番号
-      old_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      old_serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 新規機器 -> メーカー
       new_maker: { type: String, default: '' }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 新規機器 -> 機器型式
-      new_model: { type: String, default: '', maxlength: 13 }, // Free input
+      new_model: { type: String, default: '', maxlength: 18 }, // Free input
       // 新規機器 -> 製造番号
-      new_serial: { type: String, default: '', maxlength: 12 }, // Free input
+      new_serial: { type: String, default: '', maxlength: 15 }, // Free input
       // 既設仕様
       old_spec: { type: String }, // Select and Free input (Chọn từ list text cố định hoặc free input)
       // 新規仕様
@@ -438,7 +438,11 @@ var ReportSchema = new Schema({
     // 報告内容
     work_content: { type: String }, // Multiple lines
     // 指摘事項
-    description: { type: String } // Multiple lines
+    description: { type: String }, // Multiple lines
+    image1: { type: String },
+    image2: { type: String },
+    image3: { type: String },
+    image4: { type: String }
   }
 });
 
@@ -455,6 +459,9 @@ ReportSchema.pre('save', function (next) {
         next(err);
       });
   } else {
+    if (this.supplier && this.isModified('supplier')) {
+      this.search = (this.supplier ? this.supplier : '') + '-' + this.number;
+    }
     next();
   }
 });

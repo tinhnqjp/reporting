@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Config = mongoose.model('Config'),
+  Unit = mongoose.model('Unit'),
   path = require('path'),
   config = require(path.resolve('./config/config')),
   multer = require('multer'),
@@ -232,7 +233,107 @@ exports.report = function (req, res) {
     });
 };
 
+/** import Excel stores */
+exports.importdata = function (req, res) {
+  // init
+  var ACC_SHEET = 'account';
+  var PATH_FILE = './modules/users/client/excels/import/data_users.xlsx';
+  console.log('TCL: exports.importdata -> PATH_FILE', PATH_FILE);
+  var workbook = new Excel.Workbook();
 
+  workbook.xlsx.readFile(PATH_FILE)
+    .then(function () {
+      // insert and update stores
+      var promises = [];
+      var worksheet = workbook.getWorksheet(ACC_SHEET);
+      if (!worksheet) {
+        return Promise.reject({ message: ACC_SHEET + 'シートが見つかりませんでした。' });
+      }
+      worksheet.eachRow(function (row, rowNumber) {
+        var array = row.values;
+        if (rowNumber > 1) {
+          var user = {
+            // basic
+            username: array[2],
+            password: array[3],
+            name: array[4],
+            unit_name: array[5],
+            role: array[6]
+          };
+
+
+          // console.log(user);
+          promises.push(createAcc(user));
+        }
+      });
+      return Promise.all(promises);
+    })
+    .then(function (result) {
+      return res.json(result);
+    })
+    .catch(function (err) {
+      logger.error(err);
+      if (err.message && err.message.match(/Cast to String failed for value/)) {
+        return res.status(422).send({ message: 'セルに入力されている文字の書式に誤りがあります。' });
+      }
+      return res.status(422).send(err);
+    });
+
+  function createAcc(doc) {
+    return new Promise(function (resolve, reject) {
+      Unit.findOne({ name: doc.unit_name }).exec()
+        .then(function (_unit) {
+          doc.unit = _unit;
+          var roles;
+          switch (doc.role) {
+            case 'S':
+              roles = 'admin';
+              break;
+            case 'A':
+              roles = 'operator';
+              break;
+            case 'A-':
+              roles = 'bsoperator';
+              break;
+            case 'B':
+              roles = 'dispatcher';
+              break;
+            case 'B-':
+              roles = 'employee';
+              break;
+            case 'C':
+              roles = 'partner';
+              break;
+            case 'D':
+              roles = 'user';
+              break;
+          }
+          doc.roles = roles;
+          var account = new User(doc);
+          return saveSchema(account);
+        })
+        .then(function (_user) {
+          return resolve(_user);
+        })
+        .catch(function (err) {
+          reject(err);
+        });
+
+    });
+  }
+
+  function saveSchema(doc) {
+    return new Promise(function (resolve, reject) {
+      doc.save(function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(doc);
+        }
+      });
+    });
+  }
+};
 /** ====== PRIVATE ========= */
 function getQuery(condition) {
   var and_arr = [{ deleted: false }];

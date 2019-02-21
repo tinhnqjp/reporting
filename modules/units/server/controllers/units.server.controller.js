@@ -101,6 +101,74 @@ exports.unitByID = function (req, res, next, id) {
   });
 };
 
+exports.importdata = function (req, res) {
+  var arr = [
+    '1部1課',
+    '2部3課',
+    '2部1課',
+    '2部2課',
+    '3部1課',
+    '3部2課',
+    '杉並CK',
+    '多摩CK',
+    '横浜CK',
+    '品川CK',
+    '三郷CK',
+    '栃木CK',
+    '杉並CS1',
+    '多摩CS1',
+    '横浜CS1',
+    '三郷CS2',
+    '多摩CS2',
+    '中関東CK',
+    'EM課',
+    '営業推進課',
+    '技術推進課',
+    '住環境開発課',
+    '経営管理課',
+    '経営管理部',
+    '人事部',
+    '大阪営業',
+    '大阪営業推進',
+    '名古屋営業',
+    '大阪CK',
+    '大阪CS1',
+    '大阪CS2',
+    '西日本EM',
+    '大阪技術推進',
+    '名古屋CK',
+    '名古屋CS1',
+    '名古屋CS2',
+    '福岡TC',
+    'ｱﾙﾊﾞｲﾄ'
+  ];
+
+  var promises = [];
+  arr.forEach(item => {
+    var unit = new Unit({ name: item });
+    promises.push(saveSchema(unit));
+  });
+
+  Promise.all(promises)
+    .then(function (result) {
+      return res.json({
+        message: 'OK'
+      });
+    });
+
+  function saveSchema(doc) {
+    return new Promise(function (resolve, reject) {
+      doc.save(function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(doc);
+        }
+      });
+    });
+  }
+};
+
 
 /** ====== PRIVATE ========= */
 function getQuery(condition) {

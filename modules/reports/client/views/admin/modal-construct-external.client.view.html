@@ -1,0 +1,280 @@
+<form name="vm.modalInternalForm" ng-submit="confirmExternal(vm.modalInternalForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+    <div class="row pdn">
+      <div class="col-xs-6 text-left">
+        <h4>外機</h4>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">
+          キャンセル
+        </button>
+        <button class="btn btn-primary btn-sm" type="submit">完了</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading">外機情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">管理No<span class="text-red">*</span></th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="external.number" placeholder="管理Noを入力"
+                    ng-disabled="block_number" ng-change="handlerNumberInternal(external.number)" min="1" max="9999"
+                    autocomplete="off" required />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  系統名
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="text" class="form-control" ng-model="external.lineage_name" placeholder="系統名を入力" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">既設機器</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.old_maker" placeholder="メーカーを入力" ng-click="modalMaker(external.old_maker, 'old_maker')" />
+                </td>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.old_model" placeholder="機器型式を入力" maxlength="13" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.old_serial" placeholder="製造番号を入力"
+                    maxlength="12" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">新規機器</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.new_maker" placeholder="メーカーを入力" ng-click="modalMaker(external.new_maker, 'new_maker')" />
+                </td>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.new_model" placeholder="機器型式を入力" maxlength="13" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.new_serial" placeholder="製造番号を入力"
+                    maxlength="12" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">冷媒情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail mg10b">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  既設仕様
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.old_spec" placeholder="既設仕様を入力" ng-click="modalSpec(external.old_spec, 'old_spec')" />
+                </td>
+                <th class="col-xs-2">
+                  新規仕様
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="external.new_spec" placeholder="既設仕様を入力" ng-click="modalSpec(external.new_spec, 'new_spec')" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-xs-6 pdn pd5">
+            <div class="panel panel-default">
+              <div class="panel-heading">冷媒回収量
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-detail">
+                    <tbody>
+                      <tr>
+                        <th class="col-xs-4">
+                          冷媒種類
+                        </th>
+                        <td class="col-xs-8">
+                          <input type="text" class="form-control" ng-model="external.recovery_refrigerant_kind"
+                            placeholder="冷媒種類を入力" ng-click="modalRefrigerantKind(external.recovery_refrigerant_kind, 'recovery_refrigerant_kind')">
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="col-xs-4">
+                          回収量
+                        </th>
+                        <td class="col-xs-8">
+                          <div class="input-group">
+                            <input type="text" class="form-control" autocomplete="off" name="recovery_amount"
+                              input-float="" max-integer="3" max-decimal="2" has-negative="false" ng-model="external.recovery_amount"
+                              placeholder="回収量を入力">
+                            <span class="input-group-addon">Kg</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 pdn pd5">
+            <div class="panel panel-default">
+              <div class="panel-heading">冷媒規定量</div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-detail">
+                    <tbody>
+                      <tr>
+                        <th class="col-xs-4">
+                          冷媒種類
+                        </th>
+                        <td class="col-xs-8">
+                          <input type="text" class="form-control" ng-model="external.specified_refrigerant_kind"
+                            placeholder="冷媒種類を入力" ng-click="modalRefrigerantKind(external.specified_refrigerant_kind,
+'specified_refrigerant_kind')">
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="col-xs-4">
+                          規定量
+                        </th>
+                        <td class="col-xs-8">
+                          <div class="input-group">
+                            <input type="text" class="form-control" autocomplete="off" name="specified_amount"
+                              input-float="" max-integer="3" max-decimal="2" has-negative="false" ng-model="external.specified_amount"
+                              placeholder="規定量を入力">
+                            <span class="input-group-addon">Kg</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table class="table table-detail mg10b">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  設置時追加充填量
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="text" class="form-control" autocomplete="off" name="filling_amount" input-float=""
+                      max-integer="3" max-decimal="2" has-negative="false" ng-model="external.filling_amount"
+                      placeholder="設置時追加充填量を入力">
+                    <span class="input-group-addon">Kg</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  対象機
+                </th>
+                <td class="col-xs-4">
+                  <select class="form-control" ng-model="external.target" ng-options="item for item in vm.configs.targets">
+                    <option value="">対象機を選択</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  備考
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="text" class="form-control" ng-model="external.remarks" placeholder="備考を入力" maxlength="15">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalInternalForm.number.$error" role="alert">
+        <li class="text-red" ng-message="required">
+          管理Noを入力してください。
+        </li>
+        <li class="text-red" ng-message="min">
+          管理Noはを1以上を入力してください。
+        </li>
+        <li class="text-red" ng-message="max">
+          管理Noはを9999以下を入力してください。
+        </li>
+        <li class="text-red" ng-message="dupl">管理Noが重複しています</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
+        <li class="text-red" ng-message="required">氏名を入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_start.$error" role="alert">
+        <li class="text-red" ng-message="datetime">
+          開始時間の入力形式に誤りがあります。
+        </li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_end.$error" role="alert">
+        <li class="text-red" ng-message="datetime">
+          終了時間の入力形式に誤りがあります。
+        </li>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">
+      キャンセル
+    </button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>

@@ -121,6 +121,9 @@
         case 2:
           $state.go('admin.reports.repair_edit', { reportId: id });
           break;
+        case 3:
+          $state.go('admin.reports.construct_edit', { reportId: id });
+          break;
         case 4:
           $state.go('admin.reports.picture_edit', { reportId: id });
           break;
@@ -134,6 +137,9 @@
           break;
         case 2:
           $state.go('admin.reports.repair_detail', { reportId: id });
+          break;
+        case 3:
+          $state.go('admin.reports.construct_detail', { reportId: id });
           break;
         case 4:
           $state.go('admin.reports.picture_detail', { reportId: id });

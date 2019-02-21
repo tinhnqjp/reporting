@@ -51,14 +51,14 @@
           <thead>
             <tr>
               <th class="col-index">#</th>
-              <th class="text-center" ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action"
+              <th class="text-center w50" ng-click="vm.handleSortChanged('action')" table-order tbtitle="申請種類" tbmodel="action"
                 tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone" tbcondition="vm.condition"></th>
-              <th ng-click="vm.handleSortChanged('manager')" table-order tbtitle="担当者" tbmodel="manager" tbcondition="vm.condition"></th>
-              <th>協力会社</th>
+              <th class="min-w100" ng-click="vm.handleSortChanged('name')" table-order tbtitle="社名" tbmodel="name" tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('phone')" table-order tbtitle="電話番号" tbmodel="phone" tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('manager')" table-order tbtitle="担当者" tbmodel="manager" tbcondition="vm.condition"></th>
+              <th class="w150">協力会社</th>
               <th ng-click="vm.handleSortChanged('created')" table-order tbtitle="登録日時" tbmodel="created" tbcondition="vm.condition"
-                class="text-center"></th>
+                class="text-center w200"></th>
               <th class="text-center w150">操作</th>
             </tr>
           </thead>

@@ -2,7 +2,7 @@
 
 module.exports = {
   app: {
-    title: 'DEMO',
+    title: 'ECO-PLAN',
     description: 'Working report',
     keywords: '',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
@@ -41,7 +41,7 @@ module.exports = {
     xssProtection: true
   },
   logo: 'modules/core/client/img/brand/logo.png',
-  favicon: 'modules/core/client/img/brand/favicon.ico',
+  favicon: 'modules/core/client/img/brand/favicon.png',
   illegalUsernames: ['meanjs', 'administrator', 'password', 'admin', 'user',
     'unknown', 'anonymous', 'null', 'undefined', 'api'
   ],
@@ -94,6 +94,24 @@ module.exports = {
           limits: { fileSize: 50 * 1024 * 1024 }
         }
       },
+      free: {
+        image1: {
+          dest: './modules/reports/client/img/free_image1/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        image2: {
+          dest: './modules/reports/client/img/free_image2/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        image3: {
+          dest: './modules/reports/client/img/free_image3/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        },
+        image4: {
+          dest: './modules/reports/client/img/free_image4/',
+          limits: { fileSize: 50 * 1024 * 1024 }
+        }
+      },
       pdf: {
         dest: './modules/reports/client/pdf/'
       },
@@ -103,6 +121,7 @@ module.exports = {
         export: './modules/reports/client/excels/export/',
         clean: './modules/reports/client/excels/template/clean.xlsx',
         repair: './modules/reports/client/excels/template/repair.xlsx',
+        construct: './modules/reports/client/excels/template/construct.xlsx',
         picture: './modules/reports/client/excels/template/picture.xlsx'
       }
     },

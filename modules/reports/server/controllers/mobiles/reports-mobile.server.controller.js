@@ -104,7 +104,10 @@ exports.histories = function (req, res) {
             or_arr = [
               { search: { $regex: '.*' + value + '.*' } },
               { search: { $regex: '.*' + key_lower + '.*' } },
-              { search: { $regex: '.*' + key_upper + '.*' } }
+              { search: { $regex: '.*' + key_upper + '.*' } },
+              { supplier: { $regex: '.*' + value + '.*' } },
+              { supplier: { $regex: '.*' + key_lower + '.*' } },
+              { supplier: { $regex: '.*' + key_upper + '.*' } }
             ];
             and_arr.push({ $or: or_arr });
           }
@@ -117,7 +120,10 @@ exports.histories = function (req, res) {
             or_arr = [
               { search: { $regex: '.*' + value + '.*' } },
               { search: { $regex: '.*' + key_lower + '.*' } },
-              { search: { $regex: '.*' + key_upper + '.*' } }
+              { search: { $regex: '.*' + key_upper + '.*' } },
+              { supplier: { $regex: '.*' + value + '.*' } },
+              { supplier: { $regex: '.*' + key_lower + '.*' } },
+              { supplier: { $regex: '.*' + key_upper + '.*' } }
             ];
             and_arr.push({ $or: or_arr });
           }
@@ -227,6 +233,17 @@ exports.create = function (req, res) {
             }
           });
           break;
+        case 5:
+          report.free = {
+            work_kind: data.work_kind,
+            work_content: data.work_content,
+            description: data.description,
+            image1: data.image1,
+            image2: data.image2,
+            image3: data.image3,
+            image4: data.image4
+          };
+          break;
       }
 
       checkUnit(report)
@@ -253,6 +270,13 @@ exports.create = function (req, res) {
           if (report.repair) {
             report.repair = repair;
           }
+          return imageUtil.free_image(report.free);
+        })
+        .then(function (free) {
+          if (report.free) {
+            report.free = free;
+          }
+
           return findPartner(user);
         })
         .then(function (partner) {

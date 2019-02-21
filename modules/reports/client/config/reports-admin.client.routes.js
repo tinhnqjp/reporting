@@ -96,6 +96,30 @@
         data: {
           pageTitle: '報告書詳細'
         }
+      })
+      .state('admin.reports.construct_edit', {
+        url: '/:reportId/constructEdit',
+        templateUrl: '/modules/reports/client/views/admin/report-construct-form.client.view.html',
+        controller: 'ReportConstructFormController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書編集'
+        }
+      })
+      .state('admin.reports.construct_detail', {
+        url: '/:reportId/constructDetail',
+        templateUrl: '/modules/reports/client/views/admin/report-construct-detail.client.view.html',
+        controller: 'ReportConstructDetailController',
+        controllerAs: 'vm',
+        resolve: {
+          reportResolve: getReport
+        },
+        data: {
+          pageTitle: '報告書詳細'
+        }
       });
 
     getReport.$inject = ['$stateParams', 'ReportsService'];

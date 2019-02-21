@@ -98,7 +98,39 @@ exports.repair_image = function (repair) {
     }
   });
 };
+exports.free_image = function (free) {
+  return new Promise((resolve, reject) => {
+    if (free) {
+      var image1_path = config.uploads.reports.free.image1.dest;
+      var image2_path = config.uploads.reports.free.image2.dest;
+      var image3_path = config.uploads.reports.free.image3.dest;
+      var image4_path = config.uploads.reports.free.image4.dest;
 
+      createImage(image1_path, free.image1)
+        .then(function (fileName) {
+          free.image1 = fileName;
+          return createImage(image2_path, free.image2);
+        })
+        .then(function (fileName) {
+          free.image2 = fileName;
+          return createImage(image3_path, free.image3);
+        })
+        .then(function (fileName) {
+          free.image3 = fileName;
+          return createImage(image4_path, free.image4);
+        })
+        .then(function (fileName) {
+          free.image4 = fileName;
+          return resolve(free);
+        })
+        .catch(function (err) {
+          return reject(err);
+        });
+    } else {
+      return resolve({});
+    }
+  });
+};
 /* commons method  */
 function store_image(picture) {
   return new Promise((resolve, reject) => {

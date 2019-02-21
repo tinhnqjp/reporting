@@ -18,7 +18,7 @@
       $rootScope.$on('$stateChangeSuccess', listener);
 
       function listener(event, toState) {
-        var applicationCoreTitle = 'DEMO',
+        var applicationCoreTitle = 'ECO-PLAN',
           separator = ' - ',
           stateTitle = applicationCoreTitle + separator;
 

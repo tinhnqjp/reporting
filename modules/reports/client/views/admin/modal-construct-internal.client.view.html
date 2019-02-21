@@ -1,0 +1,209 @@
+<form name="vm.modalInternalForm" ng-submit="confirmInternal(vm.modalInternalForm.$valid)" novalidate>
+  <div class="modal-header-confirm">
+    <div class="row pdn">
+      <div class="col-xs-6 text-left">
+        <h4>内機</h4>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">
+          キャンセル
+        </button>
+        <button class="btn btn-primary btn-sm" type="submit">完了</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="panel panel-primary">
+      <div class="panel-heading">内機情報</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">管理No<span class="text-red">*</span></th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="number" name="number" class="form-control" ng-model="internal.number" placeholder="管理Noを入力"
+                    ng-disabled="block_number" ng-change="handlerNumberInternal(internal.number)" min="1" max="9999"
+                    autocomplete="off" required />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  系統名
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <input type="text" class="form-control" ng-model="internal.lineage_name" placeholder="系統名を入力" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">既設機器</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.old_maker" placeholder="メーカーを入力" ng-click="modalMaker(internal.old_maker, 'old_maker')" />
+                </td>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.old_model" placeholder="機器型式を入力" maxlength="13" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.old_serial" placeholder="製造番号を入力"
+                    maxlength="12" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">新規機器</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  メーカー
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.new_maker" placeholder="メーカーを入力" ng-click="modalMaker(internal.new_maker, 'new_maker')" />
+                </td>
+                <th class="col-xs-2">
+                  機器型式
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.new_model" placeholder="機器型式を入力" maxlength="13" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  製造番号
+                </th>
+                <td class="col-xs-4">
+                  <input type="text" class="form-control" ng-model="internal.new_serial" placeholder="製造番号を入力"
+                    maxlength="12" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">作業確認</div>
+      <div class="panel-body">
+        <div class="table-custom" style="border:0px;">
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in four_taps" ng-if="internal.pressure_test == item.id"
+              ng-click="tapFour(item.id, 'pressure_test')">
+              <div class="title">
+                <span>耐圧試験</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in four_taps" ng-if="internal.Water_flow == item.id"
+              ng-click="tapFour(item.id, 'Water_flow')">
+              <div class="title">
+                <span>通水確認</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="box-part text-center label-success" ng-repeat="item in four_taps" ng-if="internal.test == item.id"
+              ng-click="tapFour(item.id, 'test')">
+              <div class="title">
+                <span>試運転</span>
+              </div>
+              <span class="taps">{{item.value}}</span>
+            </div>
+          </div>
+
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  吸込温度
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="suction_temperature" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="false" ng-model="internal.suction_temperature" placeholder="吸込温度を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+                <th class="col-xs-2">
+                  吹出温度
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="blowing_temperature" input-float="" max-integer="2"
+                      max-decimal="1" has-negative="true" ng-model="internal.blowing_temperature" placeholder="吹出温度を入力">
+                    <span class="input-group-addon">℃</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div ng-if="isSaveClick">
+      <div ng-messages="vm.modalInternalForm.number.$error" role="alert">
+        <li class="text-red" ng-message="required">
+          管理Noを入力してください。
+        </li>
+        <li class="text-red" ng-message="min">
+          管理Noはを1以上を入力してください。
+        </li>
+        <li class="text-red" ng-message="max">
+          管理Noはを9999以下を入力してください。
+        </li>
+        <li class="text-red" ng-message="dupl">管理Noが重複しています</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.wokername.$error" role="alert">
+        <li class="text-red" ng-message="required">氏名を入力してください。</li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_start.$error" role="alert">
+        <li class="text-red" ng-message="datetime">
+          開始時間の入力形式に誤りがあります。
+        </li>
+      </div>
+      <div ng-messages="vm.modalInternalForm.work_end.$error" role="alert">
+        <li class="text-red" ng-message="datetime">
+          終了時間の入力形式に誤りがあります。
+        </li>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">
+      キャンセル
+    </button>
+    <button class="btn btn-primary" type="submit">完了</button>
+  </div>
+</form>
